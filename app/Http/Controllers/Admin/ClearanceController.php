@@ -60,7 +60,7 @@ class ClearanceController extends Controller
                 'status' => 'Completed',
             ]);
 
-            session()->flash('successAdd', 'Clearance added successfully.', $clearance->document_name);
+            session()->flash('successAdd', 'Clearance "' . $clearance->document_name . '" added successfully.');
 
             return response()->json([
                 'success' => true,
@@ -144,11 +144,6 @@ class ClearanceController extends Controller
         try {
             $clearance = Clearance::find($id);
             if ($clearance) {
-                return response()->json([
-                    'success' => true,
-                    'clearance' => $clearance
-                ]);
-
                 SubmittedReport::create([
                     'admin_id' => Auth::id(),
                     'user_id' => null,
@@ -157,13 +152,7 @@ class ClearanceController extends Controller
                     'status' => 'Completed',
                 ]);
 
-                session()->flash('successEdit', 'Clearance edited successfully.', $clearance->document_name);
-
-                // Simulate an error
-                // return response()->json([
-                //     'success' => false,
-                //     'message' => 'Simulated server error.'
-                // ], 500);
+                session()->flash('successEdit', 'Clearance "' . $clearance->document_name . '" edited successfully.');
 
                 return response()->json([
                     'success' => true,
@@ -213,13 +202,14 @@ class ClearanceController extends Controller
 
         $clearance->update($request->all());
 
+        session()->flash('successUpdate', 'Clearance "' . $clearance->document_name . '" updated successfully.');
+
         return response()->json([
             'success' => true,
             'message' => 'Clearance updated successfully.',
             'clearance' => $clearance
         ]);
 
-        session()->flash('successUpdate', 'Clearance updated successfully.', $clearance->document_name);
     }
 
     public function share(Request $request, $id)
@@ -251,14 +241,13 @@ class ClearanceController extends Controller
 
             DB::commit();
 
+            session()->flash('successShared', 'Clearance "' . $clearance->document_name . '" shared successfully.');
 
             return response()->json([
                 'success' => true,
                 'message' => 'Clearance shared successfully.',
             ]);
 
-
-            session()->flash('successShared', 'Clearance shared successfully.', $clearance->document_name);
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -292,7 +281,7 @@ class ClearanceController extends Controller
                 'status' => 'Completed',
             ]);
 
-            session()->flash('successDelete', 'Clearance deleted successfully.', $clearance->document_name);
+            session()->flash('successDelete', 'Clearance "'. $clearance->document_name . '" deleted successfully.');
 
             return response()->json([
                 'success' => true,
@@ -514,13 +503,14 @@ class ClearanceController extends Controller
         $clearance->number_of_requirements = $clearance->requirements()->count();
         $clearance->save();
 
+        session()->flash('successAddRequirement', 'Clearance "'. $clearance->document_name . '" requirement added successfully.');
+
         return response()->json([
             'success' => true,
             'message' => 'Requirement added successfully.',
             'requirement' => $requirement,
         ]);
 
-        session()->flash('successAddRequirement', 'Clearance added successfully.', $clearance->document_name);
     }
 
     public function storeFeedback(Request $request)
@@ -656,12 +646,7 @@ class ClearanceController extends Controller
             $requirement = ClearanceRequirement::where('clearance_id', $clearanceId)->find($requirementId);
 
             if ($requirement) {
-                return response()->json([
-                    'success' => true,
-                    'requirement' => $requirement,
-                ]);
-
-                session()->flash('successEditRequirement', 'Requirement updated successfully.', $clearance->document_name);
+                session()->flash('successEditRequirement', 'Requirement edited successfully.');
 
                 return response()->json([
                     'success' => true,
@@ -709,7 +694,7 @@ class ClearanceController extends Controller
                 'requirement' => $request->requirement,
             ]);
 
-            session()->flash('successEditRequirement', 'Requirement updated successfully.', $clearance->document_name);
+            session()->flash('successEditRequirement', 'Requirement "'. $clearance->document_name . '" updated successfully.');
 
             return response()->json([
                 'success' => true,
@@ -747,7 +732,7 @@ class ClearanceController extends Controller
             $clearance->number_of_requirements = $clearance->requirements()->count();
             $clearance->save();
 
-            session()->flash('successDeleteRequirement', 'Requirement deleted successfully.', $clearance->document_name);
+            session()->flash('successDeleteRequirement', 'Requirement "'. $clearance->document_name . '" deleted successfully.');
 
             return response()->json([
                 'success' => true,

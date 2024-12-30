@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\Admin\ClearanceController as AdminClearanceController;
 use App\Http\Controllers\Faculty\ClearanceController as FacultyClearanceController;
+use App\Http\Controllers\ProgramHeadDean\PHDController as ProgDeanController;
 use App\Http\Controllers\Admin\CampusController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
@@ -94,6 +95,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////// Redirects If Not Admin or Faculty Middleware ////////////////////////////////////////////////
 Route::middleware(['Admin', 'Dean', 'Program-Head'])->group(function () {
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -284,6 +287,17 @@ Route::middleware(['auth', 'verified', 'Faculty'])->prefix('faculty')->group(fun
     Route::delete('/faculty/clearances/delete/{sharedClearanceId}/{requirementId}/{fileId}', [FacultyClearanceController::class, 'deleteSingleFile'])->name('faculty.clearances.deleteSingleFile');
 });
 /////////////////////////////////////////////// End of Faculty Routes ////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////------------------ Prgram Head & Dean Routes ------------------///////////////////////////////////
+Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix('admin')->group(function () {
+    Route::get('/phd/program-head-dean/clearances', [ProgDeanController::class, 'indexPHD'])->name('phd.programHeadDean.clearance');
+});
+
+//////////////////////////////------------------ End of PH & Dean Routes ------------------////////////////////////////
+
+
 
 Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
 
