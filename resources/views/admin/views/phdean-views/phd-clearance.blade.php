@@ -68,11 +68,11 @@
                     </nav>
                 </div>
 
-                <div id="clearance-tab" class="tab-content">
+                <div id="phd-tab" class="tab-content">
                     @include('admin.views.phdean-views.phd-clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
                 </div>
-                <div id="phd-tab" class="tab-content hidden">
-                    @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearance, 'isInclude' => true])
+                <div id="clearance-tab" class="tab-content">
+                    @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Initial setup
-                switchTab('clearance-tab');
+                switchTab('phd-tab');
 
                 function switchTab(tabId) {
                     // Hide all tab contents
