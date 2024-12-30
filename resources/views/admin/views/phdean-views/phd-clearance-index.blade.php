@@ -39,7 +39,7 @@
                                         <span class="font-bold">{{ $activeClearance->sharedClearance->clearance->document_name }}</span> - {{ $activeClearance->sharedClearance->clearance->description }}
                                     </div>
                                     <div class="flex space-x-2">
-                                        <a href="{{ route('phd.programHeadDean.clearance', $activeClearance->id) }}"
+                                        <a href="{{ route('phd.clearance.show', $activeClearance->id) }}"
                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 text-sm rounded-md transition duration-300 ease-in-out flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 011 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>

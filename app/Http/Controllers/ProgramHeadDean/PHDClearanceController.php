@@ -31,12 +31,17 @@ class PHDClearanceController extends Controller
     // Location: resources/views/admin/views/phdean-views
     public function clearancePhD(): View
     {
-                // Fetch the user clearance data
-                $userClearance = UserClearance::with('sharedClearance.clearance')->where('user_id', Auth::id())->first();
+        // Fetch the user clearance data for Program-Head or Dean
+        $userClearance = UserClearance::where('user_id', Auth::id())
+            ->whereHas('sharedClearance.clearance', function($query) {
+                $query->whereIn('type', ['Program-Head', 'Dean']);
+            })
+            ->with('sharedClearance.clearance')
+            ->first();
 
-                $userInfo = Auth::user();
-        
-                return view('admin.views.phdean-views.phd-clearance', compact('userClearance', 'userInfo'));
+        $userInfo = Auth::user();
+
+        return view('admin.views.phdean-views.phd-clearance', compact('userClearance', 'userInfo'));
     }
 
     public function indexPhD(): View
@@ -185,12 +190,12 @@ class PHDClearanceController extends Controller
     public function showPhD($id)
     {
         $user = Auth::user();
-        $userInfo = User::getAll();
+        $userInfo = $user;
         // Confirm that the user has copied this clearance
         $userClearance = UserClearance::where('id', $id)
             ->where('user_id', $user->id)
-            ->with(['sharedClearance.clearance.requirements' => function ($query) {
-                $query->where('is_archived', false);
+            ->with(['sharedClearance.userClearances' => function ($query) {
+                $query->where('is_active', true);
             }])
             ->firstOrFail();
 
@@ -201,7 +206,7 @@ class PHDClearanceController extends Controller
             ->pluck('requirement_id')
             ->toArray();
 
-        return view('admin.views.phdean-views.phd-clearance-show', compact('userClearance', 'uploadedClearances'));
+        return view('admin.views.phdean-views.phd-clearance-show', compact('userClearance', 'uploadedClearances', 'userInfo'));
     }
 
 

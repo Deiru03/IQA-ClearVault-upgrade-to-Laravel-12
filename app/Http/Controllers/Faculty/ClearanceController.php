@@ -124,8 +124,8 @@ class ClearanceController extends Controller
         }
 
         // Deactivate other clearances
-        UserClearance::where('user_id', $user->id)
-            ->update(['is_active' => false]);
+        // UserClearance::where('user_id', $user->id)
+        //     ->update(['is_active' => false]);
 
         // Create a new user clearance and set it as active
         UserClearance::create([
@@ -177,12 +177,12 @@ class ClearanceController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        $userInfo = User::getAll();
+        $userInfo = $user;
         // Confirm that the user has copied this clearance
         $userClearance = UserClearance::where('id', $id)
             ->where('user_id', $user->id)
-            ->with(['sharedClearance.clearance.requirements' => function ($query) {
-                $query->where('is_archived', false);
+            ->with(['sharedClearance.userClearances' => function ($query) {
+                $query->where('is_active', false);
             }])
             ->firstOrFail();
 
@@ -193,7 +193,7 @@ class ClearanceController extends Controller
             ->pluck('requirement_id')
             ->toArray();
 
-        return view('faculty.views.clearances.clearance-show', compact('userClearance', 'uploadedClearances'));
+        return view('faculty.views.clearances.clearance-show', compact('userClearance', 'uploadedClearances', 'userInfo'));
     }
 
 

@@ -90,8 +90,13 @@ class FacultyController extends Controller
     }
     public function clearances(): View
     {
-            // Fetch the user clearance data
-        $userClearance = UserClearance::with('sharedClearance.clearance')->where('user_id', Auth::id())->first();
+        // Fetch the user clearance data for FACULTY only
+        $userClearance = UserClearance::where('user_id', Auth::id())
+            ->whereHas('sharedClearance.clearance', function($query) {
+                $query->whereNot('type', ['Program-Head', 'Dean']);
+            })
+            ->with('sharedClearance.clearance')
+            ->first();
 
         $userInfo = Auth::user();
 
