@@ -22,7 +22,7 @@ use App\Models\UserNotification;
 use App\Models\ClearanceFeedback;
 
 
-class PHDController extends Controller
+class PHDClearanceController extends Controller
 {
 
     // Dean and Program-Head Clearance
@@ -86,7 +86,7 @@ class PHDController extends Controller
         // Get user_clearances to map shared_clearance_id to user_clearance_id
         // Only get active clearances
         $userClearances = UserClearance::where('user_id', $user->id)
-            ->where('is_active', true)
+            // ->where('is_active', true)
             ->whereIn('shared_clearance_id', $filteredClearances->pluck('id'))
             ->pluck('id', 'shared_clearance_id')
             ->toArray();
@@ -110,7 +110,7 @@ class PHDController extends Controller
 
         // Get active clearances
         $activeClearances = UserClearance::where('user_id', $user->id)
-            ->where('is_active', true)
+            // ->where('is_active', true)
             ->get();
 
         return view('admin.views.phdean-views.phd-clearance-index', compact('filteredClearances', 'userClearances', 'recommendations', 'activeClearances'));
@@ -134,8 +134,8 @@ class PHDController extends Controller
         }
 
         // Deactivate other clearances
-        UserClearance::where('user_id', $user->id)
-            ->update(['is_active' => false]);
+        // UserClearance::where('user_id', $user->id)
+        //     ->update(['is_active' => false]);
 
         // Create a new user clearance and set it as active
         UserClearance::create([

@@ -21,20 +21,6 @@
                             </div>
                         </div>
                         <div class="bg-white p-2">
-                            {{-- <a href="{{ route('faculty.generateClearanceReport') }}" class="inline-flex items-center px-4 py-2 {{ $userInfo->clearances_status === 'complete' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600' }} text-white text-sm font-medium rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                </svg>
-                                Generate Clearance Slip
-                            </a> --}}
-                            {{-- <span class="mx-2"></span>
-                            <a href="{{ route('faculty.clearanceChecklist', $userClearance->shared_clearance_id) }}" target="_blank" class="inline-flex items-center px-4 py-2 {{ $userInfo->clearances_status === 'complete' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600' }} text-white text-sm font-medium rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 20 20">
-                                    <path d="M13 7H7v6h6V7z" />
-                                    <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v10H5V5z" clip-rule="evenodd" />
-                                </svg>
-                                Download My Checklist PDF
-                            </a> --}}
                             <span class="mx-2"></span>
                             <a href="{{ route('phd.programHeadDean.indexPhD') }}" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -61,8 +47,111 @@
         </div>
     </div>
     @if($userClearance)
-        {{-- @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearance, 'isInclude' => true]) --}}
-        @include('admin.views.phdean-views.phd-clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-2 border-indigo-200">
+                <div class="border-b border-gray-200">
+                    <nav class="flex space-x-4 px-4" aria-label="Tabs">
+                        <button onclick="switchTab('clearance-tab')" 
+                                class="tab-button px-6 py-4 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out border-transparent hover:border-indigo-300 text-gray-500 hover:text-indigo-600"
+                                id="clearance-btn">
+                            Faculty Clearance Requirements
+                        </button>
+                        <button onclick="switchTab('phd-tab')" 
+                                class="tab-button px-6 py-4 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out border-transparent hover:border-indigo-300 text-gray-500 hover:text-indigo-600"
+                                id="phd-btn">
+                             @if (Auth::user()->user_type == 'Program-Head')
+                                Program Head Clearance Requirements
+                             @else 
+                                Dean Clearance Requirements
+                            @endif
+                        </button>
+                    </nav>
+                </div>
+
+                <div id="clearance-tab" class="tab-content">
+                    @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearance, 'isInclude' => true])
+                </div>
+                <div id="phd-tab" class="tab-content hidden">
+                    @include('admin.views.phdean-views.phd-clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initial setup
+                switchTab('clearance-tab');
+
+                function switchTab(tabId) {
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(tab => {
+                        tab.classList.add('hidden');
+                    });
+
+                    // Remove active state from all buttons
+                    document.querySelectorAll('.tab-button').forEach(button => {
+                        button.classList.remove('border-indigo-500', 'text-indigo-600', 'bg-gradient-to-r', 
+                            'from-indigo-100', 'to-blue-50', 'font-bold', 'scale-105', 'shadow-lg');
+                        button.classList.add('border-transparent', 'text-gray-500');
+                        button.style.transform = 'scale(1)';
+                        button.style.boxShadow = 'none';
+                    });
+
+                    // Show selected tab with enhanced animation
+                    const selectedTab = document.getElementById(tabId);
+                    if (selectedTab) {
+                        selectedTab.classList.remove('hidden');
+                        selectedTab.classList.add('animate-fadeIn');
+                        selectedTab.style.animation = 'slideIn 0.4s ease-out';
+                    }
+
+                    // Enhanced active button styling with gradient and glow effect
+                    const activeButton = document.getElementById(tabId.replace('-tab', '-btn'));
+                    if (activeButton) {
+                        activeButton.classList.remove('border-transparent', 'text-gray-500');
+                        activeButton.classList.add(
+                            'border-indigo-500',
+                            'text-indigo-600',
+                            'bg-gradient-to-r',
+                            'from-indigo-100',
+                            'to-blue-50',
+                            'font-bold',
+                            'scale-105',
+                            'shadow-lg'
+                        );
+                        // Add sophisticated transition and glow effects
+                        activeButton.style.transform = 'scale(1.05)';
+                        activeButton.style.boxShadow = '0 0 15px rgba(99, 102, 241, 0.4)';
+                        activeButton.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                        activeButton.style.borderImage = 'linear-gradient(to right, #818cf8, #6366f1) 1';
+                    }
+
+                    // Add keyframe animation for slide effect
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        @keyframes slideIn {
+                            from {
+                                opacity: 0;
+                                transform: translateY(10px);
+                            }
+                            to {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                // Add click event listeners to buttons
+                document.querySelectorAll('.tab-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const tabId = this.id.replace('-btn', '-tab');
+                        switchTab(tabId);
+                    });
+                });
+            });
+        </script>
     @else
         <div class="mb-6">
             <div class="container mx-auto px-8 py-12">
