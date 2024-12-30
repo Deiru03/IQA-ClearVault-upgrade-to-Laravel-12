@@ -333,7 +333,7 @@
                             maintainAspectRatio: false,
                             plugins: {
                                 legend: {
-                                    display: true,
+                                    display: false, // Hide the legend
                                     position: 'right'
                                 },
                                 tooltip: {
