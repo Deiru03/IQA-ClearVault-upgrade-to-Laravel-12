@@ -62,7 +62,7 @@
     </div>
     @if($userClearance)
         {{-- @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearance, 'isInclude' => true]) --}}
-        @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
+        @include('admin.views.phdean-views.phd-clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
     @else
         <div class="mb-6">
             <div class="container mx-auto px-8 py-12">

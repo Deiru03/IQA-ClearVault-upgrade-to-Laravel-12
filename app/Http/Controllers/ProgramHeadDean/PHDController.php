@@ -8,15 +8,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use App\Models\UserClearance;
 use App\Models\ProgramHeadDean;
 use App\Models\SharedClearance;
 use App\Models\Clearance;
 use App\Models\SubmittedReport;
+use App\Models\User;
+use App\Models\UploadedClearance;
+use App\Models\ClearanceRequirement;
+use App\Models\UserNotification;
+use App\Models\ClearanceFeedback;
 
 
 class PHDController extends Controller
 {
+
+    // Dean and Program-Head Clearance
+    // File Path: resources/views/admin/views/phdean-views/phd-clearance.blade.php
+    // ******************** Main Localtion of files here is in the faculty folder ********************
+    // Location: resources/views/admin/views/phdean-views
     public function clearancePhD(): View
     {
                 // Fetch the user clearance data
@@ -101,7 +113,7 @@ class PHDController extends Controller
             ->where('is_active', true)
             ->get();
 
-        return view('admin.views.phdean-views.clearance-index', compact('filteredClearances', 'userClearances', 'recommendations', 'activeClearances'));
+        return view('admin.views.phdean-views.phd-clearance-index', compact('filteredClearances', 'userClearances', 'recommendations', 'activeClearances'));
     }
 
      /**
@@ -170,4 +182,322 @@ class PHDController extends Controller
         }
     }
 
+    public function showPhD($id)
+    {
+        $user = Auth::user();
+        $userInfo = User::getAll();
+        // Confirm that the user has copied this clearance
+        $userClearance = UserClearance::where('id', $id)
+            ->where('user_id', $user->id)
+            ->with(['sharedClearance.clearance.requirements' => function ($query) {
+                $query->where('is_archived', false);
+            }])
+            ->firstOrFail();
+
+        // Fetch already uploaded clearances by the user for this shared clearance
+        $uploadedClearances = UploadedClearance::where('shared_clearance_id', $userClearance->shared_clearance_id)
+            ->where('user_id', $user->id)
+            ->where('is_archived', false)
+            ->pluck('requirement_id')
+            ->toArray();
+
+        return view('admin.views.phdean-views.phd-clearance-show', compact('userClearance', 'uploadedClearances'));
+    }
+
+
+    /**
+     * Handle the file upload for a specific requirement.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $sharedClearanceId
+     * @param  int  $requirementId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadPhD(Request $request, $sharedClearanceId, $requirementId)
+    {
+        $user = Auth::user();
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'files.*' => 'required|file|mimes:pdf|max:200000', //,doc,docx,jpg,png',
+            'title' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        if ($request->hasFile('files')) {
+            try {
+                $uploadedFiles = [];
+                foreach ($request->file('files') as $file) {
+                    $originalName = $file->getClientOriginalName();
+                    $path = $file->storeAs('uploads/faculty_clearances', $originalName, 'public');
+
+                    $uploadedClearance = UploadedClearance::create([
+                        'shared_clearance_id' => $sharedClearanceId,
+                        'requirement_id' => $requirementId,
+                        'user_id' => $user->id,
+                        'file_path' => $path,
+                    ]);
+
+                    $uploadedFiles[] = $originalName;
+                }
+
+                $requirement = ClearanceRequirement::findOrFail($requirementId);
+                $requirementName = $requirement->requirement;
+                $fileCount = count($uploadedFiles);
+
+                // Truncate requirement name if longer than 100 characters
+                if (strlen($requirementName) > 100) {
+                    $requirementName = substr($requirementName, 0, 100) . '...';
+                }
+
+                // Create single report for all uploaded files
+                SubmittedReport::create([
+                    'user_id' => Auth::id(),
+                    'title' => "Uploaded {$fileCount} file(s) for requirement: {$requirementName}",
+                    'transaction_type' => 'Uploaded',
+                    'status' => 'Okay',
+                ]);
+                 // Create a notification for the user
+                 UserNotification::create([
+                    'user_id' => Auth::id(),
+                    'admin_user_id' => null,
+                    'notification_type' => 'File Uploaded',
+                    'notification_message' => "Uploaded a {$fileCount} file(s) for requirement: {$requirementName}.",
+                    'is_read' => false,
+                ]);
+
+                // Find the UserClearance record
+                $userClearance = UserClearance::where('user_id', $user->id)
+                    ->where('shared_clearance_id', $sharedClearanceId)
+                    ->firstOrFail();
+
+                // Update the 'updated_at' timestamp
+                $userClearance->touch();
+
+                // Create feedback for the requirement
+                ClearanceFeedback::create([
+                    'user_id' => $user->id,
+                    'requirement_id' => $requirementId,
+                    'signature_status' => 'Checking',
+                    'is_archived' => false,
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Files uploaded successfully for requirement id:' . $requirementId .' with ' . $fileCount . ' file(s).',
+                ]);
+            } catch (\Exception $e) {
+                Log::error('File Upload Error: '.$e->getMessage());
+
+                SubmittedReport::create([
+                    'user_id' => Auth::id(),
+                    'title' => 'Failed to upload files',
+                    'transaction_type' => 'Upload Failed',
+                    'status' => 'Failed',
+                ]);
+
+
+                session()->flash('error', 'Failed to upload files.');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to upload files.',
+                ], 500);
+            }
+        }
+
+        session()->flash('error', 'No files uploaded.');
+        return response()->json([
+            'success' => false,
+            'message' => 'No files uploaded.',
+        ], 400);
+    }
+
+
+    public function deleteFilePhD($sharedClearanceId, $requirementId)
+    {
+        $user = Auth::user();
+
+        DB::beginTransaction();
+
+        try {
+            // Retrieve all uploaded clearances for the specific requirement
+            $uploadedClearances = UploadedClearance::where('shared_clearance_id', $sharedClearanceId)
+                ->where('requirement_id', $requirementId)
+                ->where('user_id', $user->id)
+                ->where('is_archived', false)
+                ->get();
+
+            $deletedFiles = [];
+
+            foreach ($uploadedClearances as $uploadedClearance) {
+                // Check if the file exists before attempting to delete
+                if (Storage::disk('public')->exists($uploadedClearance->file_path)) {
+                    Storage::disk('public')->delete($uploadedClearance->file_path);
+                }
+
+                $deletedFiles[] = [
+                    'file_name' => basename($uploadedClearance->file_path),
+                    'deleted_at' => now(),
+                ];
+
+                // Delete the record from the database
+                $uploadedClearance->delete();
+            }
+
+            $requirement = ClearanceRequirement::findOrFail($requirementId);
+            $requirementName = $requirement->requirement;
+            $fileCount = count($deletedFiles);
+
+            // Truncate requirement name if longer than 100 characters
+            if (strlen($requirementName) > 100) {
+                $requirementName = substr($requirementName, 0, 100) . '...';
+            }
+
+            // Log the deletion in SubmittedReport
+            SubmittedReport::create([
+                'user_id' => Auth::id(),
+                'admin_id' => null,
+                'title' => "Deleted {$fileCount} file(s) for requirement: {$requirementName}",
+                'transaction_type' => 'Removed File',
+                'status' => 'Okay',
+            ]);
+
+            DB::commit();
+
+            session()->flash('successDelete', 'All files related to this requirement have been deleted successfully and recorded.');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'All files related to this requirement have been deleted successfully and recorded.',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('File Deletion Error: '.$e->getMessage());
+
+            SubmittedReport::create([
+                'user_id' => Auth::id(),
+                'title' => 'Failed to delete files',
+                'transaction_type' => 'Delete',
+                'status' => 'Failed',
+            ]);
+
+            session()->flash('error', 'Failed to delete the files.');
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete the files.',
+            ], 500);
+        }
+    }
+
+    public function deleteSingleFilePhD($sharedClearanceId, $requirementId, $fileId)
+    {
+        $user = Auth::user();
+
+        try {
+            // Retrieve the specific UploadedClearance record
+            $uploadedClearance = UploadedClearance::where('id', $fileId)
+                ->where('shared_clearance_id', $sharedClearanceId)
+                ->where('requirement_id', $requirementId)
+                ->where('user_id', $user->id)
+                ->firstOrFail();
+
+            // Delete the file from storage
+            if (Storage::disk('public')->exists($uploadedClearance->file_path)) {
+                Storage::disk('public')->delete($uploadedClearance->file_path);
+            }
+
+            // Delete the record from the database
+            $uploadedClearance->delete();
+
+            $requirement = ClearanceRequirement::findOrFail($requirementId);
+            $requirementName = $requirement->requirement;
+
+            // Truncate requirement name if longer than 100 characters
+            if (strlen($requirementName) > 100) {
+                $requirementName = substr($requirementName, 0, 100) . '...';
+            }
+
+            SubmittedReport::create([
+                'user_id' => Auth::id(),
+                'admin_id' => null,
+                'title' => "Deleted file for requirement: {$requirementName}",
+                'transaction_type' => 'Delete',
+                'status' => 'Okay',
+            ]);
+
+            session()->flash('successDelete', 'File deleted successfully.');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'File deleted successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Deleting Single File Error: '.$e->getMessage());
+
+            SubmittedReport::create([
+                'user_id' => Auth::id(),
+                'admin_id' => null,
+                'title' => 'Failed to delete file',
+                'transaction_type' => 'Removed',
+                'status' => 'Failed',
+            ]);
+
+            session()->flash('error', 'Failed to delete the file.');
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete the file.',
+            ], 500);
+        }
+    }
+
+
+    // Single File View Get or Fetch
+        /**
+     * Retrieve all uploaded files for a specific requirement.
+     *
+     * @param  int  $sharedClearanceId
+     * @param  int  $requirementId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUploadedFilesPhD($sharedClearanceId, $requirementId)
+    {
+        $user = Auth::user();
+
+        try {
+            $uploadedFiles = UploadedClearance::where('shared_clearance_id', $sharedClearanceId)
+                ->where('requirement_id', $requirementId)
+                ->where('user_id', $user->id)
+                ->where('is_archived', false)
+                ->get();
+
+            $files = $uploadedFiles->map(function($file) {
+                return [
+                    'id' => $file->id,
+                    'name' => basename($file->file_path),
+                    'file_path' => $file->file_path,  // Changed from url to file_path
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'files' => $files,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Fetching Uploaded Files Error: '.$e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch uploaded files.',
+            ], 500);
+        }
+    }
 }

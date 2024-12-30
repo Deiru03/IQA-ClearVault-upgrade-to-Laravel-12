@@ -295,6 +295,16 @@ Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix
     Route::get('/phd/program-head-dean/clearances/view-checklist', [ProgDeanController::class, 'indexPhD'])->name('phd.programHeadDean.indexPhD');
     Route::post('/phd/program-head-dean/clearances/view-checklist/{id}/get-copy', [ProgDeanController::class, 'getCopyPhD'])->name('phd.clearance.getCopy');
     Route::delete('/phd/program-head-dean/clearances/view-checklist/{id}/remove-copy', [ProgDeanController::class, 'removeCopyPhD'])->name('phd.clearances.removeCopy');
+
+    Route::get('/phd/clearances/show/{id}', [ProgDeanController::class, 'showPhD'])->name('phd.clearances.show');
+
+    //Uploading Actions
+    Route::post('/phd/clearances/{userClearanceId}/upload/{requirementId}', [ProgDeanController::class, 'uploadPhD'])->name('phd.clearances.upload');
+    Route::delete('/phd/clearances/{sharedClearanceId}/upload/{requirementId}/delete', [ProgDeanController::class, 'deleteFile'])->name('phd.clearances.delete');
+    //clearance view files singles
+    Route::get('/phd/clearances/{sharedClearanceId}/requirement/{requirementId}/files', [ProgDeanController::class, 'getUploadedFilesPhD'])->name('phd.clearances.getFiles');
+    Route::delete('/phd/clearances/{sharedClearanceId}/upload/{requirementId}/delete/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');
+    Route::delete('/phd/clearances/delete/{sharedClearanceId}/{requirementId}/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');
 });
 
 //////////////////////////////------------------ End of PH & Dean Routes ------------------////////////////////////////
