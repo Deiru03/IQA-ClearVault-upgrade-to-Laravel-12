@@ -300,7 +300,7 @@ Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix
 
     //Uploading Actions
     Route::post('/phd/clearances/{userClearanceId}/upload/{requirementId}', [ProgDeanController::class, 'uploadPhD'])->name('phd.clearances.upload');
-    Route::delete('/phd/clearances/{sharedClearanceId}/upload/{requirementId}/delete', [ProgDeanController::class, 'deleteFile'])->name('phd.clearances.delete');
+    Route::delete('/phd/clearances/{sharedClearanceId}/upload/{requirementId}/delete', [ProgDeanController::class, 'deleteFilePhD'])->name('phd.clearances.delete');
     //clearance view files singles
     Route::get('/phd/clearances/{sharedClearanceId}/requirement/{requirementId}/files', [ProgDeanController::class, 'getUploadedFilesPhD'])->name('phd.clearances.getFiles');
     Route::delete('/phd/clearances/{sharedClearanceId}/upload/{requirementId}/delete/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');

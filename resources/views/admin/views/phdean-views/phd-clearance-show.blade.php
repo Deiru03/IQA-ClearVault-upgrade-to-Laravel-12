@@ -167,7 +167,7 @@
             </div>
         </div>
 
-        <div class="text-center mt-6">
+        {{-- <div class="text-center mt-6">
              <!-- Generate My Checklist Button -->
              <div class="text-center mt-6">
                 <a href="{{ route('faculty.clearanceChecklist', $userClearance->shared_clearance_id) }}" target="_blank"
@@ -187,7 +187,7 @@
                     Generate Clearance Slip
                 </a>
             </div>
-        </div>
+        </div> --}}
 
         <h3 class="text-2xl font-semibold mt-8 mb-4 text-indigo-600">Requirements</h3>
 
@@ -203,34 +203,69 @@
             </div>
         @endif
 
-        <div id="missingTracker" class="mb-6 bg-transparent p-4">
-            <div class="flex flex-col gap-4">
-                <div class="flex items-center">
-                    <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        <div class="mb-8 space-y-6">
+            <!-- Action Buttons -->
+            <div class="flex flex-col items-center space-y-4 p-6 bg-white rounded-xl shadow-sm border border-gray-200">
+                <div class="flex flex-wrap justify-center gap-4">
+                    <!-- Download Checklist Button -->
+                    <a href="{{ route('faculty.clearanceChecklist', $userClearance->shared_clearance_id) }}" target="_blank"
+                        class="inline-flex items-center px-6 py-3 {{ Auth::user()->clearances_status == 'complete' ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600' }} text-white font-medium rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-md">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        <span id="missingCount" class="text-sm font-medium text-gray-600"></span>
-                        <button id="findMissing" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors duration-200 text-sm font-medium ml-2">
+                        Download Checklist PDF
+                    </a>
+
+                    <!-- Generate Clearance Slip Button -->
+                    <a href="{{ route('faculty.generateClearanceReport') }}" 
+                        class="inline-flex items-center px-6 py-3 {{ $userInfo->clearances_status === 'complete' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600' }} text-white font-medium rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-md">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                        </svg>
+                        Generate Clearance Slip
+                    </a>
+                </div>
+                <span class="text-sm text-gray-500">Last Updated: {{ date('F d, Y', strtotime($userClearance->updated_at)) }}</span>
+            </div>
+
+            <!-- Requirement Tracking -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Missing Requirements Card -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-yellow-100 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <span id="missingCount" class="text-sm font-medium text-gray-700"></span>
+                        </div>
+                        <button id="findMissing" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                            Find Missing Docs
+                            Find Missing
                         </button>
                     </div>
                 </div>
 
-                <div class="flex items-center">
-                    <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        <span id="returnCount" class="text-sm font-medium text-gray-600"></span>
-                        <button id="findReturn" class="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-200 text-sm font-medium ml-2">
+                <!-- Resubmit Requirements Card -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-red-100 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </div>
+                            <span id="returnCount" class="text-sm font-medium text-gray-700"></span>
+                        </div>
+                        <button id="findReturn" class="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
                             </svg>
-                            Find Resubmit Docs
+                            Find Resubmit
                         </button>
                     </div>
                 </div>
@@ -682,7 +717,7 @@
                 <p class="text-xl text-gray-700 mb-8">
                     It looks like you haven't obtained a copy of your clearance yet.
                 </p>
-                <a href="{{ route('faculty.clearances.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+                <a href="{{ route('phd.programHeadDean.indexPhD') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
                     Get Your Clearance
                 </a>
             </div>
@@ -900,7 +935,7 @@
          * @param {number} requirementId
          */
         function deleteFile(sharedClearanceId, requirementId) {
-            fetch(`/faculty/clearances/${sharedClearanceId}/upload/${requirementId}/delete`, {
+            fetch(`/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -947,7 +982,7 @@
             uploadedFilesGrid.innerHTML = '';
 
             // Fetch uploaded files
-            fetch(`/faculty/clearances/${sharedClearanceId}/requirement/${requirementId}/files`, {
+            fetch(`/admin/phd/clearances/${sharedClearanceId}/requirement/${requirementId}/files`, {
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -1088,7 +1123,7 @@
             };
 
             function deleteSingleFile(sharedClearanceId, requirementId, fileId) {
-                fetch(`/faculty/clearances/${sharedClearanceId}/upload/${requirementId}/delete/${fileId}`, {
+                fetch(`/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}/delete/${fileId}`, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -1347,7 +1382,7 @@
                 const uploadItem = createUploadProgress(files[i].name, files[i].size);
 
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', `/faculty/clearances/${sharedClearanceId}/upload/${requirementId}`, true);
+                xhr.open('POST', `/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}`, true);
                 xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
 
                 xhr.upload.onprogress = function(event) {
