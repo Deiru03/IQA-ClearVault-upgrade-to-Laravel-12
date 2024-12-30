@@ -272,7 +272,6 @@ Route::middleware(['auth', 'verified', 'Faculty'])->prefix('faculty')->group(fun
 
     // Clearance Controls & Routes
     Route::get('/clearances/view-checklists', [FacultyClearanceController::class, 'index'])->name('faculty.clearances.index');
-
     Route::get('/clearances/show/{id}', [FacultyClearanceController::class, 'show'])->name('faculty.clearances.show');
 
     Route::post('/clearances/share/{id}', [FacultyClearanceController::class, 'share'])->name('faculty.clearances.share'); // If needed
@@ -294,6 +293,8 @@ Route::middleware(['auth', 'verified', 'Faculty'])->prefix('faculty')->group(fun
 Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix('admin')->group(function () {
     Route::get('/phd/program-head-dean/clearances', [ProgDeanController::class, 'clearancePhD'])->name('phd.programHeadDean.clearance');
     Route::get('/phd/program-head-dean/clearances/view-checklist', [ProgDeanController::class, 'indexPhD'])->name('phd.programHeadDean.indexPhD');
+    Route::post('/phd/program-head-dean/clearances/view-checklist/{id}/get-copy', [ProgDeanController::class, 'getCopyPhD'])->name('phd.clearance.getCopy');
+    Route::delete('/phd/program-head-dean/clearances/view-checklist/{id}/remove-copy', [ProgDeanController::class, 'removeCopyPhD'])->name('phd.clearances.removeCopy');
 });
 
 //////////////////////////////------------------ End of PH & Dean Routes ------------------////////////////////////////

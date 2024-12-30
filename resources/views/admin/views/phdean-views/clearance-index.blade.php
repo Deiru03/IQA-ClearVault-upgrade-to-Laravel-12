@@ -39,7 +39,7 @@
                                         <span class="font-bold">{{ $activeClearance->sharedClearance->clearance->document_name }}</span> - {{ $activeClearance->sharedClearance->clearance->description }}
                                     </div>
                                     <div class="flex space-x-2">
-                                        <a href="{{ route('faculty.views.clearances', $activeClearance->id) }}"
+                                        <a href="{{ route('phd.programHeadDean.clearance', $activeClearance->id) }}"
                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 text-sm rounded-md transition duration-300 ease-in-out flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 011 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
@@ -128,11 +128,16 @@
 
                                     $isRecommended = false;
 
-                                    // For Dean and Program-Head
-                                    if (($userPosition === 'Dean' || $userPosition === 'Program-Head') &&
-                                        $sharedClearance->clearance->type === $userPosition) {
+                                    // For Dean
+                                    if ($userPosition === 'Dean' && $sharedClearance->clearance->type === 'Dean') {
                                         $isRecommended = true;
                                     }
+
+                                    // For Program Head
+                                    if ($userPosition === 'Program-Head' && $sharedClearance->clearance->type === 'Program-Head') {
+                                        $isRecommended = true; 
+                                    }
+
 
                                     // For Permanent positions
                                     if ($userPosition === 'Permanent-FullTime' &&
@@ -198,9 +203,9 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex justify-center space-x-2">
                                             @if(isset($userClearances[$sharedClearance->id]))
-                                                <a href="{{ route('faculty.clearances.show', $userClearances[$sharedClearance->id]) }}"
+                                                <a href="{{ route('phd.programHeadDean.clearance', $userClearances[$sharedClearance->id]) }}"
                                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-                                                   onclick="event.preventDefault(); window.location.href='{{ route('faculty.views.clearances', $userClearances[$sharedClearance->id]) }}';">
+                                                   onclick="event.preventDefault(); window.location.href='{{ route('phd.programHeadDean.clearance', $userClearances[$sharedClearance->id]) }}';">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 011 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
                                                     </svg>
@@ -215,7 +220,7 @@
                                                 </button>
                                             @else
                                                 @if(!$hasAnyCopy)
-                                                    <form action="{{ route('faculty.clearances.getCopy', $sharedClearance->id) }}" method="POST" class="inline">
+                                                    <form action="{{ route('phd.clearance.getCopy', $sharedClearance->id) }}" method="POST" class="inline">
                                                         @csrf
                                                         <button type="submit"
                                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200">
@@ -247,6 +252,7 @@
                 <button id="cancelButton" class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md mr-2 transition duration-300 ease-in-out" onclick="closeModal()">Cancel</button>
                 <form id="removeForm" method="POST" class="inline">
                     @csrf
+                    @method('DELETE') <!-- Use DELETE method -->
                     <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition duration-300 ease-in-out">Remove</button>
                 </form>
             </div>
@@ -259,7 +265,7 @@
         function openModal(clearanceId) {
             currentClearanceId = clearanceId;
             document.getElementById('confirmationModal').classList.remove('hidden');
-            document.getElementById('removeForm').action = `/faculty/clearances/remove-copy/${clearanceId}`;
+            document.getElementById('removeForm').action = `/admin/phd/program-head-dean/clearances/view-checklist/${clearanceId}/remove-copy`;
         }
 
         function closeModal() {

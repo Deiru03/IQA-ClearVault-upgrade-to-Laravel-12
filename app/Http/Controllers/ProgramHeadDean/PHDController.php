@@ -7,10 +7,13 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\UserClearance;
 use App\Models\ProgramHeadDean;
 use App\Models\SharedClearance;
 use App\Models\Clearance;
+use App\Models\SubmittedReport;
+
 
 class PHDController extends Controller
 {
@@ -99,6 +102,72 @@ class PHDController extends Controller
             ->get();
 
         return view('admin.views.phdean-views.clearance-index', compact('filteredClearances', 'userClearances', 'recommendations', 'activeClearances'));
+    }
+
+     /**
+     * Handle the user getting a copy of a shared clearance.
+     */
+    public function getCopyPhD($id)
+    {
+        $user = Auth::user();
+        $sharedClearance = SharedClearance::findOrFail($id);
+
+        // Check if the user has already copied this clearance
+        $existingCopy = UserClearance::where('shared_clearance_id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($existingCopy) {
+            return redirect()->route('phd.programHeadDean.indexPhD')->with('error', 'You have already copied this clearance.');
+        }
+
+        // Deactivate other clearances
+        UserClearance::where('user_id', $user->id)
+            ->update(['is_active' => false]);
+
+        // Create a new user clearance and set it as active
+        UserClearance::create([
+            'shared_clearance_id' => $id,
+            'user_id' => $user->id,
+            'is_active' => true,
+
+        ]);
+
+        SubmittedReport::create([
+            'user_id' => Auth::id(),
+            'title' => 'Copied a clearance for ' . $sharedClearance->clearance->name,
+            'transaction_type' => 'Aquired Checklist',
+            'status' => 'Completed',
+        ]);
+        return redirect()->route('phd.programHeadDean.indexPhD')->with('success', 'Clearance copied and set as active successfully.');
+    }
+
+    public function removeCopyPhD($id)
+    {
+        $user = Auth::user();
+
+        try {
+            // Find the user's clearance copy
+            $userClearance = UserClearance::where('shared_clearance_id', $id)
+                ->where('user_id', $user->id)
+                ->firstOrFail();
+
+            // Delete the user's clearance copy
+            $userClearance->delete();
+
+            SubmittedReport::create([
+                'user_id' => Auth::id(),
+                'title' => 'Removed a clearance copy for ' . $userClearance->sharedClearance->clearance->name,
+                'transaction_type' => 'Removed Checklist',
+                'status' => 'Completed',
+            ]);
+
+            return redirect()->route('phd.programHeadDean.indexPhD')->with('success', 'Clearance copy removed successfully.');
+        } catch (\Exception $e) {
+            Log::error('Removing Clearance Copy Error: '.$e->getMessage());
+
+            return redirect()->route('phd.programHeadDean.indexPhD')->with('error', 'Failed to remove clearance copy.');
+        }
     }
 
 }
