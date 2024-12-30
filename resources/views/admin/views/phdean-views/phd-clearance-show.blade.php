@@ -189,7 +189,18 @@
             </div>
         </div> --}}
 
-        <h3 class="text-2xl font-semibold mt-8 mb-4 text-indigo-600">Requirements</h3>
+        <div class="flex items-center justify-between mt-8 mb-6">
+            <div class="flex items-center space-x-3">
+            <h3 class="text-2xl font-bold text-indigo-600">Requirements Checklist</h3>
+            <span class="px-3 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-full">{{ count($userClearance->sharedClearance->clearance->requirements->where('is_archived', false)) }} Items</span>
+            </div>
+            <div class="text-sm text-gray-500 flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            <span>Manage your document requirements below</span>
+            </div>
+        </div>
 
         @if(session('success'))
             <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-4 shadow-sm border-l-4 border-green-500">

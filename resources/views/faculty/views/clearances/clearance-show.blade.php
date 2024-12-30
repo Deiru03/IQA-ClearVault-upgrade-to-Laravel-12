@@ -166,7 +166,7 @@
                 </svg>
             </div>
         </div>
-
+{{-- 
         <div class="text-center mt-6">
              <!-- Generate My Checklist Button -->
              <div class="text-center mt-6">
@@ -187,9 +187,20 @@
                     Generate Clearance Slip
                 </a>
             </div>
-        </div>
+        </div> --}}
 
-        <h3 class="text-2xl font-semibold mt-8 mb-4 text-indigo-600">Requirements</h3>
+        <div class="flex items-center justify-between mt-8 mb-6">
+            <div class="flex items-center space-x-3">
+            <h3 class="text-2xl font-bold text-indigo-600">Requirements Checklist</h3>
+            <span class="px-3 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-full">{{ count($userClearance->sharedClearance->clearance->requirements->where('is_archived', false)) }} Items</span>
+            </div>
+            <div class="text-sm text-gray-500 flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            <span>Manage your document requirements below</span>
+            </div>
+        </div>
 
         @if(session('success'))
             <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-4 shadow-sm border-l-4 border-green-500">
@@ -203,34 +214,80 @@
             </div>
         @endif
 
-        <div id="missingTracker" class="mb-6 bg-transparent p-4">
-            <div class="flex flex-col gap-4">
-                <div class="flex items-center">
-                    <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        <div class="mb-8 space-y-6">
+            <!-- Action Buttons Section -->
+            <div class="flex flex-col items-center space-y-4 p-6 bg-white rounded-xl shadow-md border border-indigo-100 hover:shadow-lg transition-all duration-300">
+                <div class="flex flex-wrap justify-center gap-4">
+                    <!-- Download Checklist Button -->
+                    <a href="{{ route('faculty.clearanceChecklist', $userClearance->shared_clearance_id) }}" target="_blank"
+                        class="inline-flex items-center px-6 py-3 {{ Auth::user()->clearances_status == 'complete' ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600' }} text-white font-medium rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 shadow-md">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        <span id="missingCount" class="text-sm font-medium text-gray-600"></span>
-                        <button id="findMissing" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors duration-200 text-sm font-medium ml-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        Download Checklist PDF
+                    </a>
+
+                    <!-- Generate Clearance Slip Button -->
+                    <a href="{{ route('faculty.generateClearanceReport') }}" 
+                        class="inline-flex items-center px-6 py-3 {{ Auth::user()->clearances_status === 'complete' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600' }} text-white font-medium rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 shadow-md">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                        </svg>
+                        Generate Clearance Slip
+                    </a>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Last Updated: {{ date('F d, Y', strtotime($userClearance->updated_at)) }}
+                </div>
+            </div>
+
+            <!-- Requirements Tracking Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Missing Requirements Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-yellow-100 hover:shadow-xl transition-all duration-300">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-yellow-50 rounded-xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold text-gray-600">Missing Requirements</span>
+                                <span id="missingCount" class="text-lg font-bold text-yellow-600"></span>
+                            </div>
+                        </div>
+                        <button id="findMissing" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg transition-all duration-300 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                            Find Missing Docs
+                            Locate Missing Files
                         </button>
                     </div>
                 </div>
 
-                <div class="flex items-center">
-                    <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        <span id="returnCount" class="text-sm font-medium text-gray-600"></span>
-                        <button id="findReturn" class="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-200 text-sm font-medium ml-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- Resubmit Requirements Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border border-red-100 hover:shadow-xl transition-all duration-300">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-red-50 rounded-xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold text-gray-600">Requirements for Resubmission</span>
+                                <span id="returnCount" class="text-lg font-bold text-red-600"></span>
+                            </div>
+                        </div>
+                        <button id="findReturn" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition-all duration-300 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
                             </svg>
-                            Find Resubmit Docs
+                            Find Resubmission Items
                         </button>
                     </div>
                 </div>
