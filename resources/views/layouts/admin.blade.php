@@ -171,6 +171,12 @@
                                 <span>Check Clearance</span>
                                 <span id="clearanceBadge" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
                             </a>
+                            @if(Auth::user()->user_type == 'Program-Head' || (Auth::user()->user_type == 'Dean'))
+                                <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{-- {{ request()->routeIs('admin.clearance.check') || request()->routeIs('admin.clearances.show') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }} --}}">
+                                    <span>Upload Clearances</span>
+                                    <span id="clearanceBadge" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                                </a>
+                            @endif
                         </div>
                     </div>
 

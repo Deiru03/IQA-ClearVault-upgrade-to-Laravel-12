@@ -264,7 +264,8 @@
 }
 
 /* Add a container query for modern browsers */
-@container (min-width: 400px) {
+@container () {
+    min-width: 400px;
     .team-member-card {
         padding: 2.5rem;
     }
