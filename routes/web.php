@@ -292,7 +292,8 @@ Route::middleware(['auth', 'verified', 'Faculty'])->prefix('faculty')->group(fun
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////------------------ Prgram Head & Dean Routes ------------------///////////////////////////////////
 Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix('admin')->group(function () {
-    Route::get('/phd/program-head-dean/clearances', [ProgDeanController::class, 'indexPHD'])->name('phd.programHeadDean.clearance');
+    Route::get('/phd/program-head-dean/clearances', [ProgDeanController::class, 'clearancePhD'])->name('phd.programHeadDean.clearance');
+    Route::get('/phd/program-head-dean/clearances/view-checklist', [ProgDeanController::class, 'indexPhD'])->name('phd.programHeadDean.indexPhD');
 });
 
 //////////////////////////////------------------ End of PH & Dean Routes ------------------////////////////////////////
