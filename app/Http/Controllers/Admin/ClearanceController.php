@@ -402,19 +402,23 @@ class ClearanceController extends Controller
     ///////////////////////////////////////// Clearance Requirements ///////////////////////////////////////
 
 
-    public function showUserClearance($id)
+    public function showUserClearance($userId, $clearanceId = null)
     {
-
-        // Update the session with the current timestamp
         session(['last_clearance_check' => now()]);
 
-        $userClearance = UserClearance::with(['sharedClearance.clearance.requirements', 'uploadedClearances.requirement.feedback', 'user'])
-        ->where('user_id', $id)
-        ->first();
+        $userClearances = UserClearance::with(['sharedClearance.clearance.requirements', 'uploadedClearances.requirement.feedback', 'user'])
+            ->where('user_id', $userId)
+            ->get();
 
-        if (!$userClearance) {
+        if ($userClearances->isEmpty()) {
             return redirect()->route('admin.clearance.check')
                 ->with('error', 'This user does not have a clearance copy yet.');
+        }
+
+        $userClearance = $clearanceId ? $userClearances->where('id', $clearanceId)->first() : $userClearances->first();
+
+        if (!$userClearance) {
+            abort(404, 'Clearance not found.');
         }
 
         $user = User::with(['college', 'program'])->find($userClearance->user_id);
@@ -427,7 +431,7 @@ class ClearanceController extends Controller
 
         $academicYears = $this->getAcademicYears();
 
-        return view('admin.views.clearances.user-clearance-details', compact('userClearance', 'user', 'college', 'program', 'academicYears'));
+        return view('admin.views.clearances.user-clearance-details', compact('userClearances', 'userClearance', 'user', 'college', 'program', 'academicYears'));
     }
 
     public function checkClearances(Request $request)
@@ -446,7 +450,15 @@ class ClearanceController extends Controller
 
         $academicYears = $this->getAcademicYears();
 
-        return view('admin.views.clearances.clearance-check', compact('users', 'academicYears'));
+         // Get the first user clearance ID for each user
+        $clearanceIds = [];
+        foreach ($users as $user) {
+            if ($user->userClearances->isNotEmpty()) {
+                $clearanceIds[$user->id] = $user->userClearances->first()->id;
+            }
+        }
+
+        return view('admin.views.clearances.clearance-check', compact('users', 'academicYears', 'clearanceIds'));
     }
 
     public function approveClearance($id)

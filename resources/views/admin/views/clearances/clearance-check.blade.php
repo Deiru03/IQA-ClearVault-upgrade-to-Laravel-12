@@ -119,7 +119,10 @@
                 </span>
             </div>
             @forelse($users as $user)
-                <a href="{{ route('admin.clearances.show', $user->id) }}" class="user-clearance-link bg-white rounded-lg shadow p-3 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 ease-in-out border border-gray-200" data-user-id="{{ $user->id }}">
+            @php
+                $firstClearanceId = $user->userClearances->isNotEmpty() ? $user->userClearances->first()->id : null;
+            @endphp
+                <a href="{{ $firstClearanceId ? route('admin.clearances.show', ['userId' => $user->id, 'clearanceId' => $firstClearanceId]) : '#'}}" class="user-clearance-link bg-white rounded-lg shadow p-3 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 ease-in-out border border-gray-200" data-user-id="{{ $user->id }}">
                     <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mb-2 flex items-center justify-center p-1">
                         @if ($user->profile_picture)
                             @if (str_contains($user->profile_picture, 'http'))

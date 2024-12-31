@@ -215,7 +215,8 @@ Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix
     Route::get('/admin/clearance/shared', [AdminClearanceController::class, 'shared'])->name('admin.clearance.shared');
     Route::delete('/admin/clearance/shared/{id}', [AdminClearanceController::class, 'removeShared'])->name('admin.clearance.removeShared');
     Route::get('/admin/clearances/{id}', [AdminClearanceController::class, 'approveClearance'])->name('admin.clearances.approve');
-    Route::get('/admin/clearances/{id}', [AdminClearanceController::class, 'showUserClearance'])->name('admin.clearances.show');
+    // Route::get('/admin/clearances/{id}', [AdminClearanceController::class, 'showUserClearance'])->name('admin.clearances.show');
+    Route::get('/admin/clearances/{userId}/{clearanceId}', [AdminClearanceController::class, 'showUserClearance'])->name('admin.clearances.show');
     ////////////////////////////// USERS Clearance Reset ||||| Archiving Route and Methods//////////////////////////////
     Route::post('/admin/clearance/reset-selected', [AdminClearanceController::class, 'resetSelected'])->name('admin.clearance.resetSelected');
     Route::post('/admin/clearance/reset', [AdminClearanceController::class, 'resetUserClearances'])->name('admin.clearance.reset');

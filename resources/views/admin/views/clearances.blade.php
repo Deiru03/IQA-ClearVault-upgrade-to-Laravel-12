@@ -309,7 +309,10 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($clearance as $user)
-                        <tr class="hover:bg-gray-50" onclick="window.location.href='{{ route('admin.clearances.show', $user->id) }}'">
+                        @php
+                            $firstClearanceId = $user->userClearances->isNotEmpty() ? $user->userClearances->first()->id : null;
+                        @endphp     
+                        <tr class="hover:bg-gray-50" onclick="window.location.href='{{ $firstClearanceId ? route('admin.clearances.show', ['userId' => $user->id, 'clearanceId' => $firstClearanceId]) : '#'}}'">
                             <td class="py-2 px-3 text-xs">{{ $user->id }}</td>
                             <td class="py-2 px-3 text-xs">{{ $user->name }}</td>
                             <td class="py-2 px-3 text-xs max-w-[150px] break-words">{{ $user->email }}</td>

@@ -414,9 +414,11 @@
                                     $feedback->signature_status == 'Resubmit' &&
                                     $latestUpload->created_at > $feedback->updated_at;
                             }
+                            
+                            $firstClearanceId = $user->userClearances->isNotEmpty() ? $user->userClearances->first()->id : null;
                         @endphp
 
-                          <a href="{{ route('admin.clearances.show', $user->id) }}" class="flex items-center space-x-4 p-4 rounded-lg shadow hover:bg-gray-100 transition duration-300 relative
+                          <a href="{{ $firstClearanceId ? route('admin.clearances.show', ['userId' => $user->id, 'clearanceId' => $firstClearanceId]) : '#'}}" class="flex items-center space-x-4 p-4 rounded-lg shadow hover:bg-gray-100 transition duration-300 relative
                             @if($hasComplied)
                                 bg-blue-50
                             @elseif($user->clearances_status == 'complete')

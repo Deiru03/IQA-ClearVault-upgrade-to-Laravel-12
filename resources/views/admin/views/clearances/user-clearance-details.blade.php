@@ -22,6 +22,83 @@
         <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-white"></div>
     </div> --}}
 
+    <!-- Ribbon Navigation -->
+    <div class="mb-8">
+        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            Available Clearance Documents
+        </h3>
+        
+        <div class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($userClearances as $clearance)
+                    <a href="{{ route('admin.clearances.show', ['userId' => $user->id, 'clearanceId' => $clearance->id]) }}"
+                       class="relative group">
+                        <div class="{{ $clearance->id == $userClearance->id 
+                            ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white border-2 border-indigo-300' 
+                            : 'bg-gray-50 text-gray-800 hover:bg-gray-100 border border-gray-200' }} 
+                            p-6 rounded-xl shadow-sm transition-all duration-300 ease-in-out transform hover:scale-102 hover:shadow-md">
+                            
+                            <div class="flex items-center space-x-4 mb-4">
+                                <!-- Document Icon -->
+                                <div class="{{ $clearance->id == $userClearance->id ? 'bg-white/20' : 'bg-indigo-100' }} p-3 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 {{ $clearance->id == $userClearance->id ? 'text-white' : 'text-indigo-600' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                                
+                                <span class="font-semibold text-lg truncate">
+                                    {{ $clearance->sharedClearance->clearance->document_name }}
+                                </span>
+                            </div>
+
+                            <!-- Progress Section -->
+                            @php
+                                $totalRequirements = $clearance->sharedClearance->clearance->requirements->count();
+                                $completedRequirements = $clearance->sharedClearance->clearance->requirements->filter(function($req) use ($user) {
+                                    return $req->feedback->where('user_id', $user->id)->where('signature_status', 'Complied')->count() > 0;
+                                })->count();
+                                $progress = $totalRequirements > 0 ? ($completedRequirements / $totalRequirements) * 100 : 0;
+                            @endphp
+                            
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center text-sm mb-1">
+                                    <span class="{{ $clearance->id == $userClearance->id ? 'text-white font-semibold' : 'text-gray-700 font-medium' }}">
+                                        Progress
+                                    </span>
+                                    <span class="{{ $clearance->id == $userClearance->id ? 'text-white font-bold' : 'text-indigo-600 font-bold' }}">
+                                        {{ number_format($progress, 0) }}%
+                                    </span>
+                                </div>
+                                <div class="w-full h-3 bg-gray-300 rounded-full overflow-hidden shadow-inner">
+                                    <div class="h-full {{ $clearance->id == $userClearance->id 
+                                        ? 'bg-gradient-to-r from-white/90 to-white shadow-lg' 
+                                        : 'bg-gradient-to-r from-indigo-500 to-indigo-600 shadow-lg' }} 
+                                        rounded-full transition-all duration-300 ease-in-out"
+                                        style="width: {{ $progress }}%">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Requirements Counter -->
+                            <div class="mt-4 text-sm {{ $clearance->id == $userClearance->id ? 'text-white/90' : 'text-gray-600' }}">
+                                {{ $completedRequirements }} of {{ $totalRequirements }} requirements completed
+                            </div>
+                        </div>
+
+                        <!-- Hover Tooltip -->
+                        <div class="absolute -top-16 left-1/2 transform -translate-x-1/2 w-64 p-3 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+                            <p class="text-center">Click to view detailed information</p>
+                            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 border-8 border-transparent border-t-gray-900"></div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
     {{-- Display User ID and Name --}}
     <div class="mb-8 p-6 flex items-center space-x-8 border border-gray-300">
         <div class="flex flex-col md:flex-row items-start md:items-center space-y-6 md:space-y-0 md:space-x-8 p-6 w-full">
