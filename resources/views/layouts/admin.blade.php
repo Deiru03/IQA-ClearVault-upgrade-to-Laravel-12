@@ -124,12 +124,48 @@
                     {{-- <img src="{{ asset('images/OMSCLogo.png') }}" alt="Logo" class="h-12 w-12 mr-2">
                     <span class="text-lg font-semibold">{{ Auth::user()->name }}</span> --}
                 </div>  --}}
+
+                @php
+                $role = Auth::user()->user_type;
+                $sAdmin = Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id;
+                $welcomeMessage = [
+                    'Admin' => 'Welcome to the OMSC Admin Dashboard',
+                    'Program-Head' => 'Welcome to the OMSC Program Head Dashboard',
+                    'Dean' => 'Welcome to the OMSC Dean Dashboard',
+                    'default' => 'Welcome to the OMSC Admin Dashboard'
+                ];
+            
+                // switch ($role) {
+                //     case 'Admin':
+                //         echo $welcomeMessage['Admin'];
+                //         break;
+                //     case 'sAdmin':
+                //         echo $welcomeMessage['sAdmin'];
+                //         break;
+                //     case 'Program-Head':
+                //         echo $welcomeMessage['Program-Head'];
+                //         break;
+                //     case 'Dean':
+                //         echo $welcomeMessage['Dean'];
+                //         break;
+                //     default:
+                //         echo $welcomeMessage['default'];
+                //         break;
+                // }
+
+              
+
+            @endphp
                 <div class="mt-auto p-2">
                     <a href="{{ route('admin.home') }}" class="block hover:bg-gray-700 rounded-lg transition duration-300 ease-in-out">
                         <div class="flex flex-col items-center p-4">
                             <img src="{{ asset('images/OMSCLogo.png') }}" alt="OMSC Logo" class="w-16 h-16 mb-3">
                             <p class="text-sm text-gray-400 text-center group-hover:text-indigo-300 transition duration-150 ease-in-out">
-                                Welcome to the OMSC Admin Dashboard
+                                @if  ($sAdmin)
+                                    Welcome to the Super Admin Dashboard
+                                @else
+                                    {{$welcomeMessage[$role]}}
+                                @endif
                             </p>
                             <p class="text-xs text-gray-500 mt-2 text-center group-hover:text-indigo-300 transition duration-150 ease-in-out">
                                 Manage clearances, analyze reports, and oversee system files.
