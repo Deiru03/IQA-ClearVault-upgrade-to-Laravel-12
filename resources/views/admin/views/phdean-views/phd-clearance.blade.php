@@ -68,11 +68,26 @@
                     </nav>
                 </div>
 
+                @php
+                    
+                    // $userClearanceFaculty = $userClearance->user->facultyClearance;
+
+                @endphp
+
                 <div id="phd-tab" class="tab-content">
                     @include('admin.views.phdean-views.phd-clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
                 </div>
                 <div id="clearance-tab" class="tab-content">
-                    @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
+                    <div class="p-6 flex items-center justify-center bg-yellow-50 border-2 border-yellow-200 rounded-lg m-4">
+                        <svg class="w-6 h-6 text-yellow-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <p class="text-yellow-700">
+                            <span class="font-semibold">Notice:</span>
+                            This feature is currently in testing phase and under development. Please disregard this section for now as it will be implemented in future updates.
+                        </p>
+                    </div>
+                    @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearanceFaculty, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
                 </div>
             </div>
         </div>

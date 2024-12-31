@@ -41,7 +41,15 @@ class PHDClearanceController extends Controller
 
         $userInfo = Auth::user();
 
-        return view('admin.views.phdean-views.phd-clearance', compact('userClearance', 'userInfo'));
+        // Fetch the user clearance data for FACULTY only
+        $userClearanceFaculty = UserClearance::where('user_id', Auth::id())
+            ->whereHas('sharedClearance.clearance', function($query) {
+                $query->whereNot('type', ['Program-Head', 'Dean']);
+            })
+            ->with('sharedClearance.clearance')
+            ->first();
+
+        return view('admin.views.phdean-views.phd-clearance', compact('userClearance','userClearanceFaculty' ,'userInfo'));
     }
 
     public function indexPhD(): View
