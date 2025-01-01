@@ -66,8 +66,8 @@
                                     <span class="text-gray-500">Progress</span>
                                     <span class="font-medium text-gray-700">{{ number_format($progress, 0) }}%</span>
                                 </div>
-                                <div class="w-full h-1.5 bg-gray-100 rounded overflow-hidden">
-                                    <div class="h-full bg-gray-700 rounded transition-all duration-200"
+                                <div class="w-full h-2 bg-gray-100 border border-gray-300 rounded overflow-hidden">
+                                    <div class="h-full {{ $progress == 100 ? 'bg-green-500' : 'bg-gray-700' }} rounded transition-all duration-200"
                                          style="width: {{ $progress }}%"></div>
                                 </div>
                                 <div class="text-xs text-gray-500">

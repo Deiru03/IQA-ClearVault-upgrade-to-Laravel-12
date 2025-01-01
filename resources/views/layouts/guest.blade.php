@@ -145,11 +145,10 @@
 
             <!-- Right side - Content -->
             <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 form-container">
-            <div class="w-full max-w-lg bg-white/95 backdrop-blur-sm p-8 rounded-xl 
-                    shadow-2xl transform transition-all duration-300 
-                    hover:shadow-blue-400/30 hover:scale-[1.02]">
-                {{ $slot }}
-            </div>
+                <div class="w-full max-w-lg bg-white/95 backdrop-blur-sm p-8 rounded-xl 
+                        shadow-2xl transform transition-all duration-300"">
+                    {{ $slot }}
+                </div>
             </div>
         </div>
 
