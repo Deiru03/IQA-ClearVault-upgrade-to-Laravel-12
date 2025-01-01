@@ -7,6 +7,7 @@ use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\Admin\ClearanceController as AdminClearanceController;
 use App\Http\Controllers\Faculty\ClearanceController as FacultyClearanceController;
 use App\Http\Controllers\ProgramHeadDean\PHDClearanceController as ProgDeanController;
+use App\Http\Controllers\ProgramHeadDean\GenerateReports as ProgDeanGenerateReports;
 use App\Http\Controllers\Admin\CampusController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
@@ -306,6 +307,10 @@ Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix
     Route::get('/phd/clearances/{sharedClearanceId}/requirement/{requirementId}/files', [ProgDeanController::class, 'getUploadedFilesPhD'])->name('phd.clearances.getFiles');
     Route::delete('/phd/clearances/{sharedClearanceId}/upload/{requirementId}/delete/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');
     Route::delete('/phd/clearances/delete/{sharedClearanceId}/{requirementId}/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');
+
+    // Generate Checklist and Slip
+    Route::get('/phd/clearance-report', [ProgDeanGenerateReports::class, 'generateClearanceReportPhD'])->name('phd.generateClearanceReport');
+    Route::get('/phd/clearance-checklist/{id}', [ProgDeanGenerateReports::class, 'generateChecklistPhD'])->name('phd.clearanceChecklist');
 });
 
 //////////////////////////////------------------ End of PH & Dean Routes ------------------////////////////////////////
