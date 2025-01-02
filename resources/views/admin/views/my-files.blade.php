@@ -16,6 +16,55 @@
             </div>            
         </div>
     </div>
+
+    @php
+        $userId = Auth::id();
+        $totalSize = 0;
+
+        $uploadedClearances = \App\Models\UploadedClearance::get();
+
+        foreach ($uploadedClearances as $clearance) {
+            $filePath = storage_path('app/public/' . $clearance->file_path);
+            if (file_exists($filePath)) {
+                $totalSize += filesize($filePath);
+            }
+        }
+
+        $storageSizeAP = $totalSize;
+        $storageValueInitial = 98798798789;
+    @endphp
+
+    @storageUsage($storageValueInitial)
+    <div class="container mx-auto px-4 py-8 bg-white rounded-lg border-2 border-indigo-200">
+        <h4 class="text-2xl font-bold mb-6 text-gray-800">Admin Dashboard</h4>
+
+        @php
+            $storageSiz = $storageSizeASP;
+            $sizeInMB = $storageSiz / (1024 * 1024);
+            if($sizeInMB >= 1024) {
+                $size = number_format($sizeInMB / 1024, 2) . ' GB';
+            } else {
+                $size = number_format($sizeInMB, 2) . ' MB';
+            }
+        @endphp
+
+        <div class="flex items-center justify-between mb-4">
+            <span class="text-lg font-semibold text-gray-700">Personal Storage</span>
+            <span class="text-2xl font-bold text-blue-600">{{ $size }}</span>
+        </div>
+
+        <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+            <div class="h-full rounded-full bg-gradient-to-r {{ $isHighUsage ? 'from-red-500 to-red-600' : 'from-blue-500 to-indigo-600' }} transition-all duration-500" 
+            style="width: {{ $percentage }}%">
+            </div>
+        </div>
+        
+        <div class="flex justify-between text-sm text-gray-500">
+            <span>0 MB</span>
+            <span><strong class="font-semibold text-blue-600">{{ $percentage }}% </strong>used of {{ $maxStorage }} MB</span>
+            <span>{{$maxStorage }} MB</span>
+        </div>
+    </div>
     
     
 </x-admin-layout>
