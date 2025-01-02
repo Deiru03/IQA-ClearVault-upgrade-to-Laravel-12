@@ -891,7 +891,7 @@ class ClearanceController extends Controller
     }
 
     /////////////////////////////// Reset Specific User Clearance |||| View: User-Clearance-Details.blade.php ///////////////////////////////
-    public function resetSpecificUserClearance(Request $request, $userId)
+    public function resetSpecificUserClearance(Request $request, $userId, $clearanceId)
     {
         $request->validate([
             'academicYear' => 'required|string',
@@ -899,19 +899,27 @@ class ClearanceController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use ($userId, $request) {
+            DB::transaction(function () use ($userId, $clearanceId, $request) {
                 // Get user details first
                 $user = User::findOrFail($userId);
 
                 // Archive all feedback and uploaded files for this user
-                ClearanceFeedback::where('user_id', $userId)->update([
-                    'is_archived' => true,
-                    'signature_status' => 'Checking' // Reset signature status
-                ]);
-
-                 // Update only new uploaded clearances
+                // First get the requirement IDs for this clearance
+                $requirementIds = ClearanceRequirement::where('clearance_id', $clearanceId)
+                    ->pluck('id');
+                    
+                // Update feedback for those specific requirements
+                ClearanceFeedback::where('user_id', $userId)
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->update([
+                        'is_archived' => true,
+                        'signature_status' => 'Checking'
+                    ]);
+                    
+                // Update uploaded clearances for this specific clearance
                 UploadedClearance::where('user_id', $userId)
-                    ->whereNull('archive_date') // Ensure only new records are updated
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->whereNull('archive_date')
                     ->update([
                         'is_archived' => true,
                         'academic_year' => $request->academicYear,

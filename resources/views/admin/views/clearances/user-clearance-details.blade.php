@@ -517,14 +517,19 @@
         document.getElementById('confirmResetButton').addEventListener('click', function() {
             const academicYear = document.getElementById('academicYear').value;
             const semester = document.getElementById('semester').value;
+            const clearanceId = document.getElementById('clearanceSelect').value;
 
-            fetch('{{ route('admin.clearance.resetSpecific', ['userId' => $userClearance->user->id]) }}', {
+            fetch('{{ route('admin.clearance.resetSpecific', ['userId' => $userClearance->user->id, 'clearanceId' => $userClearance->sharedClearance->clearance->id]) }}', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ academicYear, semester })
+                body: JSON.stringify({ 
+                    academicYear, 
+                    semester,
+                    clearanceId: parseInt(clearanceId)
+                })
             })
             .then(response => response.json())
             .then(data => {

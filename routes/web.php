@@ -221,7 +221,7 @@ Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix
     ////////////////////////////// USERS Clearance Reset ||||| Archiving Route and Methods//////////////////////////////
     Route::post('/admin/clearance/reset-selected', [AdminClearanceController::class, 'resetSelected'])->name('admin.clearance.resetSelected');
     Route::post('/admin/clearance/reset', [AdminClearanceController::class, 'resetUserClearances'])->name('admin.clearance.reset');
-    Route::post('/admin/clearance/reset/{userId}', [AdminClearanceController::class, 'resetSpecificUserClearance'])->name('admin.clearance.resetSpecific');
+    Route::post('/admin/clearance/reset/{userId}/{clearanceId}', [AdminClearanceController::class, 'resetSpecificUserClearance'])->name('admin.clearance.resetSpecific');
     /////////////////////////////////////////// User Clearance DetailsSearch ///////////////////////////////////////////
     Route::post('/admin/clearance/feedback/store', [AdminClearanceController::class, 'storeFeedback'])->name('admin.clearance.feedback.store');
     // Route::post('/admin/admin/clearance/search', [AdminClearanceController::class, 'search'])->name('admin.clearance.search');
