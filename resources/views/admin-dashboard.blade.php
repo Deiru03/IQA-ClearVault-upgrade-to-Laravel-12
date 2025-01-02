@@ -385,6 +385,108 @@
             </script>
         </div>
     </div>
+
+    <!-- Storage Information -->
+    <div class="py-0">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white p-6 rounded-xl shadow-xl border-2 border-indigo-200 hover:shadow-2xl transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-800">System Storage Overview</h4>
+                        <p class="text-gray-500 text-sm">Monitor storage consumption in real-time</p>
+                    </div>
+                    <div class="p-2 bg-blue-50 rounded-lg">
+                        <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-gray-50 to-white p-4 rounded-xl border border-gray-100 shadow-inner">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-base font-bold text-gray-700">Current Usage</span>
+                        <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                            {{ number_format($storageSize / (1024 * 1024), 2) }} MB
+                        </span>
+                    </div>
+                    
+                    @php
+                        $maxStorage = 999;
+                        $percentage = number_format(min(($storageSize / (1024 * 1024 * $maxStorage)) * 100, 100), 2);
+                        $isHighUsage = $percentage > 90;
+                    @endphp
+                    
+                    <div class="relative w-full h-4 bg-gray-200 rounded-full overflow-hidden mb-2">
+                        <div class="h-full rounded-full transition-all duration-700 ease-in-out 
+                            {{ $percentage >= 80 ? 'bg-gradient-to-r from-red-500 to-red-600 animate-none' : 
+                               ($isHighUsage ? 'bg-gradient-to-r from-red-800 to-red-300' : 
+                               'bg-gradient-to-r from-blue-500 to-blue-600') }} relative"
+                            style="width: {{ $percentage }}%">
+                            <div class="absolute inset-0 {{ $percentage >= 80 ? 'bg-white/20' : 'bg-white/10' }}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-500">0 MB</span>
+                        <span class="px-2 py-0.5 rounded-full {{ $isHighUsage ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700' }}">
+                            {{ $percentage }}% Used
+                        </span>
+                        <span class="text-gray-500">{{ $maxStorage > 999 ? number_format($maxStorage/1000, 1) . ' GB' : $maxStorage . ' MB' }}</span>
+                    </div>
+
+                    @if($isHighUsage)
+                    <div class="mt-2 p-2 bg-red-50 rounded-lg border border-red-100">
+                        <p class="text-sm text-red-700 flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            Storage nearly full. Free up space.
+                        </p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Storage Warning Modal -->
+    @if($percentage >= 80)
+        <div class="py-2">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-md">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-red-800">
+                                Storage Warning
+                            </h3>
+                            <div class="mt-1">
+                                <p class="text-sm text-red-700">
+                                    @if($percentage >= 90)
+                                        Critical storage level! Your storage is at {{ $percentage }}% capacity. Please free up space immediately to prevent system issues.
+                                    @else
+                                        Your storage is at {{ $percentage }}% capacity. Consider freeing up space soon.
+                                    @endif
+                                </p>
+                            </div>
+                            <div class="mt-2">
+                                <a href="{{ route('admin.views.submittedReports') }}" class="inline-flex items-center px-3 py-2 border border-red-600 text-sm leading-4 font-medium rounded-md text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
+                                    Manage Storage
+                                    <svg class="ml-2 -mr-0.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="py-0">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 

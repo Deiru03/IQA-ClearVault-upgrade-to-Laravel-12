@@ -37,7 +37,11 @@ class AdminController extends Controller
 
     public function overview(): View
     {
-        return view('admin.overview');
+        $storagePath = storage_path();
+        $storageSize = getDirectorySize($storagePath);
+        
+        
+        return view('admin.overview', compact('storageSize')) ;
     }
 
      /////////////////////////////////////////////// Auto Update Clearance Status Controller /////////////////////////////////////////////////
@@ -179,6 +183,9 @@ class AdminController extends Controller
             return view('dashboard');
         }
 
+        $storagePath = storage_path();
+        $storageSize = getDirectorySize($storagePath);
+
         //////////////////////// Dashboard Throw Variables //////////////////////////
         return view('admin-dashboard', compact('TotalUser', 'clearancePending',
          'clearanceComplete', 'clearanceReturn', 'clearanceTotal',
@@ -186,7 +193,8 @@ class AdminController extends Controller
          'managedUsers', 'managedFacultyCount', 'submittedReportsCount',
          'facultyPartTime', 'facultyPartTimeFT', 'facultyPermanentFT', 'facultyPermanentT', 'facultyDean', 'facultyPH',
          'usersDean', 'usersPH',
-         'completedClearancesThisMonth', 'newUsersThisMonth', 'recentLogins'));
+         'completedClearancesThisMonth', 'newUsersThisMonth', 'recentLogins',
+         'storageSize'));
     }
 
     public function clearances(Request $request): View

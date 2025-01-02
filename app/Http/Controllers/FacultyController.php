@@ -15,6 +15,8 @@ use App\Models\Clearance;
 use App\Models\SharedClearance;
 use App\Models\Program;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+use App\helper;
 
 class FacultyController extends Controller
 {
@@ -28,7 +30,10 @@ class FacultyController extends Controller
 
     public function overview(): View
     {
-        return view('faculty.overview');
+        $storagePath = storage_path();
+        $storageSize = getDirectorySize($storagePath);
+
+        return view('faculty.overview', compact('storageSize'));
     }
 
     public function dashboard(): View

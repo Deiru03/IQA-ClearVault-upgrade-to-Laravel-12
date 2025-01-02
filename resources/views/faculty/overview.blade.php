@@ -216,5 +216,42 @@
                 <p class="text-sm text-gray-500 mt-2">Available Monday to Friday, 8:00 AM - 5:00 PM</p>
             </div>
         </div>
+
+        <!-- Storage Size Section -->
+        <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h4 class="text-2xl font-bold text-gray-800">System Storage Consumption</h4>
+                    <p class="text-gray-500 mt-1">Current system storage usage</p>
+                </div>
+                <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                </svg>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-lg font-semibold text-gray-700">System Storage</span>
+                    <span class="text-2xl font-bold text-blue-600">{{ number_format($storageSize / (1024 * 1024), 2) }} MB</span>
+                </div>
+                
+                @php
+                    $maxStorage = 1000; // 500MB limit
+                    $percentage = number_format(min(($storageSize / (1024 * 1024 * $maxStorage)) * 100, 100), 2);
+                @endphp
+                
+                <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                    <div class="h-full rounded-full bg-gradient-to-r {{ $percentage > 90 ? 'from-red-500 to-red-600' : 'from-blue-500 to-indigo-600' }} transition-all duration-500" 
+                    style="width: {{ $percentage }}%">
+                    </div>
+                </div>
+                
+                <div class="flex justify-between text-sm text-gray-500">
+                    <span>0 MB</span>
+                    <span><strong class="font-semibold text-blue-600">{{ $percentage }}% </strong>used of {{ $maxStorage > 999 ? number_format($maxStorage/1000, 0) . ' GB' : $maxStorage . ' MB' }}</span>
+                    <span>{{ $maxStorage > 999 ? number_format($maxStorage/1000, 0) . ' GB' : $maxStorage . ' MB' }}</span>
+                </div>
+            </div>
+        </div>
     </div>
 </x-app-layout>
