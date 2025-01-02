@@ -11,8 +11,20 @@ class BladeDirectives
         // Register the storageUsage directive
         Blade::directive('storageUsage', function ($expression) {
             return "<?php
-                \$storageSizeASP = $expression;
-                \$maxStorage = 999;
+                \$userId = $expression;
+                \$totalSize = 0;
+
+                \$uploadedClearances = \App\Models\UploadedClearance::where('user_id', \$userId)->get();
+
+                foreach (\$uploadedClearances as \$clearance) {
+                    \$filePath = storage_path('app/public/' . \$clearance->file_path);
+                    if (file_exists(\$filePath)) {
+                        \$totalSize += filesize(\$filePath);
+                    }
+                }
+
+                \$storageSizeASP = \$totalSize;
+                \$maxStorage = 1500;
                 \$percentage = number_format(min((\$storageSizeASP / (1024 * 1024 * \$maxStorage)) * 100, 100), 2);
                 \$isHighUsage = \$percentage > 90;
             ?>";

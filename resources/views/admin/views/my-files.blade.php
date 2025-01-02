@@ -19,22 +19,10 @@
 
     @php
         $userId = Auth::id();
-        $totalSize = 0;
-
-        $uploadedClearances = \App\Models\UploadedClearance::get();
-
-        foreach ($uploadedClearances as $clearance) {
-            $filePath = storage_path('app/public/' . $clearance->file_path);
-            if (file_exists($filePath)) {
-                $totalSize += filesize($filePath);
-            }
-        }
-
-        $storageSizeAP = $totalSize;
-        $storageValueInitial = 98798798789;
     @endphp
 
-    @storageUsage($storageValueInitial)
+    @storageUsage($userId)
+    
     <div class="container mx-auto px-4 py-8 bg-white rounded-lg border-2 border-indigo-200">
         <h4 class="text-2xl font-bold mb-6 text-gray-800">Admin Dashboard</h4>
 
