@@ -455,7 +455,7 @@
                                     <div class="h-[150px] overflow-y-auto pr-4 space-y-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                                         <p class="text-sm text-gray-600">
                                             <span class="font-medium">Document Name:</span>
-                                            {{ $clearance->clearance->document_name }}
+                                            <span class="text-blue-700 font-semibold">{{ $clearance->clearance->document_name }}</span>
                                         </p>
                                         <p class="text-sm text-gray-600">
                                             <span class="font-medium">Description:</span>
@@ -467,7 +467,7 @@
                                         </p>
                                         <p class="text-sm text-gray-600">
                                             <span class="font-medium">Type/Position:</span>
-                                            <span class='text-blue-700 font-semibold'>{{ $clearance->clearance->position }}</span>
+                                            <span class='text-blue-700 font-semibold'>{{ $clearance->clearance->type }}</span>
                                         </p>
                                         <p class="text-sm text-gray-600">
                                             <span class="font-medium">Created Date:</span>
@@ -522,7 +522,7 @@
 
     <!-- Notification -->
     <div id="notification"
-        class="z-50 fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg transform transition-all duration-500 opacity-0 translate-y-[-100%] pointer-events-none">
+        class="z-50 fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg transform transition-all duration-500 opacity-0 translate-y-[-100%] pointer-events-none" style="z-index: 9999;">
     </div>
 
     <!-- Script to handle modal and notification -->
