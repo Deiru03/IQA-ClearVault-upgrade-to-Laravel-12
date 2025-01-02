@@ -25,16 +25,6 @@ class FacultyController extends Controller
     {
         return view('faculty.home');
     }
-    private function getDirectorySize($dir)
-    {
-        $size = 0;
-
-        foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
-            $size += is_file($each) ? filesize($each) : $this->getDirectorySize($each);
-        }
-
-        return $size;
-    }
 
     private function getUserStorageSize($userId)
     {

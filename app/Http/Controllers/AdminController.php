@@ -35,6 +35,17 @@ class AdminController extends Controller
         return view('admin.home');
     }
 
+    private function getDirectorySize($dir)
+    {
+        $size = 0;
+
+        foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
+            $size += is_file($each) ? filesize($each) : $this->getDirectorySize($each);
+        }
+
+        return $size;
+    }
+
     public function overview(): View
     {
         $storagePath = storage_path();
@@ -195,17 +206,6 @@ class AdminController extends Controller
          'usersDean', 'usersPH',
          'completedClearancesThisMonth', 'newUsersThisMonth', 'recentLogins',
          'storageSize'));
-    }
-
-    private function getDirectorySize($dir)
-    {
-        $size = 0;
-
-        foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
-            $size += is_file($each) ? filesize($each) : $this->getDirectorySize($each);
-        }
-
-        return $size;
     }
 
     public function clearances(Request $request): View
