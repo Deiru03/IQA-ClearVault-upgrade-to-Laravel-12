@@ -15,8 +15,6 @@ use App\Models\Clearance;
 use App\Models\SharedClearance;
 use App\Models\Program;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
-use App\helper;
 
 class FacultyController extends Controller
 {
@@ -28,10 +26,21 @@ class FacultyController extends Controller
         return view('faculty.home');
     }
 
+    private function getDirectorySize($dir)
+    {
+        $size = 0;
+
+        foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
+            $size += is_file($each) ? filesize($each) : $this->getDirectorySize($each);
+        }
+
+        return $size;
+    }
+
     public function overview(): View
     {
         $storagePath = storage_path();
-        $storageSize = getDirectorySize($storagePath);
+        $storageSize = $this->getDirectorySize($storagePath);
 
         return view('faculty.overview', compact('storageSize'));
     }

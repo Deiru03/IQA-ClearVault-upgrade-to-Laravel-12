@@ -38,7 +38,7 @@ class AdminController extends Controller
     public function overview(): View
     {
         $storagePath = storage_path();
-        $storageSize = getDirectorySize($storagePath);
+        $storageSize = $this->getDirectorySize($storagePath);
         
         
         return view('admin.overview', compact('storageSize')) ;
@@ -184,7 +184,7 @@ class AdminController extends Controller
         }
 
         $storagePath = storage_path();
-        $storageSize = getDirectorySize($storagePath);
+        $storageSize = $this->getDirectorySize($storagePath);
 
         //////////////////////// Dashboard Throw Variables //////////////////////////
         return view('admin-dashboard', compact('TotalUser', 'clearancePending',
@@ -195,6 +195,17 @@ class AdminController extends Controller
          'usersDean', 'usersPH',
          'completedClearancesThisMonth', 'newUsersThisMonth', 'recentLogins',
          'storageSize'));
+    }
+
+    private function getDirectorySize($dir)
+    {
+        $size = 0;
+
+        foreach (glob(rtrim($dir, '/') . '/*', GLOB_NOSORT) as $each) {
+            $size += is_file($each) ? filesize($each) : $this->getDirectorySize($each);
+        }
+
+        return $size;
     }
 
     public function clearances(Request $request): View
