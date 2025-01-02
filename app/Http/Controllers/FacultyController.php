@@ -25,7 +25,6 @@ class FacultyController extends Controller
     {
         return view('faculty.home');
     }
-
     private function getDirectorySize($dir)
     {
         $size = 0;
@@ -37,10 +36,26 @@ class FacultyController extends Controller
         return $size;
     }
 
+    private function getUserStorageSize($userId)
+    {
+        $totalSize = 0;
+
+        $uploadedClearances = UploadedClearance::where('user_id', $userId)->get();
+
+        foreach ($uploadedClearances as $clearance) {
+            $filePath = storage_path('app/public/' . $clearance->file_path);
+            if (file_exists($filePath)) {
+                $totalSize += filesize($filePath);
+            }
+        }
+
+        return $totalSize;
+    }
+
     public function overview(): View
     {
-        $storagePath = storage_path();
-        $storageSize = $this->getDirectorySize($storagePath);
+        $userId = Auth::id(); // Get the current user's ID
+        $storageSize = $this->getUserStorageSize($userId);
 
         return view('faculty.overview', compact('storageSize'));
     }

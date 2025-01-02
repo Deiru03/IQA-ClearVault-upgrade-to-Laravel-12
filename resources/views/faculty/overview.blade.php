@@ -221,8 +221,8 @@
         <div class="bg-white rounded-lg shadow-md p-8 mb-8">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h4 class="text-2xl font-bold text-gray-800">System Storage Consumption</h4>
-                    <p class="text-gray-500 mt-1">Current system storage usage</p>
+                    <h4 class="text-2xl font-bold text-gray-800">Your Storage Consumption</h4>
+                    <p class="text-gray-500 mt-1">Your personal storage usage</p>
                 </div>
                 <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
@@ -231,12 +231,12 @@
             
             <div class="bg-gray-50 p-6 rounded-lg">
                 <div class="flex items-center justify-between mb-4">
-                    <span class="text-lg font-semibold text-gray-700">System Storage</span>
+                    <span class="text-lg font-semibold text-gray-700">Personal Storage</span>
                     <span class="text-2xl font-bold text-blue-600">{{ number_format($storageSize / (1024 * 1024), 2) }} MB</span>
                 </div>
-                
+            
                 @php
-                    $maxStorage = 1000; // 500MB limit
+                    $maxStorage = 100; // 100MB personal limit
                     $percentage = number_format(min(($storageSize / (1024 * 1024 * $maxStorage)) * 100, 100), 2);
                 @endphp
                 
@@ -248,8 +248,8 @@
                 
                 <div class="flex justify-between text-sm text-gray-500">
                     <span>0 MB</span>
-                    <span><strong class="font-semibold text-blue-600">{{ $percentage }}% </strong>used of {{ $maxStorage > 999 ? number_format($maxStorage/1000, 0) . ' GB' : $maxStorage . ' MB' }}</span>
-                    <span>{{ $maxStorage > 999 ? number_format($maxStorage/1000, 0) . ' GB' : $maxStorage . ' MB' }}</span>
+                    <span><strong class="font-semibold text-blue-600">{{ $percentage }}% </strong>used of {{ $maxStorage }} MB</span>
+                    <span>{{ $maxStorage }} MB</span>
                 </div>
             </div>
         </div>

@@ -142,7 +142,7 @@ class ProfileController extends Controller
         }
         // $user->clearances_status = 'pending';
         // $user->checked_by = 'System';
-        $program = \App\Models\Program::find($request->input('program_id'));
+        $program = Program::find($request->input('program_id'));
 
         $user->position = $request->input('position');
         $user->units = $request->input('units');
@@ -167,9 +167,9 @@ class ProfileController extends Controller
 
 
         if ($user->user_type === 'Admin' || $user->user_type === 'Dean' || $user->user_type === 'Program-Head') {
-            return Redirect::route('admin.profile.edit')->with('status', 'profile-updated', 'campuses');
+            return Redirect::route('admin.profile.edit')->with('status', 'profile-updated');
         } else {
-            return Redirect::route('profile.edit')->with('status', 'profile-updated', 'campuses');
+            return Redirect::route('profile.edit')->with('status', 'profile-updated');
         }
     }
 
