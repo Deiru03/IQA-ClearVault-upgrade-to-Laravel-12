@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\UserNotification;
 use App\Models\ClearanceFeedback;
+use App\Models\UploadedFileMetadata;
+
 class ClearanceController extends Controller
 {/**
      * Display a listing of shared clearances for the faculty.
@@ -211,7 +213,7 @@ class ClearanceController extends Controller
 
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'files.*' => 'required|file|mimes:pdf|max:200000', //,doc,docx,jpg,png',
+            'files.*' => 'required|file|mimes:pdf|max:51200', //,doc,docx,jpg,png',
             'title' => 'nullable|string|max:255',
         ]);
 
@@ -229,6 +231,7 @@ class ClearanceController extends Controller
                 foreach ($request->file('files') as $file) {
                     $originalName = $file->getClientOriginalName();
                     $path = $file->storeAs('uploads/faculty_clearances', $originalName, 'public');
+                    $fileContent = file_get_contents($file->getRealPath());
 
                     $uploadedClearance = UploadedClearance::create([
                         'shared_clearance_id' => $sharedClearanceId,
@@ -236,6 +239,15 @@ class ClearanceController extends Controller
                         'user_id' => $user->id,
                         'file_path' => $path,
                     ]);
+
+                    // // Save metadata to the database
+                    // UploadedFileMetadata::create([
+                    //     'user_id' => $user->id,
+                    //     'shared_clearance_id' => $sharedClearanceId,
+                    //     'requirement_id' => $requirementId,
+                    //     'file_name' => $originalName,
+                    //     'file_content' => $fileContent,
+                    // ]);
 
                     $uploadedFiles[] = $originalName;
                 }
@@ -372,6 +384,8 @@ class ClearanceController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('File Deletion Error: '.$e->getMessage());
+            Log::error('File Upload Error: '.$e->getMessage());
+            Log::error('File Upload Trace: '.$e->getTraceAsString());
 
             SubmittedReport::create([
                 'user_id' => Auth::id(),
