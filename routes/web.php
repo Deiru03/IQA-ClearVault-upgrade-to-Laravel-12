@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ClearanceController as AdminClearanceController;
 use App\Http\Controllers\Faculty\ClearanceController as FacultyClearanceController;
 use App\Http\Controllers\ProgramHeadDean\PHDClearanceController as ProgDeanController;
 use App\Http\Controllers\ProgramHeadDean\GenerateReports as ProgDeanGenerateReports;
+use App\Http\Controllers\AdminOffice\AdminOfficeController as OfficeController;
 use App\Http\Controllers\Admin\CampusController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
@@ -83,6 +84,8 @@ Route::get('/dashboard', function () {
             Auth::user()->user_type === 'Dean' ||
             Auth::user()->user_type === 'Program-Head') {
             return redirect()->route('admin.dashboard');
+        } elseif(Auth::user()->user_type === 'Admin-Office') {
+            return redirect()->route('office.dashboard');
         } else {
             return redirect()->route('faculty.dashboard');
         }
@@ -102,6 +105,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['Admin', 'Dean', 'Program-Head'])->group(function () {
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/homepage', [AdminController::class, 'home'])->name('admin.home');
+});
+
+Route::middleware(['Admin-Office'])->group(function () {
+    Route::get('/office', [OfficeController::class, 'dashboard'])->name('office.dashboard');
 });
 
 Route::middleware(['Faculty'])->group(function () {
@@ -315,7 +322,11 @@ Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix
 
 //////////////////////////////------------------ End of PH & Dean Routes ------------------////////////////////////////
 
-
+/////////////////////////////////////////////// Admin Office Routes //////////////////////////////////////////////////
+Route::middleware(['auth', 'verified', 'Admin-Office'])->prefix('office')->group(function () {
+    Route::get('/dashboard', [OfficeController::class, 'dashboard'])->name('office.dashboard');
+    
+});
 
 Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
 

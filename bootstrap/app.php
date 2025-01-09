@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\RedirectIfNotAdmin;
 use App\Http\Middleware\RedirectIfNotFaculty;
+use App\Http\Middleware\RedirectIfOffice;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'Dean' => RedirectIfNotAdmin::class,
             'Program-Head' => RedirectIfNotAdmin::class,
             'Faculty' => RedirectIfNotFaculty::class,
+            'Admin-Office' => RedirectIfOffice::class,  
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
