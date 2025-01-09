@@ -235,7 +235,7 @@
                 </div>
                 
                 @php
-                    $maxStorage = 1000; // 500MB limit
+                    $maxStorage = 150000; // 500MB limit
                     $percentage = number_format(min(($storageSize / (1024 * 1024 * $maxStorage)) * 100, 100), 2);
                 @endphp
                 
