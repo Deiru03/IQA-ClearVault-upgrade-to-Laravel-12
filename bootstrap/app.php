@@ -15,10 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Register Middleware
         $middleware->alias([
-            'Admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
-            'Dean' => \App\Http\Middleware\RedirectIfNotAdmin::class,
-            'Program-Head' => \App\Http\Middleware\RedirectIfNotAdmin::class,
-            'Faculty' => \App\Http\Middleware\RedirectIfNotFaculty::class,
+            'Admin' => RedirectIfNotAdmin::class,
+            'Dean' => RedirectIfNotAdmin::class,
+            'Program-Head' => RedirectIfNotAdmin::class,
+            'Faculty' => RedirectIfNotFaculty::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
