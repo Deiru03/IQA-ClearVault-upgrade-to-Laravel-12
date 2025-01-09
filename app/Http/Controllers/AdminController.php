@@ -651,6 +651,14 @@ class AdminController extends Controller
     public function deleteAdminId($id)
     {
         $adminId = AdminId::findOrFail($id);
+
+        $userId = $adminId->user_id;
+
+        if ($userId) {
+            $user = User::find($userId);
+            $user->admin_id_registered = null;
+            $user->save();
+        }
         // if ($adminId->is_assigned) {
         //     return redirect()->route('admin.adminIdManagement')->withErrors(['error' => 'Cannot delete an assigned Admin ID.']);
         // }
@@ -704,6 +712,18 @@ class AdminController extends Controller
     public function deleteProgramHeadDeanId($id)
     {
         $programHeadDeanId = ProgramHeadDeanId::findOrFail($id);
+
+        $userId = $programHeadDeanId->user_id;
+
+        if ($userId) {
+            $user = User::find($userId);
+            if ($programHeadDeanId->type === 'Program-Head') {
+                $user->program_head_id = null;
+            } else {
+                $user->dean_id = null;
+            }
+            $user->save();
+        }
 
         // Forcefully remove the ID, regardless of assignment
         $programHeadDeanId->delete();
