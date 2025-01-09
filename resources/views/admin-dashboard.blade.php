@@ -411,7 +411,7 @@
                     </div>
                     
                     @php
-                        $maxStorage = 999;
+                        $maxStorage = 150000;
                         $percentage = number_format(min(($storageSize / (1024 * 1024 * $maxStorage)) * 100, 100), 2);
                         $isHighUsage = $percentage > 90;
                     @endphp
@@ -431,7 +431,8 @@
                         <span class="px-2 py-0.5 rounded-full {{ $isHighUsage ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700' }}">
                             {{ $percentage }}% Used
                         </span>
-                        <span class="text-gray-500">{{ $maxStorage > 999 ? number_format($maxStorage/1000, 1) . ' GB' : $maxStorage . ' MB' }}</span>
+                        <span class="text-gray-500">{{ $maxStorage > 999 ? number_format($maxStorage/1000, 1) . ' GB' : $maxStorage . ' MB' }} <span class="text-xs text-gray-400 italic mt-1">(Temporary Limit)</span></span>
+                        
                     </div>
 
                     @if($isHighUsage)
