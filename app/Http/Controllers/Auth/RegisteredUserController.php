@@ -57,7 +57,7 @@ class RegisteredUserController extends Controller
                 ->numbers()
                 ->mixedCase()
                 ->symbols()],
-            'user_type' => ['required', 'string', 'in:Admin,Faculty,Program-Head,Dean'],
+            'user_type' => ['required', 'string', 'in:Admin,Faculty,Program-Head,Dean,Admin-Office'],
             'units' => ['nullable', 'integer'],
             'program' => ['nullable', 'string'],
             'position' => ['required', 'string', 'in:Part-Time,Part-Time-FullTime,Permanent-Temporary,Permanent-FullTime,Dean,Program-Head'],

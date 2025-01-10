@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UploadedClearance;
+use App\Models\UserClearance;
+use App\Models\ClearanceFeedback;
 use App\Models\SubmittedReport;
 use App\Models\Program;
 use App\Models\Campus;
@@ -15,9 +17,88 @@ use App\Models\SubProgram;
 
 class OfficeController extends Controller
 {
+    public function home(): View
+    {
+        return view('office.home');
+    }
+
+    public function overview(): View
+    {
+        return view('office.overview');
+    }   
+
+    private function getUserStorageSize($userId)
+    {
+        $totalSize = 0;
+
+        $uploadedClearances = UploadedClearance::where('user_id', $userId)->get();
+
+        foreach ($uploadedClearances as $clearance) {
+            $filePath = storage_path('app/public/' . $clearance->file_path);
+            if (file_exists($filePath)) {
+                $totalSize += filesize($filePath);
+            }
+        }
+
+        return $totalSize;
+    }
+
     public function dashboard(): View
     {
-        return view("office.dashboard");
+        $user = Auth::user();
+        $showProfileModal = empty($user->program_id) || empty($user->department_id) || empty($user->position);
+
+        // Fetch the user's current active clearance data
+        $userClearance = UserClearance::with(['sharedClearance.clearance.requirements', 'uploadedClearances'])
+            ->where('user_id', $user->id)
+            ->where('is_active', true) // Ensure only active clearance is fetched
+            ->first();
+
+        $noActiveClearance = !$userClearance;
+
+        $userFeedbackReturn = ClearanceFeedback::where('user_id', $user->id)
+            ->where('signature_status', 'resubmit')
+            ->count();
+
+        $totalRequirements = 0;
+        $uploadedRequirements = 0;
+        $missingRequirements = 0;
+        $returnedDocuments = 0;
+        $completionRate = 0; // Initialize completion rate
+
+        if ($userClearance) {
+            $totalRequirements = $userClearance->sharedClearance->clearance->requirements->count();
+
+            // Filter uploaded clearances to only include those for the current active clearance
+            $currentUploadedClearances = UploadedClearance::where('shared_clearance_id', $userClearance->shared_clearance_id)
+                ->where('user_id', $user->id)
+                ->where('is_archived', false)
+                ->get();
+
+            $uploadedRequirements = $currentUploadedClearances->unique('requirement_id')->count();
+            $missingRequirements = $totalRequirements - $uploadedRequirements;
+            $returnedDocuments = ClearanceFeedback::whereIn('requirement_id', $currentUploadedClearances->pluck('requirement_id'))
+                ->where('user_id', $user->id)
+                ->where('signature_status', 'resubmit')
+                ->count();
+
+            // Calculate completion rate
+            if ($totalRequirements > 0) {
+                $completionRate = ($uploadedRequirements / $totalRequirements) * 100;
+                $completionRate = number_format($completionRate, 2); // Format to two decimal places
+            }
+        }
+
+        return view('office.dashboard', compact(
+            'showProfileModal',
+            'noActiveClearance',
+            'totalRequirements',
+            'uploadedRequirements',
+            'missingRequirements',
+            'returnedDocuments',
+            'userFeedbackReturn',
+            'completionRate' // Pass formatted completion rate to the view
+        ));
     }
 
     public function MyFiles(): View 

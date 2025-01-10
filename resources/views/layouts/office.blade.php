@@ -151,7 +151,7 @@
 
             @endphp
                 <div class="mt-auto -mb-4 p-2">
-                    <a href="{{ route('admin.home') }}" class="block hover:bg-gray-700 rounded-lg transition duration-300 ease-in-out">
+                    <a href="{{ route('office.home') }}" class="block hover:bg-gray-700 rounded-lg transition duration-300 ease-in-out">
                         <div class="flex flex-col items-center p-4">
                             <img src="{{ asset('images/OMSCLogo.png') }}" alt="OMSC Logo" class="w-16 h-16 mb-3">
                             <p class="text-sm text-gray-400 text-center group-hover:text-indigo-300 transition duration-150 ease-in-out">
@@ -169,7 +169,6 @@
                 </div>
                 <nav class="mt-2">
                     <!-- Storage Used only for Program-Head and Dean -->
-                    @if (Auth::user()->user_type == 'Program-Head' || Auth::user()->user_type == 'Dean')
                         <div class="px-4 py-2">
                             <div class="bg-gray-700 rounded-lg p-3 hover:bg-gray-600 transition-all duration-200">
                                 <div class="flex items-center space-x-2">
@@ -191,7 +190,6 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
                     <!-- Dashboard -->
                     <a href="{{ route('office.dashboard') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('office.dashboard') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
@@ -313,7 +311,7 @@
 
                             <div class="flex items-center space-x-4">
                                 <!-- Overview Link -->
-                                <a href="{{ route('admin.overview') }}" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 hover:scale-110 relative group">
+                                <a href="{{ route('office.overview') }}" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 hover:scale-110 relative group">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                                     </svg>
@@ -368,7 +366,7 @@
                                     </x-slot>
 
                                     <x-slot name="content">
-                                        <x-dropdown-link :href="route('admin.profile.edit')"
+                                        <x-dropdown-link :href="route('office.profile-edit')"
                                             class="hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150">
                                             {{ __('Profile') }}
                                         </x-dropdown-link>

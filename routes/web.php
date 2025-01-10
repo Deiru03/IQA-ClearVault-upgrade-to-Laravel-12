@@ -109,6 +109,7 @@ Route::middleware(['Admin', 'Dean', 'Program-Head'])->group(function () {
 
 Route::middleware(['Admin-Office'])->group(function () {
     Route::get('/office', [OfficeController::class, 'dashboard'])->name('office.dashboard');
+    Route::get('/office/homepage', [AdminController::class, 'home'])->name('office.home');
 });
 
 Route::middleware(['Faculty'])->group(function () {
@@ -329,9 +330,7 @@ Route::middleware(['auth', 'verified', 'Admin-Office'])->prefix('office')->group
     Route::get('/archive', [OfficeController::class, 'archive'])->name('office.archive');
     Route::get('/my-files', [OfficeController::class, 'myFiles'])->name('office.myFiles');
     Route::get('/profile-edit', [OfficeController::class, 'profileEdit'])->name('office.profile-edit');
-
-
-    
+    Route::get('/overview', [OfficeController::class, 'overview'])->name('office.overview');
 });
 
 Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');

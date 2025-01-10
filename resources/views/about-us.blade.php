@@ -9,6 +9,17 @@
             @include('about-us-content')
         </div>
     </x-admin-layout>
+@elseif (Auth::user()->user_type === 'Admin-Office')
+    <x-office-layout>
+        <x-slot name="header">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('About Us') }}
+            </h2>
+        </x-slot>
+        <div class="about-us-container">
+            @include('about-us-content')
+        </div>
+    </x-office-layout>
 @else
     <x-app-layout>
         <x-slot name="header">
@@ -20,8 +31,7 @@
             @include('about-us-content')
         </div>
     </x-app-layout>
-@endif
-
+@endif  
 <style>
 .about-us-container {
     padding: 4rem 2rem;
