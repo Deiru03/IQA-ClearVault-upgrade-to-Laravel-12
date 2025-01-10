@@ -102,8 +102,8 @@
                                     <option value="Part-Time-FullTime" {{ old('position', $user->position) === 'Part-Time-FullTime' ? 'selected' : '' }}>Part-Time (Full-Time)</option>
                                     <option value="Permanent-Temporary" {{ old('position', $user->position) === 'Permanent-Temporary' ? 'selected' : '' }}>Permanent (Temporary)</option>
                                     <option value="Permanent-FullTime" {{ old('position', $user->position) === 'Permanent-FullTime' ? 'selected' : '' }}>Permanent (Full-Time)</option>
-                                    <option value="Dean" {{ old('position', $user->position) === 'Dean' ? 'selected' : '' }}>Dean</option>
-                                    <option value="Program-Head" {{ old('position', $user->position) === 'Program-Head' ? 'selected' : '' }}>Program Head</option>
+                                    {{-- <option value="Dean" {{ old('position', $user->position) === 'Dean' ? 'selected' : '' }}>Dean</option>
+                                    <option value="Program-Head" {{ old('position', $user->position) === 'Program-Head' ? 'selected' : '' }}>Program Head</option> --}}
                                 </select>
                                 <x-input-error class="mt-2" :messages="$errors->get('position')" />
                             </div>
@@ -293,26 +293,30 @@
                                     @if(!($user->user_type === 'Admin' && is_null($user->campus_id) ||
                                         $user->user_type === 'Program-Head' && is_null($user->campus_id) || 
                                         $user->user_type === 'Dean' && is_null($user->campus_id)))
-                                    <option value="Faculty" {{ old('user_type', $user->user_type) === 'Faculty' ? 'selected' : '' }}>Faculty</option>
+                                        <option value="Admin-Office" {{ old('user_type', $user->user_type) === 'Admin-Office' ? 'selected' : '' }}>Admin Office</option>
+                                        <option value="Faculty" {{ old('user_type', $user->user_type) === 'Faculty' ? 'selected' : '' }}>Faculty</option>
                                     @endif
-                                    <option value="Admin" {{ old('user_type', $user->user_type) === 'Admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="Dean" {{ old('user_type', $user->user_type) === 'Dean' ? 'selected' : '' }}>Dean</option>
                                     <option value="Program-Head" {{ old('user_type', $user->user_type) === 'Program-Head' ? 'selected' : '' }}>Program Head</option>
+                                    <option value="Dean" {{ old('user_type', $user->user_type) === 'Dean' ? 'selected' : '' }}>Dean</option>
+                                    <option value="Admin" {{ old('user_type', $user->user_type) === 'Admin' ? 'selected' : '' }}>Admin</option>
                                 </select>
                                 <x-input-error class="mt-2" :messages="$errors->get('user_type')" />
                                 
-                                <template x-if="userType === 'Admin'">
-                                    <p class="text-sm text-gray-600 mt-2">{{ __('Always use your Admin-ID when switching from Faculty to Admin.') }}</p>
-                                </template>
-                                <template x-if="userType === 'Faculty'">
-                                    <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Faculty user type.') }}</p>
-                                </template>
-                                <template x-if="userType === 'Program-Head'">
-                                    <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Program Head user type.') }}</p>
-                                </template>
-                                <template x-if="userType === 'Dean'">
-                                    <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Dean user type.') }}</p>
-                                </template>
+                                    <template x-if="userType === 'Faculty'">
+                                        <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Faculty user type.') }}</p>
+                                    </template>
+                                    <template x-if="userType === 'Admin-Office'">
+                                        <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Admin Office user type.') }}</p>
+                                    </template>
+                                    <template x-if="userType === 'Program-Head'">
+                                        <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Program Head user type.') }}</p>
+                                    </template>
+                                    <template x-if="userType === 'Dean'">
+                                        <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Dean user type.') }}</p>
+                                    </template>
+                                    <template x-if="userType === 'Admin'">
+                                        <p class="text-sm text-gray-600 mt-2">{{ __('Always use your Admin-ID when switching from Faculty to Admin.') }}</p>
+                                    </template>
                             </div>
 
                             <!-- Role-specific ID fields -->

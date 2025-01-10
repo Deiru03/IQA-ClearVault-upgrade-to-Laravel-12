@@ -325,6 +325,12 @@ Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix
 /////////////////////////////////////////////// Admin Office Routes //////////////////////////////////////////////////
 Route::middleware(['auth', 'verified', 'Admin-Office'])->prefix('office')->group(function () {
     Route::get('/dashboard', [OfficeController::class, 'dashboard'])->name('office.dashboard');
+    Route::get('/history-reports', [OfficeController::class, 'historyReport'])->name('office.historyReports');
+    Route::get('/archive', [OfficeController::class, 'archive'])->name('office.archive');
+    Route::get('/my-files', [OfficeController::class, 'myFiles'])->name('office.myFiles');
+    Route::get('/profile-edit', [OfficeController::class, 'profileEdit'])->name('office.profile-edit');
+
+
     
 });
 
