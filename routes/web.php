@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\ClearanceController as AdminClearanceController;
 use App\Http\Controllers\Faculty\ClearanceController as FacultyClearanceController;
 use App\Http\Controllers\ProgramHeadDean\PHDClearanceController as ProgDeanController;
 use App\Http\Controllers\ProgramHeadDean\GenerateReports as ProgDeanGenerateReports;
-use App\Http\Controllers\AdminOffice\AdminOfficeController as OfficeController;
+use App\Http\Controllers\Office\OfficeController;
 use App\Http\Controllers\Admin\CampusController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;

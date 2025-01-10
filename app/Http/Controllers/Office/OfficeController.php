@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\AdminOffice;
+namespace App\Http\Controllers\Office;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ use App\Models\SharedClearance;
 use App\Models\Program;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class AdminOfficeController extends Controller
+class OfficeController extends Controller
 {
     public function dashboard(): View
     {
