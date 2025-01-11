@@ -442,7 +442,7 @@
                                 x-transition:leave="transition ease-in duration-300"
                                 x-transition:leave-start="opacity-100 transform scale-100"
                                 x-transition:leave-end="opacity-0 transform scale-90"
-                                x-init="setTimeout(() => show = false, 7000)"
+                                x-init="setTimeout(() => show = false, 10000)"
                                 class="text-sm text-red-600 bg-red-100 px-4 py-2 rounded-full font-semibold"
                             >
                                 <svg class="w-5 h-5 inline mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
