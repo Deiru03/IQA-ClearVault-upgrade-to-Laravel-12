@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-office-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Clearances') }}
@@ -47,6 +47,7 @@
         </div>
     </div>
     @if($userClearance)
+        {{-- @include('office.views.office-clearance-view.office-clearance-show', ['userClearance' => $userClearance, 'isInclude' => true]) --}}
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-2 border-indigo-200">
                 <div class="border-b border-gray-200">
@@ -54,10 +55,7 @@
                         <button onclick="switchTab('phd-tab')" 
                             class="tab-button px-6 py-4 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out border-transparent hover:border-indigo-300 text-gray-500 hover:text-indigo-600"
                             id="phd-btn">
-                            @if (Auth::user()->user_type == 'Program-Head')
-                                Program Head Clearance Requirements
-                            @else 
-                            Dean Clearance Requirements
+                            Admin Office Clearance Requirements
                             @endif
                         </button>
                         <button onclick="switchTab('clearance-tab')" 
@@ -67,15 +65,8 @@
                         </button>
                     </nav>
                 </div>
-
-                @php
-                    
-                    // $userClearanceFaculty = $userClearance->user->facultyClearance;
-
-                @endphp
-
                 <div id="phd-tab" class="tab-content">
-                    @include('admin.views.phdean-views.phd-clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
+                    @include('office.views.office-clearance-view.office-clearance-show', ['userClearance' => $userClearance, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
                 </div>
                 <div id="clearance-tab" class="tab-content">
                     <div class="p-6 flex items-center justify-center bg-yellow-50 border-2 border-yellow-200 rounded-lg m-4">
@@ -178,11 +169,11 @@
                     <p class="text-xl text-gray-700 mb-8">
                         It looks like you haven't obtained a copy of your clearance yet.
                     </p>
-                    <a href="{{ route('phd.programHeadDean.indexPhD') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+                    <a href="{{ route('office.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
                         Get Your Clearance
                     </a>
                 </div>
             </div>
         </div>
     @endif
-</x-admin-layout>
+</x-office-layout>

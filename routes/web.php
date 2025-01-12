@@ -9,6 +9,7 @@ use App\Http\Controllers\Faculty\ClearanceController as FacultyClearanceControll
 use App\Http\Controllers\ProgramHeadDean\PHDClearanceController as ProgDeanController;
 use App\Http\Controllers\ProgramHeadDean\GenerateReports as ProgDeanGenerateReports;
 use App\Http\Controllers\Office\OfficeController;
+use App\Http\Controllers\Office\OfficeClearanceController;
 use App\Http\Controllers\Admin\CampusController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
@@ -300,7 +301,7 @@ Route::middleware(['auth', 'verified', 'Faculty'])->prefix('faculty')->group(fun
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////------------------ Prgram Head & Dean Routes ------------------///////////////////////////////////
-Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix('')->group(function () {
     Route::get('/phd/program-head-dean/clearances', [ProgDeanController::class, 'clearancePhD'])->name('phd.programHeadDean.clearance');
     Route::get('/phd/program-head-dean/clearances/view-checklist', [ProgDeanController::class, 'indexPhD'])->name('phd.programHeadDean.indexPhD');
     Route::post('/phd/program-head-dean/clearances/view-checklist/{id}/get-copy', [ProgDeanController::class, 'getCopyPhD'])->name('phd.clearance.getCopy');
@@ -331,6 +332,22 @@ Route::middleware(['auth', 'verified', 'Admin-Office'])->prefix('office')->group
     Route::get('/my-files', [OfficeController::class, 'myFiles'])->name('office.myFiles');
     Route::get('/profile-edit', [OfficeController::class, 'profileEdit'])->name('office.profile-edit');
     Route::get('/overview', [OfficeController::class, 'overview'])->name('office.overview');
+
+    // Clearance Section Routes
+    Route::get('/program-head-dean/clearances', [OfficeClearanceController::class, 'clearanceOffice'])->name('office.clearance');
+    Route::get('/program-head-dean/clearances/view-checklist', [OfficeClearanceController::class, 'indexOffice'])->name('office.index');
+    Route::post('/program-head-dean/clearances/view-checklist/{id}/get-copy', [OfficeClearanceController::class, 'getCopyOffice'])->name('office.clearance.getCopy');
+    Route::delete('/program-head-dean/clearances/view-checklist/{id}/remove-copy', [OfficeClearanceController::class, 'removeCopyOffice'])->name('office.clearances.removeCopy');
+
+    Route::get('/clearances/show/{id}', [OfficeClearanceController::class, 'showOffice'])->name('office.clearance.show');
+
+    //Uploading Actions
+    Route::post('/clearances/{userClearanceId}/upload/{requirementId}', [OfficeClearanceController::class, 'uploadOffice'])->name('office.clearances.upload');
+    Route::delete('/clearances/{sharedClearanceId}/upload/{requirementId}/delete', [OfficeClearanceController::class, 'deleteFileOffice'])->name('office.clearances.delete');
+    //clearance view files singles
+    Route::get('/clearances/{sharedClearanceId}/requirement/{requirementId}/files', [OfficeClearanceController::class, 'getUploadedFilesOffice'])->name('office.clearances.getFiles');
+    Route::delete('/clearances/{sharedClearanceId}/upload/{requirementId}/delete/{fileId}', [OfficeClearanceController::class, 'deleteSingleFileOffice'])->name('office.clearances.deleteSingleFile');
+    Route::delete('/clearances/delete/{sharedClearanceId}/{requirementId}/{fileId}', [OfficeClearanceController::class, 'deleteSingleFileOffice'])->name('office.clearances.deleteSingleFile');
 });
 
 Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');

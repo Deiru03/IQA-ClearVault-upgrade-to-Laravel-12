@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-office-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('View Clearances Checklist') }}
@@ -272,4 +272,4 @@
             document.getElementById('confirmationModal').classList.add('hidden');
         }
     </script>
-</x-admin-layout>
+</x-office-layout>
