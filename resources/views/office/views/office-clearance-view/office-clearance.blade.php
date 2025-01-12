@@ -56,7 +56,6 @@
                             class="tab-button px-6 py-4 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out border-transparent hover:border-indigo-300 text-gray-500 hover:text-indigo-600"
                             id="phd-btn">
                             Admin Office Clearance Requirements
-                            @endif
                         </button>
                         <button onclick="switchTab('clearance-tab')" 
                                 class="tab-button px-6 py-4 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out border-transparent hover:border-indigo-300 text-gray-500 hover:text-indigo-600"

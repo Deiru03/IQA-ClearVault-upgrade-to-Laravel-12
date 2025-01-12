@@ -52,6 +52,32 @@ class OfficeClearanceController extends Controller
         return view('office.views.office-clearance-view.office-clearance', compact('userClearance','userClearanceFaculty' ,'userInfo'));
     }
 
+   
+        // Filter shared clearances based on user_type
+        /* $filteredClearances = $sharedClearances->filter(function ($sharedClearance) use ($userType) {
+            $clearanceType = $sharedClearance->clearance->type;
+
+            // For Admin-Office based on user_type only
+            if ($userType === 'Admin-Office') {
+            return $clearanceType === 'Admin-Office';
+            }
+            return false;
+        });
+
+        // Get user_clearances to map shared_clearance_id to user_clearance_id
+        $userClearances = UserClearance::where('user_id', $user->id)
+            ->whereIn('shared_clearance_id', $filteredClearances->pluck('id'))
+            ->pluck('id', 'shared_clearance_id')
+            ->toArray();
+
+        // Determine recommendations based on user's position
+        $recommendations = $filteredClearances->filter(function ($sharedClearance) use ($user) {
+            // Filter for Admin-Office position
+            if ($user->position === 'Admin-Office') {
+            return $sharedClearance->clearance->type === 'Admin-Office';
+            }
+            return false;
+        }); */
     public function indexOffice(): View
     {
         $user = Auth::user();
@@ -66,38 +92,23 @@ class OfficeClearanceController extends Controller
             $clearanceUnits = $sharedClearance->clearance->units;
             $clearanceType = $sharedClearance->clearance->type;
 
-            // For Dean and Program-Head based on user_type
-            if ($userType === 'Dean' || $userType === 'Program-Head') {
-                // If user has no units, fetch all clearances of matching user_type
-                if ($userType === 'Dean') {
-                    if (is_null($userUnits)) {
-                        return $clearanceType === 'Dean';
-                    }
-                    // If clearance has units and user has units, check if they match
-                    if (!is_null($clearanceUnits)) {
-                        return $clearanceType === 'Dean' && $clearanceUnits == $userUnits;
-                    }
-                    // If clearance has no units but user has units, still fetch it
-                    return $clearanceType === 'Dean';
-                } 
-                else if ($userType === 'Program-Head') {
-                    if (is_null($userUnits)) {
-                        return $clearanceType === 'Program-Head';
-                    }
-                    // If clearance has units and user has units, check if they match
-                    if (!is_null($clearanceUnits)) {
-                        return $clearanceType === 'Program-Head' && $clearanceUnits == $userUnits;
-                    }
-                    // If clearance has no units but user has units, still fetch it
-                    return $clearanceType === 'Program-Head';
+            // For Admin-Office based on user_type
+            if ($userType === 'Admin-Office') {
+                if (is_null($userUnits)) {
+                    return $clearanceType === 'Admin-Office';
                 }
+                // If clearance has units and user has units, check if they match
+                if (!is_null($clearanceUnits)) {
+                    return $clearanceType === 'Admin-Office' && $clearanceUnits == $userUnits;
+                }
+                // If clearance has no units but user has units, still fetch it
+                return $clearanceType === 'Admin-Office';
             }
             return false;
             
         });
 
         // Get user_clearances to map shared_clearance_id to user_clearance_id
-        // Only get active clearances
         $userClearances = UserClearance::where('user_id', $user->id)
             // ->where('is_active', true)
             ->whereIn('shared_clearance_id', $filteredClearances->pluck('id'))
@@ -106,17 +117,12 @@ class OfficeClearanceController extends Controller
 
         // Determine recommendations based on user's position and units
         $recommendations = $filteredClearances->filter(function ($sharedClearance) use ($user) {
-            // Filter for Dean position
-            if ($user->position === 'Dean') {
-                return $sharedClearance->clearance->type === 'Dean';
+            // Filter for Admin-Office position
+            if ($user->position === 'Admin-Office') {
+                return $sharedClearance->clearance->type === 'Admin-Office';
             }
             
-            // Filter for Program-Head position
-            if ($user->position === 'Program-Head') {
-                return $sharedClearance->clearance->type === 'Program-Head';
-            }
-            
-            // Filter for other positions based on type and units
+            // Filter based on type and units
             return $sharedClearance->clearance->type === $user->position &&
                    $sharedClearance->clearance->units == $user->units;
         });
@@ -164,7 +170,7 @@ class OfficeClearanceController extends Controller
             'transaction_type' => 'Aquired Checklist',
             'status' => 'Completed',
         ]);
-        return redirect()->route('phd.programHeadDean.indexPhD')->with('success', 'Clearance copied and set as active successfully.');
+        return redirect()->route('office.index')->with('success', 'Clearance copied and set as active successfully.');
     }
 
     public function removeCopyOffice($id)
