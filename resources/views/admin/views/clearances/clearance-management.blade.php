@@ -156,6 +156,7 @@
                         <label for="addType" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
                         <select name="type" id="addType" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out" required>
                             <option value="" disabled selected>Select Type</option>
+                            <option value="Admin-Office">Admin Office</option>
                             <option value="Dean">Dean</option>
                             <option value="Program-Head">Program-Head</option>
                             <option value="Permanent-FullTime">Permanent (Full-Time)</option>
@@ -218,6 +219,7 @@
                         <label for="editType" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
                         <select name="type" id="editType" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out" required>
                             <option value="" disabled>Select Type</option>
+                            <option value="Admin-Office">Admin Office</option>
                             <option value="Dean">Dean</option>
                             <option value="Program-Head">Program-Head</option>
                             <option value="Permanent-FullTime">Permanent (Full-Time)</option>

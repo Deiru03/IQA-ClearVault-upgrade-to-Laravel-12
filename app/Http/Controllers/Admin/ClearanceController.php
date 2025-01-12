@@ -37,7 +37,7 @@ class ClearanceController extends Controller
             'document_name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'units' => 'nullable|integer',
-            'type' => 'required|in:Permanent-FullTime,Permanent-Temporary,Part-Time,Part-Time-FullTime,Dean,Program-Head',
+            'type' => 'required|in:Permanent-FullTime,Permanent-Temporary,Part-Time,Part-Time-FullTime,Dean,Program-Head,Admin-Office',
         ]);
 
         if ($validator->fails()) {
@@ -189,7 +189,7 @@ class ClearanceController extends Controller
             'document_name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'units' => 'nullable|integer',
-            'type' => 'required|in:Permanent-FullTime,Permanent-Temporary,Part-Time,Part-Time-FullTime,Dean,Program-Head',
+            'type' => 'required|in:Permanent-FullTime,Permanent-Temporary,Part-Time,Part-Time-FullTime,Dean,Program-Head,Admin-Office',
         ]);
 
         SubmittedReport::create([
