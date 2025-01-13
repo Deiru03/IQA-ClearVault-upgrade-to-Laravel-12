@@ -219,7 +219,7 @@
             <div class="flex flex-col items-center space-y-4 p-6 bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="flex flex-wrap justify-center gap-4">
                     <!-- Download Checklist Button -->
-                    <a href="{{ route('phd.clearanceChecklist', $userClearance->shared_clearance_id) }}" target="_blank"
+                    <a href="{{ route('office.clearanceChecklist', $userClearance->shared_clearance_id) }}" target="_blank"
                         class="inline-flex items-center px-6 py-3 {{ Auth::user()->clearances_status == 'complete' ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600' }} text-white font-medium rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-md">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -228,7 +228,7 @@
                     </a>
 
                     <!-- Generate Clearance Slip Button -->
-                    <a href="{{ route('phd.generateClearanceReport') }}" 
+                    <a href="{{ route('office.generateClearanceReport') }}" 
                         class="inline-flex items-center px-6 py-3 {{ $userInfo->clearances_status === 'complete' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600' }} text-white font-medium rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 shadow-md">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
@@ -946,7 +946,7 @@
          * @param {number} requirementId
          */
         function deleteFile(sharedClearanceId, requirementId) {
-            fetch(`/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}/delete`, {
+            fetch(`/office/clearances/${sharedClearanceId}/upload/${requirementId}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -993,7 +993,7 @@
             uploadedFilesGrid.innerHTML = '';
 
             // Fetch uploaded files
-            fetch(`/admin/phd/clearances/${sharedClearanceId}/requirement/${requirementId}/files`, {
+            fetch(`/office/clearances/${sharedClearanceId}/requirement/${requirementId}/files`, {
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -1134,7 +1134,7 @@
             };
 
             function deleteSingleFile(sharedClearanceId, requirementId, fileId) {
-                fetch(`/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}/delete/${fileId}`, {
+                fetch(`/office/clearances/${sharedClearanceId}/upload/${requirementId}/delete/${fileId}`, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -1393,7 +1393,7 @@
                 const uploadItem = createUploadProgress(files[i].name, files[i].size);
 
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', `/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}`, true);
+                xhr.open('POST', `/office/clearances/${sharedClearanceId}/upload/${requirementId}`, true);
                 xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
 
                 xhr.upload.onprogress = function(event) {
