@@ -19,6 +19,7 @@ use App\Models\Department;
 use App\Models\Program;
 use App\Models\UserNotification;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ClearanceController extends Controller
@@ -916,16 +917,29 @@ class ClearanceController extends Controller
                         'signature_status' => 'Checking'
                     ]);
                     
-                // Update uploaded clearances for this specific clearance
-                UploadedClearance::where('user_id', $userId)
+                  // Update uploaded clearances for this specific clearance
+                $uploadedClearances = UploadedClearance::where('user_id', $userId)
                     ->whereIn('requirement_id', $requirementIds)
                     ->whereNull('archive_date')
-                    ->update([
+                    ->get();
+
+                foreach ($uploadedClearances as $uploadedClearance) {
+                    // Define the new archive path
+                    $archiveDirectory = 'user_uploaded_documents/' . $user->id . '/' . $user->user_type . '/archives/' . $request->academicYear . '_' . $request->semester;
+                    $newPath = $archiveDirectory . '/' . basename($uploadedClearance->file_path);
+
+                    // Move the file to the new archive path
+                    Storage::disk('public')->move($uploadedClearance->file_path, $newPath);
+
+                    // Update the file path in the database
+                    $uploadedClearance->update([
+                        'file_path' => $newPath,
                         'is_archived' => true,
                         'academic_year' => $request->academicYear,
                         'semester' => $request->semester,
                         'archive_date' => now(),
                     ]);
+                }
 
 
                 // Reset user clearance status to pending in the users table

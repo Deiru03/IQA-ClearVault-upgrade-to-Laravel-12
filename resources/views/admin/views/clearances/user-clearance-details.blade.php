@@ -232,7 +232,7 @@
         </div>
     @endif
 
-   <!-- Confirmation Modal -->
+   <!-- Confirmation Modal of Reset , Update , Archive -->
     <div id="confirmationModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 hidden z-50">
         <div class="bg-white p-8 rounded-xl shadow-2xl max-w-2xl w-full">
             <!-- Title and Description -->
@@ -249,7 +249,7 @@
                 <div class="relative">
                     <select id="clearanceSelect" class="appearance-none w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all duration-200 text-gray-700 bg-white">
                         @foreach($userClearances as $clearance)
-                            <option value="{{ $clearance->id }}" class="py-2">
+                            <option value="{{ $clearance->id }}" {{ $clearance->id == $userClearance->id ? 'selected' : '' }} class="py-2">
                                 {{ $clearance->sharedClearance->clearance->document_name }}
                             </option>
                         @endforeach
@@ -277,6 +277,7 @@
                 }
             @endphp
 
+            {{-- Academic Year Selection RESET OR UPDATE OR ARCHIVES --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
                     <label for="academicYear" class="block text-lg font-semibold text-gray-700 mb-2">
