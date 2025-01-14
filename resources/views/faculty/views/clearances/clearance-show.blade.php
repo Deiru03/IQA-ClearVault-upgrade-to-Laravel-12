@@ -14,7 +14,7 @@
     </div>
 
     <!-- Upload Tracker -->
-    <div id="uploadTracker" class="fixed bottom-20 right-4 w-80 bg-white/70 backdrop-blur-sm shadow-2xl rounded-xl p-6 z-20 hidden transform transition-all duration-300 ease-in-out hover:shadow-lg border-2 border-blue-500 hover:border-blue-700 pointer-events-none">
+    <div id="uploadTracker" class="fixed bottom-20 right-4 w-80 bg-white/70 backdrop-blur-sm shadow-2xl rounded-xl p-6 z-20 hidden transform transition-all duration-300 ease-in-out hover:shadow-lg border-2 border-blue-500 hover:border-blue-700 pointer-events-none" style="z-index: 9999;">
         <div class="flex items-center justify-between mb-4">
             <h4 class="text-lg font-bold text-gray-800 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

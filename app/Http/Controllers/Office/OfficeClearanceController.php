@@ -255,7 +255,10 @@ class OfficeClearanceController extends Controller
                 $uploadedFiles = [];
                 foreach ($request->file('files') as $file) {
                     $originalName = $file->getClientOriginalName();
-                    $path = $file->storeAs('uploads/faculty_clearances', $originalName, 'public');
+                    // $path = $file->storeAs('uploads/faculty_clearances', $originalName, 'public'); // Bushet na Logic Path
+                    $userDirectory = 'user_uploaded_documents/' . $user->id . '/' . $user->user_type . '/current_uploaded'; //Bagong Logic 01/14/2025
+                    $path = $file->storeAs($userDirectory, $originalName, 'public');
+                    $fileContent = file_get_contents($file->getRealPath());
 
                     $uploadedClearance = UploadedClearance::create([
                         'shared_clearance_id' => $sharedClearanceId,

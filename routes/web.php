@@ -302,25 +302,25 @@ Route::middleware(['auth', 'verified', 'Faculty'])->prefix('faculty')->group(fun
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////------------------ Prgram Head & Dean Routes ------------------///////////////////////////////////
-Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix('')->group(function () {
-    Route::get('/phd/program-head-dean/clearances', [ProgDeanController::class, 'clearancePhD'])->name('phd.programHeadDean.clearance');
-    Route::get('/phd/program-head-dean/clearances/view-checklist', [ProgDeanController::class, 'indexPhD'])->name('phd.programHeadDean.indexPhD');
-    Route::post('/phd/program-head-dean/clearances/view-checklist/{id}/get-copy', [ProgDeanController::class, 'getCopyPhD'])->name('phd.clearance.getCopy');
-    Route::delete('/phd/program-head-dean/clearances/view-checklist/{id}/remove-copy', [ProgDeanController::class, 'removeCopyPhD'])->name('phd.clearances.removeCopy');
+Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix('phd')->group(function () {
+    Route::get('/program-head-dean/clearances', [ProgDeanController::class, 'clearancePhD'])->name('phd.programHeadDean.clearance');
+    Route::get('/program-head-dean/clearances/view-checklist', [ProgDeanController::class, 'indexPhD'])->name('phd.programHeadDean.indexPhD');
+    Route::post('/program-head-dean/clearances/view-checklist/{id}/get-copy', [ProgDeanController::class, 'getCopyPhD'])->name('phd.clearance.getCopy');
+    Route::delete('/program-head-dean/clearances/view-checklist/{id}/remove-copy', [ProgDeanController::class, 'removeCopyPhD'])->name('phd.clearances.removeCopy');
 
-    Route::get('/phd/clearances/show/{id}', [ProgDeanController::class, 'showPhD'])->name('phd.clearance.show');
+    Route::get('/clearances/show/{id}', [ProgDeanController::class, 'showPhD'])->name('phd.clearance.show');
 
     //Uploading Actions
-    Route::post('/phd/clearances/{userClearanceId}/upload/{requirementId}', [ProgDeanController::class, 'uploadPhD'])->name('phd.clearances.upload');
-    Route::delete('/phd/clearances/{sharedClearanceId}/upload/{requirementId}/delete', [ProgDeanController::class, 'deleteFilePhD'])->name('phd.clearances.delete');
+    Route::post('/clearances/{userClearanceId}/upload/{requirementId}', [ProgDeanController::class, 'uploadPhD'])->name('phd.clearances.upload');
+    Route::delete('/clearances/{sharedClearanceId}/upload/{requirementId}/delete', [ProgDeanController::class, 'deleteFilePhD'])->name('phd.clearances.delete');
     //clearance view files singles
-    Route::get('/phd/clearances/{sharedClearanceId}/requirement/{requirementId}/files', [ProgDeanController::class, 'getUploadedFilesPhD'])->name('phd.clearances.getFiles');
-    Route::delete('/phd/clearances/{sharedClearanceId}/upload/{requirementId}/delete/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');
-    Route::delete('/phd/clearances/delete/{sharedClearanceId}/{requirementId}/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');
+    Route::get('/clearances/{sharedClearanceId}/requirement/{requirementId}/files', [ProgDeanController::class, 'getUploadedFilesPhD'])->name('phd.clearances.getFiles');
+    Route::delete('/clearances/{sharedClearanceId}/upload/{requirementId}/delete/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');
+    Route::delete('/clearances/delete/{sharedClearanceId}/{requirementId}/{fileId}', [ProgDeanController::class, 'deleteSingleFilePhD'])->name('phd.clearances.deleteSingleFile');
 
     // Generate Checklist and Slip
-    Route::get('/phd/clearance-report', [ProgDeanGenerateReports::class, 'generateClearanceReportPhD'])->name('phd.generateClearanceReport');
-    Route::get('/phd/clearance-checklist/{id}', [ProgDeanGenerateReports::class, 'generateChecklistPhD'])->name('phd.clearanceChecklist');
+    Route::get('/clearance-report', [ProgDeanGenerateReports::class, 'generateClearanceReportPhD'])->name('phd.generateClearanceReport');
+    Route::get('/clearance-checklist/{id}', [ProgDeanGenerateReports::class, 'generateChecklistPhD'])->name('phd.clearanceChecklist');
 });
 
 //////////////////////////////------------------ End of PH & Dean Routes ------------------////////////////////////////

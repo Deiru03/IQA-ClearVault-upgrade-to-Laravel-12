@@ -170,8 +170,10 @@ class ProfileController extends Controller
             return Redirect::route('admin.profile.edit')->with('status', 'profile-updated');
         } elseif ($user->user_type === 'Faculty') {
             return Redirect::route('profile.edit')->with('status', 'profile-updated');
-        } else {
+        } elseif ($user->user_type === 'Admin-Office') {
             return Redirect::route('office.profile-edit')->with('status', 'profile-updated');
+        } else {
+            return Redirect::route('profile.edit')->with('status','');
         }
     }
 

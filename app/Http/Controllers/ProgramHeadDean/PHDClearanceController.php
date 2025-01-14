@@ -232,7 +232,7 @@ class PHDClearanceController extends Controller
 
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'files.*' => 'required|file|mimes:pdf|max:200000', //,doc,docx,jpg,png',
+            'files.*' => 'required|file|mimes:pdf|max:51200', //,doc,docx,jpg,png',
             'title' => 'nullable|string|max:255',
         ]);
 
@@ -249,7 +249,10 @@ class PHDClearanceController extends Controller
                 $uploadedFiles = [];
                 foreach ($request->file('files') as $file) {
                     $originalName = $file->getClientOriginalName();
-                    $path = $file->storeAs('uploads/faculty_clearances', $originalName, 'public');
+                    // $path = $file->storeAs('uploads/faculty_clearances', $originalName, 'public');
+                    $userDirectory = 'user_uploaded_documents/' . $user->id . '/' . $user->user_type . '/current_uploaded';
+                    $path = $file->storeAs($userDirectory, $originalName, 'public');
+                    $fileContent = file_get_contents($file->getRealPath());
 
                     $uploadedClearance = UploadedClearance::create([
                         'shared_clearance_id' => $sharedClearanceId,

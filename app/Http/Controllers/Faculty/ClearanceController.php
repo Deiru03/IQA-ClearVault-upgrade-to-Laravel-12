@@ -230,7 +230,9 @@ class ClearanceController extends Controller
                 $uploadedFiles = [];
                 foreach ($request->file('files') as $file) {
                     $originalName = $file->getClientOriginalName();
-                    $path = $file->storeAs('uploads/faculty_clearances', $originalName, 'public');
+                    // $path = $file->storeAs('uploads/faculty_clearances', $originalName, 'public');
+                    $userDirectory = 'user_uploaded_documents/' . $user->id . '/' . $user->user_type . '/current_uploaded';
+                    $path = $file->storeAs($userDirectory, $originalName, 'public');
                     $fileContent = file_get_contents($file->getRealPath());
 
                     $uploadedClearance = UploadedClearance::create([

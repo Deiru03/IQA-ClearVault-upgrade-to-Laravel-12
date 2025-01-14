@@ -946,7 +946,7 @@
          * @param {number} requirementId
          */
         function deleteFile(sharedClearanceId, requirementId) {
-            fetch(`/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}/delete`, {
+            fetch(`/phd/clearances/${sharedClearanceId}/upload/${requirementId}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -993,7 +993,7 @@
             uploadedFilesGrid.innerHTML = '';
 
             // Fetch uploaded files
-            fetch(`/admin/phd/clearances/${sharedClearanceId}/requirement/${requirementId}/files`, {
+            fetch(`/phd/clearances/${sharedClearanceId}/requirement/${requirementId}/files`, {
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -1134,7 +1134,7 @@
             };
 
             function deleteSingleFile(sharedClearanceId, requirementId, fileId) {
-                fetch(`/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}/delete/${fileId}`, {
+                fetch(`/phd/clearances/${sharedClearanceId}/upload/${requirementId}/delete/${fileId}`, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -1393,7 +1393,7 @@
                 const uploadItem = createUploadProgress(files[i].name, files[i].size);
 
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', `/admin/phd/clearances/${sharedClearanceId}/upload/${requirementId}`, true);
+                xhr.open('POST', `/phd/clearances/${sharedClearanceId}/upload/${requirementId}`, true);
                 xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
 
                 xhr.upload.onprogress = function(event) {

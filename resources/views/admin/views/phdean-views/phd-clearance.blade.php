@@ -87,7 +87,8 @@
                             This feature is currently in testing phase and under development. Please disregard this section for now as it will be implemented in future updates.
                         </p>
                     </div>
-                    @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearanceFaculty, 'isInclude' => true, 'bodyClass' => 'is-clearance-show'])
+                    {{-- TESTING --}}
+                    {{-- @include('faculty.views.clearances.clearance-show', ['userClearance' => $userClearanceFaculty, 'isInclude' => true, 'bodyClass' => 'is-clearance-show']) --}}
                 </div>
             </div>
         </div>
