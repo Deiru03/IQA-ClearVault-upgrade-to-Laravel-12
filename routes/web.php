@@ -11,6 +11,7 @@ use App\Http\Controllers\ProgramHeadDean\GenerateReports as ProgDeanGenerateRepo
 use App\Http\Controllers\Office\OfficeController;
 use App\Http\Controllers\Office\OfficeClearanceController;
 use App\Http\Controllers\Office\GenerateReports as OfficeGenerateReports;
+use App\Http\Controllers\Admin\AdminOfficesController;
 use App\Http\Controllers\Admin\CampusController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
@@ -353,6 +354,10 @@ Route::middleware(['auth', 'verified', 'Admin-Staff'])->prefix('office')->group(
     // Generate Checklist and Slip
     Route::get('/clearance-report', [OfficeGenerateReports::class, 'generateClearanceReportOffice'])->name('office.generateClearanceReport');
     Route::get('/clearance-checklist/{id}', [OfficeGenerateReports::class, 'generateChecklistOffice'])->name('office.clearanceChecklist');
+});
+
+Route::middleware(['auth', 'verified', 'Admin'])->prefix('admin')->group(function () {
+    Route::get('/Admin-Offices', [AdminOfficesController::class, 'indexOffice'])->name('admin.views.offices-index');
 });
 
 Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');

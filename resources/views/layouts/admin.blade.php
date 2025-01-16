@@ -324,7 +324,15 @@
                             <span class="{{ request()->routeIs('admin.views.college') ? 'text-indigo-300 font-semibold' : '' }}">College</span>
                         </a>
                     @endif
-
+                    <!-- Admin Offices -->
+                    @if(Auth::user()->user_type == 'Admin')
+                        <a href="{{ route('admin.views.offices-index') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.offices-index') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                            </svg>
+                            <span class="{{ request()->routeIs('admin.views.offices-index') ? 'text-indigo-300 font-semibold' : '' }}">Admin Offices</span>
+                        </a>
+                    @endif
                     <!-- Campuses -->
                     @if(Auth::user()->user_type == 'Admin')
                         <a href="{{ route('admin.views.campuses') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.campuses') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
