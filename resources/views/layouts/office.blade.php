@@ -132,7 +132,7 @@
                     'Admin' => 'Welcome to the OMSC Admin Dashboard',
                     'Program-Head' => 'Welcome to the OMSC Program Head Dashboard',
                     'Dean' => 'Welcome to the OMSC Dean Dashboard',
-                    'Admin-Office' => 'Welcome to the OMSC ClearVault Dashboard'
+                    'Admin-Staff' => 'Welcome to the OMSC ClearVault Dashboard'
                 ];
 
                 $userId = Auth::id();

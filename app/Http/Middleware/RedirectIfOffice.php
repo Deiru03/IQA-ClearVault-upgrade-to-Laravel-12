@@ -17,7 +17,7 @@ class RedirectIfOffice
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->user_type == 'Admin-Office') {
+        if (Auth::check() && Auth::user()->user_type == 'Admin-Staff') {
             return $next($request);
         }
         return redirect()->route('faculty.dashboard');

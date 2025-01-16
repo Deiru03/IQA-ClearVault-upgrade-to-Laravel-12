@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'Dean' => RedirectIfNotAdmin::class,
             'Program-Head' => RedirectIfNotAdmin::class,
             'Faculty' => RedirectIfNotFaculty::class,
-            'Admin-Office' => RedirectIfOffice::class,  
+            'Admin-Staff' => RedirectIfOffice::class,  
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -9,7 +9,7 @@
             @include('about-us-content')
         </div>
     </x-admin-layout>
-@elseif (Auth::user()->user_type === 'Admin-Office')
+@elseif (Auth::user()->user_type === 'Admin-Staff')
     <x-office-layout>
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">

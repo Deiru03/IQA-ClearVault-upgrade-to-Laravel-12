@@ -25,7 +25,7 @@ use Illuminate\View\View;
 class ClearanceController extends Controller
 {
     // Display the clearance management page
-    public function index()
+    public function index(): View 
     {
         $clearances = Clearance::all();
         return view('admin.views.clearances.clearance-management', compact('clearances'));
@@ -38,7 +38,7 @@ class ClearanceController extends Controller
             'document_name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'units' => 'nullable|integer',
-            'type' => 'required|in:Permanent-FullTime,Permanent-Temporary,Part-Time,Part-Time-FullTime,Dean,Program-Head,Admin-Office',
+            'type' => 'required|in:Permanent-FullTime,Permanent-Temporary,Part-Time,Part-Time-FullTime,Dean,Program-Head,Admin-Staff',
         ]);
 
         if ($validator->fails()) {
@@ -190,7 +190,7 @@ class ClearanceController extends Controller
             'document_name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'units' => 'nullable|integer',
-            'type' => 'required|in:Permanent-FullTime,Permanent-Temporary,Part-Time,Part-Time-FullTime,Dean,Program-Head,Admin-Office',
+            'type' => 'required|in:Permanent-FullTime,Permanent-Temporary,Part-Time,Part-Time-FullTime,Dean,Program-Head,Admin-Staff',
         ]);
 
         SubmittedReport::create([

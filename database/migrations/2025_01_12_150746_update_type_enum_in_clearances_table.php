@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clearances', function (Blueprint $table) {
-            $table->enum('type', ['Part-Time', 'Part-Time-FullTime', 'Permanent-Temporary', 'Permanent-FullTime', 'Dean', 'Program-Head', 'Admin-Office'])->nullable()->change();
+            $table->enum('type', ['Part-Time', 'Part-Time-FullTime', 'Permanent-Temporary', 'Permanent-FullTime', 'Dean', 'Program-Head', 'Admin-Staff'])->nullable()->change();
             // $table->timestamp('date_completed')->nullable()->after('number_of_requirements');
         });
 

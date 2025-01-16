@@ -86,7 +86,7 @@ Route::get('/dashboard', function () {
             Auth::user()->user_type === 'Dean' ||
             Auth::user()->user_type === 'Program-Head') {
             return redirect()->route('admin.dashboard');
-        } elseif(Auth::user()->user_type === 'Admin-Office') {
+        } elseif(Auth::user()->user_type === 'Admin-Staff') {
             return redirect()->route('office.dashboard');
         } else {
             return redirect()->route('faculty.dashboard');
@@ -109,7 +109,7 @@ Route::middleware(['Admin', 'Dean', 'Program-Head'])->group(function () {
     Route::get('/admin/homepage', [AdminController::class, 'home'])->name('admin.home');
 });
 
-Route::middleware(['Admin-Office'])->group(function () {
+Route::middleware(['Admin-Staff'])->group(function () {
     Route::get('/office', [OfficeController::class, 'dashboard'])->name('office.dashboard');
     Route::get('/office/homepage', [AdminController::class, 'home'])->name('office.home');
 });
@@ -326,7 +326,7 @@ Route::middleware(['auth', 'verified', 'Admin', 'Dean', 'Program-Head'])->prefix
 //////////////////////////////------------------ End of PH & Dean Routes ------------------////////////////////////////
 
 /////////////////////////////////////////////// Admin Office Routes //////////////////////////////////////////////////
-Route::middleware(['auth', 'verified', 'Admin-Office'])->prefix('office')->group(function () {
+Route::middleware(['auth', 'verified', 'Admin-Staff'])->prefix('office')->group(function () {
     Route::get('/dashboard', [OfficeController::class, 'dashboard'])->name('office.dashboard');
     Route::get('/history-reports', [OfficeController::class, 'historyReport'])->name('office.historyReports');
     Route::get('/archive', [OfficeController::class, 'archive'])->name('office.archive');

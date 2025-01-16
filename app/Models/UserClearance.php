@@ -14,6 +14,8 @@ class UserClearance extends Model
         'user_id',
         'is_active',
         'is_archived', // Added Line On 28-10-2024
+        'date_cpmpleted', // Added Line On 15-01-2025
+        'last_uploaded', // Added Line On 15-01-2025
     ];
 
     /**

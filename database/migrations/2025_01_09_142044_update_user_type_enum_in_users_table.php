@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('user_type', ['Admin', 'Faculty', 'Dean', 'Program-Head', 'Admin-Office'])->change();
+            $table->enum('user_type', ['Admin', 'Faculty', 'Dean', 'Program-Head', 'Admin-Staff'])->change();
         });
     }
 

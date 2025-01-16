@@ -34,7 +34,7 @@ class OfficeClearanceController extends Controller
         // Fetch the user clearance data for Program-Head or Dean
         $userClearance = UserClearance::where('user_id', Auth::id())
             ->whereHas('sharedClearance.clearance', function($query) {
-                $query->whereIn('type', ['Admin-Office']);
+                $query->whereIn('type', ['Admin-Staff']);
             })
             ->with('sharedClearance.clearance')
             ->first();
@@ -44,7 +44,7 @@ class OfficeClearanceController extends Controller
         // Fetch the user clearance data for FACULTY only
         $userClearanceFaculty = UserClearance::where('user_id', Auth::id())
             ->whereHas('sharedClearance.clearance', function($query) {
-                $query->whereNot('type', ['Admin-Office']);
+                $query->whereNot('type', ['Admin-Staff']);
             })
             ->with('sharedClearance.clearance')
             ->first();
@@ -93,16 +93,16 @@ class OfficeClearanceController extends Controller
             $clearanceType = $sharedClearance->clearance->type;
 
             // For Admin-Office based on user_type
-            if ($userType === 'Admin-Office') {
+            if ($userType === 'Admin-Staff') {
                 if (is_null($userUnits)) {
-                    return $clearanceType === 'Admin-Office';
+                    return $clearanceType === 'Admin-Staff';
                 }
                 // If clearance has units and user has units, check if they match
                 if (!is_null($clearanceUnits)) {
-                    return $clearanceType === 'Admin-Office' && $clearanceUnits == $userUnits;
+                    return $clearanceType === 'Admin-Staff' && $clearanceUnits == $userUnits;
                 }
                 // If clearance has no units but user has units, still fetch it
-                return $clearanceType === 'Admin-Office';
+                return $clearanceType === 'Admin-Staff';
             }
             return false;
             
@@ -118,8 +118,8 @@ class OfficeClearanceController extends Controller
         // Determine recommendations based on user's position and units
         $recommendations = $filteredClearances->filter(function ($sharedClearance) use ($user) {
             // Filter for Admin-Office position
-            if ($user->position === 'Admin-Office') {
-                return $sharedClearance->clearance->type === 'Admin-Office';
+            if ($user->position === 'Admin-Staff') {
+                return $sharedClearance->clearance->type === 'Admin-Staff';
             }
             
             // Filter based on type and units

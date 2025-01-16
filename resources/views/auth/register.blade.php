@@ -32,7 +32,7 @@
                 <x-input-label for="user_type" :value="__('User Type')" class="text-xs font-medium text-gray-700" />
                 <select id="user_type" name="user_type" class="mt-1 block w-full text-sm border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm" onchange="toggleAdminIdField()">
                     <option value="Faculty" {{ old('user_type') === 'Faculty' ? 'selected' : '' }}>Faculty</option>
-                    <option value="Admin-Office" {{ old('user_type') === 'Admin-Office' ? 'selected' : '' }}>Admin Office</option>
+                    <option value="Admin-Staff" {{ old('user_type') === 'Admin-Staff' ? 'selected' : '' }}>Admin Office</option>
                     <option value="Program-Head" {{ old('user_type') === 'Program-Head' ? 'selected' : '' }}>Program Head</option>
                     <option value="Dean" {{ old('user_type') === 'Dean' ? 'selected' : '' }}>Dean</option>
                     <option value="Admin" {{ old('user_type') === 'Admin' ? 'selected' : '' }}>Admin</option>

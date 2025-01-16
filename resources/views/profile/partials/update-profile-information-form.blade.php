@@ -293,7 +293,7 @@
                                     @if(!($user->user_type === 'Admin' && is_null($user->campus_id) ||
                                         $user->user_type === 'Program-Head' && is_null($user->campus_id) || 
                                         $user->user_type === 'Dean' && is_null($user->campus_id)))
-                                        <option value="Admin-Office" {{ old('user_type', $user->user_type) === 'Admin-Office' ? 'selected' : '' }}>Admin Office</option>
+                                        <option value="Admin-Staff" {{ old('user_type', $user->user_type) === 'Admin-Staff' ? 'selected' : '' }}>Admin Office</option>
                                         <option value="Faculty" {{ old('user_type', $user->user_type) === 'Faculty' ? 'selected' : '' }}>Faculty</option>
                                     @endif
                                     <option value="Program-Head" {{ old('user_type', $user->user_type) === 'Program-Head' ? 'selected' : '' }}>Program Head</option>
@@ -305,7 +305,7 @@
                                     <template x-if="userType === 'Faculty'">
                                         <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Faculty user type.') }}</p>
                                     </template>
-                                    <template x-if="userType === 'Admin-Office'">
+                                    <template x-if="userType === 'Admin-Staff'">
                                         <p class="text-sm text-gray-600 mt-2">{{ __('You are now in Admin Office user type.') }}</p>
                                     </template>
                                     <template x-if="userType === 'Program-Head'">
