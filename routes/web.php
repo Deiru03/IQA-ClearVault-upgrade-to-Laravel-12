@@ -358,6 +358,8 @@ Route::middleware(['auth', 'verified', 'Admin-Staff'])->prefix('office')->group(
 
 Route::middleware(['auth', 'verified', 'Admin'])->prefix('admin')->group(function () {
     Route::get('/Admin-Offices', [AdminOfficesController::class, 'indexOffice'])->name('admin.views.offices-index');
+    Route::post('/Office-Create', [AdminOfficesController::class, 'storeOffice'])->name('admin.office.store');
+    Route::delete('/Office-Delete/{officeId}', [AdminOfficesController::class, 'destroyOffice'])->name('admin.office.destroy');
 });
 
 Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
