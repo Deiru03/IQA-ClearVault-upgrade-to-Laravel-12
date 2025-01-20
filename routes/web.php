@@ -31,6 +31,8 @@ use Psy\Command\EditCommand;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/get-offices/{campusId}', [RegisteredUserController::class, 'getOffices']);
 /////////////////////////////////////////////// File View Route ////////////////////////////////////////////////
 // General file view route
 Route::get('/file-view/{path}', function($path) {
@@ -131,7 +133,7 @@ Route::middleware(['Admin', 'Dean', 'Program-Head'])->group(function () {
 
 Route::middleware(['Admin-Staff'])->group(function () {
     Route::get('/office', [OfficeController::class, 'dashboard'])->name('office.dashboard');
-    Route::get('/office/homepage', [AdminController::class, 'home'])->name('office.home');
+    Route::get('/office/homepage', [OfficeController::class, 'homeOffice'])->name('office.home');
 });
 
 Route::middleware(['Faculty'])->group(function () {

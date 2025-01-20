@@ -319,12 +319,12 @@
                             <span class="text-xl">👨‍🏫 Faculty</span>
                         </a>
                         
-                        <a href="{{ route('register', ['role' => 'admin']) }}" 
+                        <a href="{{ route('registerAdminStaff', ['role' => 'admin']) }}" 
                            class="block w-full p-4 bg-white/5 hover:bg-white/10 text-white rounded-lg border border-white/20 transition-all duration-200 text-center">
                             <span class="text-xl">👨‍💼 Admin Staff</span>
                         </a>
 
-                        <a href="{{ route('register', ['role' => 'superadmin']) }}" 
+                        <a href="{{ route('registerSA', ['role' => 'superadmin']) }}" 
                            id="secretOption"
                            class="hidden w-full p-4 text-white hover:text-red-300 transition-all duration-300 text-center mt-6 group relative">
                             <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

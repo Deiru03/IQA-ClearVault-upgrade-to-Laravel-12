@@ -29,6 +29,7 @@ class User extends Authenticatable //implements MustVerifyEmail
         'clearances_status', // Added date 09/16/2024 // pending, return, complete
         'last_clearance_update', // Added date 09/16/2024 // date when last clearance update was made
         'checked_by', // Added date 10/19/2024 // department id
+        'office_id', // Added date 01/20/2025 // office id ***
         'department_id', // Added date 10/19/2024 // department id
         'program_id', // Added date 10/19/2024 // program id
         'admin_id_registered', // Added date 10/30/2024 // admin id registered

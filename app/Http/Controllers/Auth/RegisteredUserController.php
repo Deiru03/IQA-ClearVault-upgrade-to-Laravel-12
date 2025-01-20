@@ -15,6 +15,7 @@ use App\Models\Department;
 use App\Models\Program;
 use App\Models\Campus;
 use App\Models\AdminId;
+use App\Models\Office;
 use App\Models\ProgramHeadDeanId;
 
 class RegisteredUserController extends Controller
@@ -30,6 +31,17 @@ class RegisteredUserController extends Controller
         return view('auth.register', compact('campuses', 'departments'));
     }
 
+    public function createAdminStaff(): View
+    {
+        $campuses = Campus::all();
+        $offices = Office::all();
+        return view('auth.register-admin-staff', compact('campuses', 'offices'));
+    }
+
+    public function createSA(): View
+    {
+        return view('auth.register-superadmin');
+    }
     public function getDepartments($campusId)
     {
         $departments = Department::where('campus_id', $campusId)->get();
@@ -40,6 +52,13 @@ class RegisteredUserController extends Controller
     {
         $programs = Program::where('department_id', $departmentId)->get();
         return response()->json($programs);
+    }
+
+    public function getOffices($campusId)
+    {
+        $offices = Office::where('campus_id', $campusId)->get();
+        return response()->json($offices);
+
     }
     /**
      * Handle an incoming registration request.
@@ -151,5 +170,67 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(route('homepage', absolute: false));
+    }
+
+    public function storeAdminStaff(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed',
+                 Rules\Password::min(8)
+                 ->letters()
+                 ->numbers()
+                // ->mixedCase()
+                 ->symbols()
+            ],
+            'user_type' => "Admin-Staff",
+            'office_id' => ['required', 'exists:offices,id'],
+            'campus_id' => ['required', 'exists:campuses,id'],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'user_type' => "Admin-Staff",
+            'office_id' => $request->office_id,
+            'campus_id' => $request->campus_id,
+        ]);
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect(route('office.home', absolute: false));
+    }
+
+    public function storeSA(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed',
+                 Rules\Password::min(8)
+                 ->letters()
+                 ->numbers()
+                // ->mixedCase()
+                 ->symbols()
+            ],
+            'user_type' => ['required', 'string', 'in:Super-Admin'],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'user_type' => $request->user_type,
+        ]);
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect(route('admin.home', absolute: false));
     }
 }

@@ -17,7 +17,7 @@ use App\Models\SubProgram;
 
 class OfficeController extends Controller
 {
-    public function home(): View
+    public function homeOffice(): View
     {
         return view('office.home');
     }
