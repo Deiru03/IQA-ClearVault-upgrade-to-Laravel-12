@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use App\Models\Office;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class AdminOfficesController extends Controller
 {
@@ -36,28 +38,25 @@ class AdminOfficesController extends Controller
             $validatedRequest = $request->validate([
                 "name" => "required|string",
                 "description" => "nullable|string",
-                // "department_id" => "nullable|integer",
-                "profile_picture" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048",
+                "profile_picture" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
                 "campus_id" => "required|integer",
             ]);
 
             if ($request->hasFile('profile_picture')) {
-                $data['profile_picture'] = $request->file('profile_picture')->store('office_pictures', 'public');
+                $path = $request->file('profile_picture')->store('office_pictures', 'public');
+                $validatedRequest['profile_picture'] = '/storage/' . $path;
+            } else {
+                $validatedRequest['profile_picture'] = null;
             }
-    
-    
-            // if (empty($validatedRequest['profile_picture'])) {
-            //     $validatedRequest['profile_picture'] = null;
-            // }
-            $validatedRequest['profile_picture'] = null;
-    
+
             $officeStored = Office::create($validatedRequest);
-    
-            return redirect()->route("admin.views.offices-index", $officeStored)->with("success", "Office created successfully and Saved to the database");
+
+            return redirect()->route("admin.views.offices-index")->with("success", "Office created successfully");
     
             // return redirect()->route("admin.views.offices-index")->with("success", "Office created successfully");
         } catch (\Exception $e) {
-            return redirect()->route("admin.views.offices-index")->with("error", "Error creating office");
+            Log::error('Office creation error: ' . $e->getMessage());
+            return redirect()->route("admin.views.offices-index")->with("error", "Error creating office: " . $e->getMessage());
         }
     }
 
@@ -72,17 +71,49 @@ class AdminOfficesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function editOffice(string $id)
     {
-        //
+        try {
+            $office = Office::findOrFail($id);
+            return response()->json($office);
+        } catch (\Exception $e) {
+            Log::error('Error fetching office data: ' . $e->getMessage());
+            return response()->json(['error' => 'Error fetching office data'], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateOffice(Request $request, string $id)
     {
-        //
+        try {
+            $validatedRequest = $request->validate([
+                "name" => "required|string",
+                "description" => "nullable|string",
+                "profile_picture" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
+                "campus_id" => "required|integer",
+            ]);
+
+            $office = Office::findOrFail($id);
+
+            if ($request->hasFile('profile_picture')) {
+                // Delete the old profile picture if it exists
+                if ($office->profile_picture) {
+                    Storage::disk('public')->delete(str_replace('/storage/', '', $office->profile_picture));
+                }
+
+                $path = $request->file('profile_picture')->store('office_pictures', 'public');
+                $validatedRequest['profile_picture'] = '/storage/' . $path;
+            }
+
+            $office->update($validatedRequest);
+
+            return redirect()->route("admin.views.offices-index")->with("success", "Office updated successfully");
+        } catch (\Exception $e) {
+            Log::error('Office update error: ' . $e->getMessage());
+            return redirect()->route("admin.views.offices-index")->with("error", "Error updating office: " . $e->getMessage());
+        }
     }
 
     /**

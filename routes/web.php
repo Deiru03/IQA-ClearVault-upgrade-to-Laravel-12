@@ -26,6 +26,7 @@ use App\Models\UploadedClearance;
 use Faker\Provider\ar_EG\Address;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\AboutController;
+use Psy\Command\EditCommand;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,6 +53,24 @@ Route::get('/profile_pictures/{path}', function($path) {
     if (!File::exists($fullPath)) {
         // Return default profile picture if requested one doesn't exist
         $fullPath = public_path('images/default-profile.png');
+        if (!File::exists($fullPath)) {
+            abort(404);
+        }
+    }
+
+    return response()->file($fullPath, [
+        'Content-Type' => File::mimeType($fullPath),
+        'Content-Disposition' => 'inline; filename="' . basename($path) . '"'
+    ]);
+})->where('path', '.*')->middleware('auth');
+
+// Office pictures route
+Route::get('/office_pictures/{path}', function($path) {
+    $fullPath = storage_path('app/public/office_pictures/' . $path);
+
+    if (!File::exists($fullPath)) {
+        // Return default office picture if requested one doesn't exist 
+        $fullPath = public_path('images/default-office.png');
         if (!File::exists($fullPath)) {
             abort(404);
         }
@@ -360,6 +379,8 @@ Route::middleware(['auth', 'verified', 'Admin'])->prefix('admin')->group(functio
     Route::get('/Admin-Offices', [AdminOfficesController::class, 'indexOffice'])->name('admin.views.offices-index');
     Route::post('/Office-Create', [AdminOfficesController::class, 'storeOffice'])->name('admin.office.store');
     Route::delete('/Office-Delete/{officeId}', [AdminOfficesController::class, 'destroyOffice'])->name('admin.office.destroy');
+    Route::get('/admin/Office-Edit/{id}', [AdminOfficesController::class, 'editOffice'])->name('admin.office.edit');
+    Route::put('/admin/Office-Update/{id}', [AdminOfficesController::class, 'updateOffice'])->name('admin.office.update');
 });
 
 Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
