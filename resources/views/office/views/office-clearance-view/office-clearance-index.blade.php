@@ -265,7 +265,7 @@
         function openModal(clearanceId) {
             currentClearanceId = clearanceId;
             document.getElementById('confirmationModal').classList.remove('hidden');
-            document.getElementById('removeForm').action = `/admin/phd/program-head-dean/clearances/view-checklist/${clearanceId}/remove-copy`;
+            document.getElementById('removeForm').action = `/office/clearances/view-checklist/${clearanceId}/remove-copy`;
         }
 
         function closeModal() {

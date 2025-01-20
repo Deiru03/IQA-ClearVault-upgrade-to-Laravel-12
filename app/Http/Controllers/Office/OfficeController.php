@@ -52,6 +52,9 @@ class OfficeController extends Controller
         $userClearance = UserClearance::with(['sharedClearance.clearance.requirements', 'uploadedClearances'])
             ->where('user_id', $user->id)
             ->where('is_active', true) // Ensure only active clearance is fetched
+            ->whereHas('sharedClearance.clearance', function($query) {
+                $query->whereIn('type', ['Admin-Staff']);
+                })
             ->first();
 
         $noActiveClearance = !$userClearance;

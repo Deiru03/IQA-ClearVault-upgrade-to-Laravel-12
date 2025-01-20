@@ -59,6 +59,9 @@ class FacultyController extends Controller
         $userClearance = UserClearance::with(['sharedClearance.clearance.requirements', 'uploadedClearances'])
             ->where('user_id', $user->id)
             ->where('is_active', true) // Ensure only active clearance is fetched
+            ->whereHas('sharedClearance.clearance', function($query) {
+            $query->whereNotIn('type', ['Admin-Staff', 'Program-Head', 'Dean']);
+            })
             ->first();
 
         $noActiveClearance = !$userClearance;
@@ -112,7 +115,7 @@ class FacultyController extends Controller
         // Fetch the user clearance data for FACULTY only
         $userClearance = UserClearance::where('user_id', Auth::id())
             ->whereHas('sharedClearance.clearance', function($query) {
-                $query->whereNot('type', ['Program-Head', 'Dean']);
+                $query->whereNot('type', ['ADmin-Staff', 'Program-Head', 'Dean']);
             })
             ->with('sharedClearance.clearance')
             ->first();
