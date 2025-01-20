@@ -309,7 +309,69 @@
                         @endauth
                     </div>
                 @endif
+            <div id="registerModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+                <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+                    <h2 class="text-2xl font-light mb-6 text-white text-center" id="modalTitle">Select Role</h2>
+                    
+                    <div class="space-y-4">
+                        <a href="{{ route('register', ['role' => 'faculty']) }}" 
+                           class="block w-full p-4 bg-white/5 hover:bg-white/10 text-white rounded-lg border border-white/20 transition-all duration-200 text-center">
+                            <span class="text-xl">👨‍🏫 Faculty</span>
+                        </a>
+                        
+                        <a href="{{ route('register', ['role' => 'admin']) }}" 
+                           class="block w-full p-4 bg-white/5 hover:bg-white/10 text-white rounded-lg border border-white/20 transition-all duration-200 text-center">
+                            <span class="text-xl">👨‍💼 Admin Staff</span>
+                        </a>
+
+                        <a href="{{ route('register', ['role' => 'superadmin']) }}" 
+                           id="secretOption"
+                           class="hidden w-full p-4 text-white hover:text-red-300 transition-all duration-300 text-center mt-6 group relative">
+                            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="relative flex items-center justify-center">
+                                <span class="text-xl mr-2 transform group-hover:rotate-12 transition-transform duration-300">🔐</span>
+                                <span class="text-xl">Super Admin</span>
+                            </div>
+                            <div class="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                        </a>
+
+                        <div class="text-sm text-white/80 bg-white/5 p-3 rounded-lg mt-4">
+                            Note: Choose Faculty if you hold both positions
+                        </div>
+                        
+                        <button onclick="closeRegisterModal()" 
+                                class="w-full p-3 text-white/60 hover:text-white transition-colors duration-200">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             </div>
+
+            <script>
+                let clickCount = 0;
+                
+                document.querySelector('a[href="{{ route("register") }}"]').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('registerModal').classList.remove('hidden');
+                    document.getElementById('registerModal').classList.add('flex');
+                });
+
+                document.getElementById('modalTitle').addEventListener('click', function() {
+                    clickCount++;
+                    if (clickCount === 10) {
+                        document.getElementById('secretOption').classList.remove('hidden');
+                        this.innerHTML = "🔓 Secret Option Unlocked";
+                        setTimeout(() => this.innerHTML = "Select Role", 5000);
+                    }
+                });
+
+                function closeRegisterModal() {
+                    document.getElementById('registerModal').classList.add('hidden');
+                    document.getElementById('registerModal').classList.remove('flex');
+                    clickCount = 0;
+                    document.getElementById('secretOption').classList.add('hidden');
+                }
+            </script>
         </main>
         <footer>
             Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
@@ -345,7 +407,7 @@
                 }, 1000);
             });
         </script>
-        {{-- <!-- Loading Spinner -->
+         <!-- Loading Spinner -->
         <div id="loadingSpinner" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-80 hidden z-50">
             <div class="flex flex-col items-center">
                 <div class="loader-container">
@@ -432,6 +494,6 @@
                 // Hide loading spinner on page load
                 window.addEventListener('load', hideLoading);
             });
-        </script> --}}
+        </script>
     </body>
 </html>
