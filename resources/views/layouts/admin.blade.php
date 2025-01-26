@@ -173,9 +173,9 @@
                     </div>
                 </div>
             </div>
-            <!-- Sidebar -->
-            <div class="w-60 bg-gray-800 text-white h-screen fixed z-10">
-                    {{-- <div class="flex items-center p-4">
+                <!-- Sidebar -->
+                {{-- <div class="w-60 bg-gray-800 text-white h-screen fixed z-10">
+                    <div class="flex items-center p-4">
                         <img src="{{ Auth::user()->profile_picture }}" alt="Profile Picture" class="profile-picture">
                         <span class="text-lg font-semibold">{{ Auth::user()->name }}</span>
                     </div> --}}
