@@ -6,9 +6,9 @@
             <h3 class="text-lg font-semibold mb-4">Category 1: User Experience</h3>
 
             <div class="mb-4">
-                <x-input-label for="c1_1" :value="__('How easy was it to navigate through the website?')" />
+                <x-input-label for="c1_1" :value="__('The website is easy to navigate.')" />
                 <div>
-                    @foreach(['Very Easy', 'Easy', 'Neutral', 'Difficult', 'Very Difficult'] as $index => $option)
+                    @foreach(['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] as $index => $option)
                         <label>
                             <input type="radio" name="c1_1" value="{{ $index + 1 }}" {{ old('c1_1') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -21,9 +21,9 @@
             </div>
 
             <div class="mb-4">
-                <x-input-label for="c1_2" :value="__('Did you find the information you were looking for?')" />
+                <x-input-label for="c1_2" :value="__('I can easily find what I need on the website.')" />
                 <div>
-                    @foreach(['Yes, easily', 'Yes, but with some difficulty', 'No'] as $index => $option)
+                    @foreach(['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] as $index => $option)
                         <label>
                             <input type="radio" name="c1_2" value="{{ $index + 1 }}" {{ old('c1_2') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -36,9 +36,9 @@
             </div>
 
             <div class="mb-4">
-                <x-input-label for="c1_3" :value="__('How visually appealing do you find the website design?')" />
+                <x-input-label for="c1_3" :value="__('The design of the website is user-friendly.')" />
                 <div>
-                    @foreach(['Excellent', 'Good', 'Average', 'Poor', 'Very Poor'] as $index => $option)
+                    @foreach(['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] as $index => $option)
                         <label>
                             <input type="radio" name="c1_3" value="{{ $index + 1 }}" {{ old('c1_3') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -53,7 +53,7 @@
             <div class="mb-4">
                 <x-input-label for="c1_4" :value="__('How quickly does the website load for you?')" />
                 <div>
-                    @foreach(['Very Fast', 'Fast', 'Neutral', 'Slow', 'Very Slow'] as $index => $option)
+                    @foreach(['Very Slow', 'Slow', 'Neutral', 'Fast', 'Very Fast'] as $index => $option)
                         <label>
                             <input type="radio" name="c1_4" value="{{ $index + 1 }}" {{ old('c1_4') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -68,7 +68,7 @@
             <div class="mb-4">
                 <x-input-label for="c1_5" :value="__('How likely are you to recommend this website to others?')" />
                 <div>
-                    @foreach(['Very Likely', 'Likely', 'Neutral', 'Unlikely', 'Very Unlikely'] as $index => $option)
+                    @foreach(['Very Unlikely','Not Likely', 'Neutral', 'Likely', 'Very Likely'] as $index => $option)
                         <label>
                             <input type="radio" name="c1_5" value="{{ $index + 1 }}" {{ old('c1_5') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -86,7 +86,7 @@
             <div class="mb-4">
                 <x-input-label for="c2_1" :value="__('Is the content on the website relevant to your needs?')" />
                 <div>
-                    @foreach(['Highly Relevant', 'Relevant', 'Neutral', 'Irrelevant', 'Highly Irrelevant'] as $index => $option)
+                    @foreach(['Poor', 'Average','Fair', 'Good', 'Excellent'] as $index => $option)
                         <label>
                             <input type="radio" name="c2_1" value="{{ $index + 1 }}" {{ old('c2_1') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -101,7 +101,7 @@
             <div class="mb-4">
                 <x-input-label for="c2_2" :value="__('How well-organized is the content on the website?')" />
                 <div>
-                    @foreach(['Excellent', 'Good', 'Average', 'Poor', 'Very Poor'] as $index => $option)
+                    @foreach(['Very Unorganized', 'Unorganized', 'Neutral', 'Organized', 'Very Organized'] as $index => $option)
                         <label>
                             <input type="radio" name="c2_2" value="{{ $index + 1 }}" {{ old('c2_2') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -114,9 +114,9 @@
             </div>
 
             <div class="mb-4">
-                <x-input-label for="c2_3" :value="__('How satisfied are you with the coverage of topics on the website?')" />
+                <x-input-label for="c2_3" :value="__('How satisfied are you with the clearance process on the website?')" />
                 <div>
-                    @foreach(['Very Satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very Dissatisfied'] as $index => $option)
+                    @foreach(['Not Satisfied', 'Slightly Satisfied', 'Neutral', 'Satisfied', 'Very Satisfied'] as $index => $option)
                         <label>
                             <input type="radio" name="c2_3" value="{{ $index + 1 }}" {{ old('c2_3') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -127,9 +127,9 @@
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>          <div class="mb-4">
-                <x-input-label for="c2_4" :value="__('How accurate do you find the information on the website?')" />
+                <x-input-label for="c2_4" :value="__('How helpful is do you think is the IQA Clearance process?')" />
                 <div>
-                    @foreach(['Very Accurate', 'Accurate', 'Neutral', 'Inaccurate', 'Very Inaccurate'] as $index => $option)
+                    @foreach(['Not Helpful', 'Slightly Helpful', 'Neutral', 'Helpful', 'Very Helpful'] as $index => $option)
                         <label>
                             <input type="radio" name="c2_4" value="{{ $index + 1 }}" {{ old('c2_4') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -142,9 +142,9 @@
             </div>
 
             <div class="mb-4">
-                <x-input-label for="c2_5" :value="__('How engaging is the content presented?')" />
+                <x-input-label for="c2_5" :value="__('How engaging is the IQA CLearVault system?')" />
                 <div>
-                    @foreach(['Very Engaging', 'Engaging', 'Neutral', 'Unengaging', 'Very Unengaging'] as $index => $option)
+                    @foreach(['Not Engaging', 'Slightly Engaging', 'Neutral', 'Engaging', 'Very Engaging'] as $index => $option)
                         <label>
                             <input type="radio" name="c2_5" value="{{ $index + 1 }}" {{ old('c2_5') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -160,9 +160,9 @@
             <h3 class="text-lg font-semibold mb-4">Category 3: Technical Performance</h3>
 
             <div class="mb-4">
-                <x-input-label for="c3_1" :value="__('How often did you encounter errors or bugs while using the website?')" />
+                <x-input-label for="c3_1" :value="__('I did not encounter any technical issues or errors.')" />
                 <div>
-                    @foreach(['Never', 'Rarely', 'Sometimes', 'Often', 'Very Often'] as $index => $option)
+                    @foreach(['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'] as $index => $option)
                         <label>
                             <input type="radio" name="c3_1" value="{{ $index + 1 }}" {{ old('c3_1') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -174,9 +174,9 @@
                 @enderror
             </div>
             <div class="mb-4">
-                <x-input-label for="c3_2" :value="__('How satisfied are you with the website\'s mobile responsiveness?')" />
+                <x-input-label for="c3_2" :value="__('I am satisfied of the user experience on the website.')" />
                 <div>
-                    @foreach(['Very Satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very Dissatisfied'] as $index => $option)
+                    @foreach(['Not Satisfied', 'Slightly Satisfied', 'Neutral', 'Satisfied', 'Very Satisfied'] as $index => $option)
                         <label>
                             <input type="radio" name="c3_2" value="{{ $index + 1 }}" {{ old('c3_2') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -189,9 +189,9 @@
             </div>
 
             <div class="mb-4">
-                <x-input-label for="c3_3" :value="__('How secure do you feel using this website?')" />
+                <x-input-label for="c3_3" :value="__('I feel secure using this website?')" />
                 <div>
-                    @foreach(['Very Secure', 'Secure', 'Neutral', 'Insecure', 'Very Insecure'] as $index => $option)
+                    @foreach(['Very Unsecure', 'Unsecure', 'Neutral', 'Secure', 'Very Secure'] as $index => $option)
                         <label>
                             <input type="radio" name="c3_3" value="{{ $index + 1 }}" {{ old('c3_3') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -206,7 +206,7 @@
             <div class="mb-4">
                 <x-input-label for="c3_4" :value="__('How often does the website crash or fail to load?')" />
                 <div>
-                    @foreach(['Never', 'Rarely', 'Sometimes', 'Often', 'Always'] as $index => $option)
+                    @foreach(['Ver Often', 'Often', 'Neutral', 'Rarely', 'Never'] as $index => $option)
                         <label>
                             <input type="radio" name="c3_4" value="{{ $index + 1 }}" {{ old('c3_4') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
@@ -221,7 +221,7 @@
             <div class="mb-4">
                 <x-input-label for="c3_5" :value="__('How much improvement do you think the website features and functionalities need?')" />
                 <div>
-                    @foreach(['No Improvement Needed', 'Minor Improvements', 'Neutral', 'Significant Improvements', 'Major Improvements'] as $index => $option)
+                    @foreach(['Extensive', 'Moderate', 'Neutral', 'Minimal', 'None'] as $index => $option)
                         <label>
                             <input type="radio" name="c3_5" value="{{ $index + 1 }}" {{ old('c3_5') == $index + 1 ? 'checked' : '' }}>
                             {{ $option }}
