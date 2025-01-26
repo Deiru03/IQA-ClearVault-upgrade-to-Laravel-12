@@ -197,17 +197,17 @@
                                             {{ $feedback->user->name }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $uxAvg <= 2 ? 'bg-green-100 text-green-800' : ($uxAvg <= 3.5 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $uxAvg >= 4 ? 'bg-green-100 text-green-800' : ($uxAvg >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                                 {{ number_format($uxAvg, 2) }}/5
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $contentAvg <= 2 ? 'bg-green-100 text-green-800' : ($contentAvg <= 3.5 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $contentAvg >= 4 ? 'bg-green-100 text-green-800' : ($contentAvg >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                                 {{ number_format($contentAvg, 2) }}/5
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $technicalAvg <= 2 ? 'bg-green-100 text-green-800' : ($technicalAvg <= 3.5 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $technicalAvg >= 4 ? 'bg-green-100 text-green-800' : ($technicalAvg >= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                                 {{ number_format($technicalAvg, 2) }}/5
                                             </span>
                                         </td>
