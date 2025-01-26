@@ -174,445 +174,446 @@
                 </div>
             </div>
             <!-- Sidebar -->
-            {{-- <div class="w-60 bg-gray-800 text-white h-screen fixed z-10">
-                <div class="flex items-center p-4">
-                    <img src="{{ Auth::user()->profile_picture }}" alt="Profile Picture" class="profile-picture">
-                    <span class="text-lg font-semibold">{{ Auth::user()->name }}</span>
-                </div> --}}
-            <div class="w-60 bg-gray-800 text-white h-screen fixed z-10 overflow-y-auto">
-                {{-- <div class="profile-section">
-                    @if(Auth::check())
-                        @if(Auth::user()->profile_picture)
-                            <img src="{{ Auth::user()->profile_picture }}" alt="Profile Picture" class="profile-picture h-9 w-9">
-                        @else
-                            <div class="h-9 w-9 profile-picture flex items-center justify-center text-white font-bold" style="background-color: {{ '#' . substr(md5(Auth::user()->name), 0, 6) }};">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            </div>
-                        @endif
+            <div class="w-60 bg-gray-800 text-white h-screen fixed z-10">
+                    {{-- <div class="flex items-center p-4">
+                        <img src="{{ Auth::user()->profile_picture }}" alt="Profile Picture" class="profile-picture">
                         <span class="text-lg font-semibold">{{ Auth::user()->name }}</span>
-                    @endif
-                    {{-- <img src="{{ asset('images/OMSCLogo.png') }}" alt="Logo" class="h-12 w-12 mr-2">
-                    <span class="text-lg font-semibold">{{ Auth::user()->name }}</span> --}
-                </div>  --}}
-
-                @php
-                $role = Auth::user()->user_type;
-                $sAdmin = Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id;
-                $welcomeMessage = [
-                    'Admin' => 'Welcome to the OMSC Admin Dashboard',
-                    'Program-Head' => 'Welcome to the OMSC Program Head Dashboard',
-                    'Dean' => 'Welcome to the OMSC Dean Dashboard',
-                    'default' => 'Welcome to the OMSC Admin Dashboard'
-                ];
-            
-                // switch ($role) {
-                //     case 'Admin':
-                //         echo $welcomeMessage['Admin'];
-                //         break;
-                //     case 'sAdmin':
-                //         echo $welcomeMessage['sAdmin'];
-                //         break;
-                //     case 'Program-Head':
-                //         echo $welcomeMessage['Program-Head'];
-                //         break;
-                //     case 'Dean':
-                //         echo $welcomeMessage['Dean'];
-                //         break;
-                //     default:
-                //         echo $welcomeMessage['default'];
-                //         break;
-                // }
-
-                $userId = Auth::id();
-                $totalSize = 0;
-
-                $uploadedClearances = \App\Models\UploadedClearance::where('user_id', $userId)->get();
-
-                foreach ($uploadedClearances as $clearance) {
-                    $filePath = storage_path('app/public/' . $clearance->file_path);
-                    if (file_exists($filePath)) {
-                        $totalSize += filesize($filePath);
-                    }
-                }
-
-                $storageSize = $totalSize;
-
-            @endphp
-                <div class="mt-auto -mb-4 p-2">
-                    <a href="{{ route('admin.home') }}" class="block hover:bg-gray-700 rounded-lg transition duration-300 ease-in-out">
-                        <div class="flex flex-col items-center p-4">
-                            <img src="{{ asset('images/OMSCLogo.png') }}" alt="OMSC Logo" class="w-16 h-16 mb-3">
-                            <p class="text-sm text-gray-400 text-center group-hover:text-indigo-300 transition duration-150 ease-in-out">
-                                @if  ($sAdmin)
-                                    Welcome to the Super Admin Dashboard
-                                @else
-                                    {{$welcomeMessage[$role]}}
-                                @endif
-                            </p>
-                            <p class="text-xs text-gray-500 mt-2 text-center group-hover:text-indigo-300 transition duration-150 ease-in-out">
-                                Manage clearances, analyze reports, and oversee system files.
-                            </p>
-                        </div>
-                    </a>
-                </div>
-                <nav class="mt-2">
-                    <!-- Storage Used only for Program-Head and Dean -->
-                    @if (Auth::user()->user_type == 'Program-Head' || Auth::user()->user_type == 'Dean')
-                        <div class="px-4 py-2">
-                            <div class="bg-gray-700 rounded-lg p-3 hover:bg-gray-600 transition-all duration-200">
-                                <div class="flex items-center space-x-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-                                    </svg>
-                                    @php
-                                        $storageSiz = $storageSize;
-                                        $sizeInMB = $storageSiz / (1024 * 1024);
-                                        if($sizeInMB >= 1024) {
-                                            $size = number_format($sizeInMB / 1024, 2) . ' GB';
-                                        } else {
-                                            $size = number_format($sizeInMB, 2) . ' MB';
-                                        }
-                                    @endphp
-                                    <span class="text-gray-300 text-sm">Your Storage Used: 
-                                        <span class="text-indigo-400 font-medium block text-center">{{ $size }}</span>
-                                    </span>
+                    </div> --}}
+                <div class="w-60 bg-gray-800 text-white h-screen fixed z-10 overflow-y-auto">
+                    {{-- <div class="profile-section">
+                        @if(Auth::check())
+                            @if(Auth::user()->profile_picture)
+                                <img src="{{ Auth::user()->profile_picture }}" alt="Profile Picture" class="profile-picture h-9 w-9">
+                            @else
+                                <div class="h-9 w-9 profile-picture flex items-center justify-center text-white font-bold" style="background-color: {{ '#' . substr(md5(Auth::user()->name), 0, 6) }};">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                 </div>
+                            @endif
+                            <span class="text-lg font-semibold">{{ Auth::user()->name }}</span>
+                        @endif
+                        {{-- <img src="{{ asset('images/OMSCLogo.png') }}" alt="Logo" class="h-12 w-12 mr-2">
+                        <span class="text-lg font-semibold">{{ Auth::user()->name }}</span> --}
+                    </div>  --}}
+
+                    @php
+                    $role = Auth::user()->user_type;
+                    $sAdmin = Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id;
+                    $welcomeMessage = [
+                        'Admin' => 'Welcome to the OMSC Admin Dashboard',
+                        'Program-Head' => 'Welcome to the OMSC Program Head Dashboard',
+                        'Dean' => 'Welcome to the OMSC Dean Dashboard',
+                        'default' => 'Welcome to the OMSC Admin Dashboard'
+                    ];
+                
+                    // switch ($role) {
+                    //     case 'Admin':
+                    //         echo $welcomeMessage['Admin'];
+                    //         break;
+                    //     case 'sAdmin':
+                    //         echo $welcomeMessage['sAdmin'];
+                    //         break;
+                    //     case 'Program-Head':
+                    //         echo $welcomeMessage['Program-Head'];
+                    //         break;
+                    //     case 'Dean':
+                    //         echo $welcomeMessage['Dean'];
+                    //         break;
+                    //     default:
+                    //         echo $welcomeMessage['default'];
+                    //         break;
+                    // }
+
+                    $userId = Auth::id();
+                    $totalSize = 0;
+
+                    $uploadedClearances = \App\Models\UploadedClearance::where('user_id', $userId)->get();
+
+                    foreach ($uploadedClearances as $clearance) {
+                        $filePath = storage_path('app/public/' . $clearance->file_path);
+                        if (file_exists($filePath)) {
+                            $totalSize += filesize($filePath);
+                        }
+                    }
+
+                    $storageSize = $totalSize;
+
+                @endphp
+                    <div class="mt-auto -mb-4 p-2">
+                        <a href="{{ route('admin.home') }}" class="block hover:bg-gray-700 rounded-lg transition duration-300 ease-in-out">
+                            <div class="flex flex-col items-center p-4">
+                                <img src="{{ asset('images/OMSCLogo.png') }}" alt="OMSC Logo" class="w-16 h-16 mb-3">
+                                <p class="text-sm text-gray-400 text-center group-hover:text-indigo-300 transition duration-150 ease-in-out">
+                                    @if  ($sAdmin)
+                                        Welcome to the Super Admin Dashboard
+                                    @else
+                                        {{$welcomeMessage[$role]}}
+                                    @endif
+                                </p>
+                                <p class="text-xs text-gray-500 mt-2 text-center group-hover:text-indigo-300 transition duration-150 ease-in-out">
+                                    Manage clearances, analyze reports, and oversee system files.
+                                </p>
                             </div>
-                        </div>
-                    @endif
-                    <!-- Dashboard -->
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M12 3l9 9-9 9-9-9 9-9z" />
-                        </svg>
-                        <span class="{{ request()->routeIs('admin.dashboard') ? 'text-indigo-300 font-semibold' : '' }}">Dashboard</span>
-                    </a>
-
-                    <!-- Clearances -->
-                    <div x-data="{ clearancesOpen: {{ request()->routeIs('admin.views.clearances') || request()->routeIs('admin.clearance.manage') || request()->routeIs('admin.clearance.check') || request()->routeIs('phd.programHeadDean.clearance') ? 'true' : 'false' }} }">
-                        <a @click="clearancesOpen = !clearancesOpen" class="flex items-center px-10 py-4 hover:bg-gray-700 cursor-pointer {{ request()->routeIs('admin.views.clearances') || request()->routeIs('admin.clearance.manage') || request()->routeIs('admin.clearance.check') || request()->routeIs('admin.clearances.show') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
-                            </svg>
-                            <span class="{{ request()->routeIs('admin.views.clearances') || request()->routeIs('admin.clearance.manage') || request()->routeIs('admin.clearance.check') ? 'text-indigo-300 font-semibold' : '' }}">Clearance</span>
-                            <span id="clearancesRedDot" class="ml-2 bg-red-500 rounded-full h-2 w-2 hidden"></span>
-                            <svg :class="{'rotate-90': clearancesOpen}" class="ml-auto h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
                         </a>
-                        <div x-show="clearancesOpen" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="pl-8">
-                            <!-- View Clearance -->
-                            <a href="{{ route('admin.views.clearances') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{ request()->routeIs('admin.views.clearances') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
-                                <span>View Clearance</span>
-                            </a>
-                            
-                            <!-- Manage Clearance (Admin Only) -->
-                            @if(Auth::user()->user_type == 'Admin')
-                                <a href="{{ route('admin.clearance.manage') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{ request()->routeIs('admin.clearance.manage') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.204-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.109.94h-1.094c-.55 0-1.02-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.78-.93-.398-.164-.855-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    </svg>
-                                    <span>Manage Clearance</span>
-                                </a>
-                            @endif
-
-                            <!-- Check Clearance -->
-                            <a href="{{ route('admin.clearance.check') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{ request()->routeIs('admin.clearance.check') || request()->routeIs('admin.clearances.show') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
-                                </svg>
-                                <span>Check Clearance</span>
-                                <span id="clearanceBadge" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
-                            </a>
-
-                            <!-- Upload Clearances (Program-Head or Dean Only) -->
-                            @if(Auth::user()->user_type == 'Program-Head' || (Auth::user()->user_type == 'Dean'))
-                                <a href="{{ route('phd.programHeadDean.clearance') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{ request()->routeIs('phd.programHeadDean.clearance') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
-                                    </svg>
-                                    <span>Upload Clearances</span>
-                                    <span id="clearanceBadge" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
-                                </a>
-                            @endif
-                        </div>
                     </div>
-
-                    <!-- History of Faculty Reports -->
-                    <a href="{{ route('admin.views.submittedReports') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.submittedReports') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-                        </svg>
-                        <span class="{{ request()->routeIs('admin.views.submittedReports') ? 'text-indigo-300 font-semibold' : '' }}">History of Reports</span>
-                    </a>
-
-                    <!-- Admin Action Reports -->
-                    <a href="{{ route('admin.views.actionReports') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.actionReports') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
-                        </svg>
-                        <span class="{{ request()->routeIs('admin.views.actionReports') ? 'text-indigo-300 font-semibold' : '' }}">Admin Action Reports</span>
-                    </a>
-
-                    <!-- Faculty -->
-                    <a href="{{ route('admin.views.faculty') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.faculty') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                        </svg>
-                        <span class="{{ request()->routeIs('admin.views.faculty') ? 'text-indigo-300 font-semibold' : '' }}">Faculty</span>
-                    </a>
-
-                    <!-- My Files // Archives -->
-                    <a href="{{ route('admin.views.archive') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.archive') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                        </svg>
-                        <span class="{{ request()->routeIs('admin.views.archive') ? 'text-indigo-300 font-semibold' : '' }}">Archives</span>
-                    </a>
-
-                    <!-- Admin ID Management -->
-                    @if(Auth::user()->user_type == 'Admin')
-                    <a href="{{ route('admin.adminIdManagement') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.adminIdManagement') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-9 w-9 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-                        </svg>
-                        <span class="{{ request()->routeIs('admin.adminIdManagement') ? 'text-indigo-300 font-semibold' : '' }}">Admin ID Management</span>
-                    </a>
-                    @endif
-
-                    <!-- College -->
-                    @if(Auth::user()->user_type == 'Admin')
-                        <a href="{{ route('admin.views.college') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.college') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                            </svg>
-                            <span class="{{ request()->routeIs('admin.views.college') ? 'text-indigo-300 font-semibold' : '' }}">College</span>
-                        </a>
-                    @endif
-                    <!-- Admin Offices -->
-                    @if(Auth::user()->user_type == 'Admin')
-                        <a href="{{ route('admin.views.offices-index') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.offices-index') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
-                            </svg>
-                            <span class="{{ request()->routeIs('admin.views.offices-index') ? 'text-indigo-300 font-semibold' : '' }}">Admin Offices</span>
-                        </a>
-                    @endif
-                    <!-- Campuses -->
-                    @if(Auth::user()->user_type == 'Admin')
-                        <a href="{{ route('admin.views.campuses') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.campuses') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                            </svg>
-                            <span class="{{ request()->routeIs('admin.views.campuses') ? 'text-indigo-300 font-semibold' : '' }}">Campuses</span>
-                        </a>
-                    @endif
-
-                    <!-- Profile -->
-                    <a href="{{ route('admin.profile.edit') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.profile.edit') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                        </svg>
-                        <span class="{{ request()->routeIs('admin.profile.edit') ? 'text-indigo-300 font-semibold' : '' }}">Profile</span>
-                    </a>
-
-                    <!-- Logout -->
-                    <form method="POST" action="{{ route('logout') }}" class="flex items-center w-full">
-                        @csrf
-                        <button type="submit" class="flex items-center w-full text-left px-9 py-4 hover:bg-gray-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-                            </svg>
-                            <span>Logout</span>
-                        </button>
-                    </form>
-
-                    <!-- About Us -->
-                    <a href="{{ route('about-us') }}" class="flex items-center px-10 py-4 hover:bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 {{-- request()->routeIs('about.us') ? 'bg-gradient-to-r from-indigo-500 to-purple-600 border-l-4 border-indigo-500' : '' --}} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                        <span class="{{ request()->routeIs('about.us') ? 'text-white font-semibold' : '' }}">About Us</span>
-                    </a>
-                </nav>
-            </div>
-
-            <div class="flex-1 ml-60">
-                @include('layouts.navigation')
-
-                <!-- Page Heading -->
-                @isset($header)
-                <header class="bg-white shadow sticky-header">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center">
-                                <button onclick="window.history.back()" class="mr-4 text-gray-600 hover:text-gray-900">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                                    </svg>
-                                </button>
-                                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                                    {{ $header }} <!-- Use the header variable -->
-                                </h2>
-                            </div>
-
-                            <div class="text-center">
-                                {{-- <h4>{{ date('F d, Y') }}</h4> --}}
-                                <p> {{ date( 'd, l' )}} </p><p id="currentTime">{{ date('h:i A') }}</p>
-                                <script>
-                                    function updateTime() {
-                                        const timeElement = document.getElementById('currentTime');
-                                        const now = new Date();
-                                        timeElement.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-                                    }
-                                    // Update time immediately and then every minute
-                                    updateTime();
-                                    setInterval(updateTime, 60000);
-                                </script>
-                            </div>
-
-                            <div class="flex items-center space-x-4">
-                                <!-- User Feedback to System Button -->
-                                <!-- Feedback Button -->
-                                <button @click="showUserFeedbackModal = true" 
-                                    class="hover:bg-gray-100 p-2 rounded-full transition-colors duration-200 relative group">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
-                                        class="w-6 h-6 text-gray-600 hover:text-indigo-600 transition-colors duration-200"
-                                        onmouseover="this.style.transform='scale(1.1)'" 
-                                        onmouseout="this.style.transform='scale(1)'">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                    </svg>
-                                    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                                        Add Feedback
-                                    </span>
-                                </button>
-
-                                <!-- Overview Link -->
-                                <a href="{{ route('admin.overview') }}" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 hover:scale-110 relative group">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                                    </svg>
-                                    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                                        Overview of the System
-                                    </span>
-                                </a>
-
-                                <!-- Notification Bell -->
-                                <div class="notification-div relative group" style="position: relative; top: 0px; right: 0px;">
-                                    <button id="notificationBell" class="relative hover:bg-gray-100 p-2 rounded-full transition-colors duration-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 hover:text-indigo-600 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5" />
+                    <nav class="mt-2">
+                        <!-- Storage Used only for Program-Head and Dean -->
+                        @if (Auth::user()->user_type == 'Program-Head' || Auth::user()->user_type == 'Dean')
+                            <div class="px-4 py-2">
+                                <div class="bg-gray-700 rounded-lg p-3 hover:bg-gray-600 transition-all duration-200">
+                                    <div class="flex items-center space-x-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
                                         </svg>
-                                        <span id="notificationCount" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center hidden animate-bounce">0</span>
-                                        <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                                            Notifications (Click to Open)
+                                        @php
+                                            $storageSiz = $storageSize;
+                                            $sizeInMB = $storageSiz / (1024 * 1024);
+                                            if($sizeInMB >= 1024) {
+                                                $size = number_format($sizeInMB / 1024, 2) . ' GB';
+                                            } else {
+                                                $size = number_format($sizeInMB, 2) . ' MB';
+                                            }
+                                        @endphp
+                                        <span class="text-gray-300 text-sm">Your Storage Used: 
+                                            <span class="text-indigo-400 font-medium block text-center">{{ $size }}</span>
                                         </span>
-                                    </button>
-                                    <div id="notificationDropdown" class="absolute right-0 mt-2 w-[300px] bg-white border border-gray-200 rounded-lg shadow-lg hidden hover:shadow-xl transition-shadow duration-200">
-                                        <ul id="notificationList" class="p-2">
-                                            <!-- Notifications will be appended here -->
-                                        </ul>
                                     </div>
                                 </div>
+                            </div>
+                        @endif
+                        <!-- Dashboard -->
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M12 3l9 9-9 9-9-9 9-9z" />
+                            </svg>
+                            <span class="{{ request()->routeIs('admin.dashboard') ? 'text-indigo-300 font-semibold' : '' }}">Dashboard</span>
+                        </a>
 
-                                <!-- User Dropdown -->
-                                <x-dropdown align="right" width="48">
-                                    <x-slot name="trigger">
-                                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                            @if(Auth::user()->profile_picture)
-                                                @if (str_contains(Auth::user()->profile_picture, 'http'))
-                                                    <img src="{{ Auth::user()->profile_picture }}" alt="Profile Picture" class="h-6 w-6 rounded-full mr-2">
-                                                @else
-                                                    <img src="{{ url('/profile_pictures/' . basename(Auth::user()->profile_picture)) }}" alt="Profile Picture" class="h-6 w-6 rounded-full mr-2">
-                                                @endif
-                                            @else
-                                                <div class="h-6 w-6 rounded-full mr-2 flex items-center justify-center text-white font-bold" style="background-color: {{ '#' . substr(md5(Auth::user()->name), 0, 6) }};">
-                                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                                </div>
-                                            @endif
-                                            <div>
-                                                {{ Auth::user()->name }}
-                                                (<span class="@if(Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id) text-red-600 font-semibold @elseif(Auth::user()->user_type === 'Admin') text-blue-600 font-semibold @elseif(Auth::user()->user_type === 'Program-Head') text-emerald-600 font-semibold @elseif(Auth::user()->user_type === 'Dean') text-amber-600 font-semibold @else text-gray-600 font-semibold @endif">
-                                                    {{ Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id ? 'Super Admin' : Auth::user()->user_type }}
-                                                </span>)
-                                            </div>
-                                            <div class="ms-1">
-                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                </svg>
-                                            </div>
-                                        </button>
-                                    </x-slot>
+                        <!-- Clearances -->
+                        <div x-data="{ clearancesOpen: {{ request()->routeIs('admin.views.clearances') || request()->routeIs('admin.clearance.manage') || request()->routeIs('admin.clearance.check') || request()->routeIs('phd.programHeadDean.clearance') ? 'true' : 'false' }} }">
+                            <a @click="clearancesOpen = !clearancesOpen" class="flex items-center px-10 py-4 hover:bg-gray-700 cursor-pointer {{ request()->routeIs('admin.views.clearances') || request()->routeIs('admin.clearance.manage') || request()->routeIs('admin.clearance.check') || request()->routeIs('admin.clearances.show') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                                </svg>
+                                <span class="{{ request()->routeIs('admin.views.clearances') || request()->routeIs('admin.clearance.manage') || request()->routeIs('admin.clearance.check') ? 'text-indigo-300 font-semibold' : '' }}">Clearance</span>
+                                <span id="clearancesRedDot" class="ml-2 bg-red-500 rounded-full h-2 w-2 hidden"></span>
+                                <svg :class="{'rotate-90': clearancesOpen}" class="ml-auto h-5 w-5 transform transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                            <div x-show="clearancesOpen" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="pl-8">
+                                <!-- View Clearance -->
+                                <a href="{{ route('admin.views.clearances') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{ request()->routeIs('admin.views.clearances') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    </svg>
+                                    <span>View Clearance</span>
+                                </a>
+                                
+                                <!-- Manage Clearance (Admin Only) -->
+                                @if(Auth::user()->user_type == 'Admin')
+                                    <a href="{{ route('admin.clearance.manage') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{ request()->routeIs('admin.clearance.manage') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.204-.107-.397.165-.71.505-.78.929l-.15.894c-.09.542-.56.94-1.109.94h-1.094c-.55 0-1.02-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.78-.93-.398-.164-.855-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
+                                        <span>Manage Clearance</span>
+                                    </a>
+                                @endif
 
-                                    <x-slot name="content">
-                                        <x-dropdown-link :href="route('admin.profile.edit')"
-                                            class="hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150">
-                                            {{ __('Profile') }}
-                                        </x-dropdown-link>
+                                <!-- Check Clearance -->
+                                <a href="{{ route('admin.clearance.check') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{ request()->routeIs('admin.clearance.check') || request()->routeIs('admin.clearances.show') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+                                    </svg>
+                                    <span>Check Clearance</span>
+                                    <span id="clearanceBadge" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                                </a>
 
-                                        @foreach(Auth::user()->availableRoles() as $role)
-                                            @if($role !== Auth::user()->user_type)
-                                                @if(!(Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id) && !(Auth::user()->user_type === 'Program-Head' && !Auth::user()->campus_id) && !(Auth::user()->user_type === 'Dean' && !Auth::user()->campus_id))
-                                                    @if((Auth::user()->user_type !== 'Admin' || Auth::user()->campus_id) && (Auth::user()->user_type !== 'Program-Head' || Auth::user()->campus_id) && (Auth::user()->user_type !== 'Dean' || Auth::user()->campus_id))
-                                                        <form method="POST" action="{{ route('switchRole') }}">
-                                                            @csrf
-                                                            <input type="hidden" name="role" value="{{ $role }}">
-                                                            <x-dropdown-link :href="route('switchRole')"
-                                                                    class="hover:bg-green-50 hover:text-green-600 transition-colors duration-150"
-                                                                    onclick="event.preventDefault();
-                                                                                this.closest('form').submit();">
-                                                                {{ __('Switch to ' . $role) }}
-                                                            </x-dropdown-link>
-                                                        </form>
-                                                    @endif
-                                                @endif
-                                            @endif
-                                        @endforeach
-
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <x-dropdown-link :href="route('logout')"
-                                                class="hover:bg-red-50 hover:text-red-600 transition-colors duration-150"
-                                                onclick="event.preventDefault();
-                                                            this.closest('form').submit();">
-                                                {{ __('Log Out') }}
-                                            </x-dropdown-link>
-                                        </form>
-                                    </x-slot>
-                                </x-dropdown>
+                                <!-- Upload Clearances (Program-Head or Dean Only) -->
+                                @if(Auth::user()->user_type == 'Program-Head' || (Auth::user()->user_type == 'Dean'))
+                                    <a href="{{ route('phd.programHeadDean.clearance') }}" class="flex items-center px-4 py-2 text-sm hover:bg-gray-700 {{ request()->routeIs('phd.programHeadDean.clearance') ? 'bg-gray-700 text-indigo-300' : 'text-gray-300' }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+                                        </svg>
+                                        <span>Upload Clearances</span>
+                                        <span id="clearanceBadge" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                                    </a>
+                                @endif
                             </div>
                         </div>
-                    </div>
-                </header>
-                @endisset
-                    <!-- Main Content -->
-                <main class="min-h-screen overflow-x-hidden">
-                    <div class="py-12">
-                        <div class="{{--max-w-7xl--}}max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
-                            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                <div class="p-6 text-gray-900">
-                                    {{ $slot }}
+
+                        <!-- History of Faculty Reports -->
+                        <a href="{{ route('admin.views.submittedReports') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.submittedReports') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                            </svg>
+                            <span class="{{ request()->routeIs('admin.views.submittedReports') ? 'text-indigo-300 font-semibold' : '' }}">History of Reports</span>
+                        </a>
+
+                        <!-- Admin Action Reports -->
+                        <a href="{{ route('admin.views.actionReports') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.actionReports') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                            </svg>
+                            <span class="{{ request()->routeIs('admin.views.actionReports') ? 'text-indigo-300 font-semibold' : '' }}">Admin Action Reports</span>
+                        </a>
+
+                        <!-- Faculty -->
+                        <a href="{{ route('admin.views.faculty') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.faculty') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                            </svg>
+                            <span class="{{ request()->routeIs('admin.views.faculty') ? 'text-indigo-300 font-semibold' : '' }}">Faculty</span>
+                        </a>
+
+                        <!-- My Files // Archives -->
+                        <a href="{{ route('admin.views.archive') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.archive') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                            </svg>
+                            <span class="{{ request()->routeIs('admin.views.archive') ? 'text-indigo-300 font-semibold' : '' }}">Archives</span>
+                        </a>
+
+                        <!-- Admin ID Management -->
+                        @if(Auth::user()->user_type == 'Admin')
+                        <a href="{{ route('admin.adminIdManagement') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.adminIdManagement') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-9 w-9 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+                            </svg>
+                            <span class="{{ request()->routeIs('admin.adminIdManagement') ? 'text-indigo-300 font-semibold' : '' }}">Admin ID Management</span>
+                        </a>
+                        @endif
+
+                        <!-- College -->
+                        @if(Auth::user()->user_type == 'Admin')
+                            <a href="{{ route('admin.views.college') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.college') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                </svg>
+                                <span class="{{ request()->routeIs('admin.views.college') ? 'text-indigo-300 font-semibold' : '' }}">College</span>
+                            </a>
+                        @endif
+                        <!-- Admin Offices -->
+                        @if(Auth::user()->user_type == 'Admin')
+                            <a href="{{ route('admin.views.offices-index') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.offices-index') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                                </svg>
+                                <span class="{{ request()->routeIs('admin.views.offices-index') ? 'text-indigo-300 font-semibold' : '' }}">Admin Offices</span>
+                            </a>
+                        @endif
+                        <!-- Campuses -->
+                        @if(Auth::user()->user_type == 'Admin')
+                            <a href="{{ route('admin.views.campuses') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.views.campuses') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                </svg>
+                                <span class="{{ request()->routeIs('admin.views.campuses') ? 'text-indigo-300 font-semibold' : '' }}">Campuses</span>
+                            </a>
+                        @endif
+
+                        <!-- Profile -->
+                        <a href="{{ route('admin.profile.edit') }}" class="flex items-center px-10 py-4 hover:bg-gray-700 {{ request()->routeIs('admin.profile.edit') ? 'bg-gray-700 border-l-4 border-indigo-500' : '' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+                            <span class="{{ request()->routeIs('admin.profile.edit') ? 'text-indigo-300 font-semibold' : '' }}">Profile</span>
+                        </a>
+
+                        <!-- Logout -->
+                        <form method="POST" action="{{ route('logout') }}" class="flex items-center w-full">
+                            @csrf
+                            <button type="submit" class="flex items-center w-full text-left px-9 py-4 hover:bg-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                                </svg>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+
+                        <!-- About Us -->
+                        <a href="{{ route('about-us') }}" class="flex items-center px-10 py-4 hover:bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 {{-- request()->routeIs('about.us') ? 'bg-gradient-to-r from-indigo-500 to-purple-600 border-l-4 border-indigo-500' : '' --}} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            <span class="{{ request()->routeIs('about.us') ? 'text-white font-semibold' : '' }}">About Us</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="flex-1 ml-60">
+                    @include('layouts.navigation')
+
+                    <!-- Page Heading -->
+                    @isset($header)
+                    <header class="bg-white shadow sticky-header">
+                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <button onclick="window.history.back()" class="mr-4 text-gray-600 hover:text-gray-900">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                                        </svg>
+                                    </button>
+                                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                                        {{ $header }} <!-- Use the header variable -->
+                                    </h2>
+                                </div>
+
+                                <div class="text-center">
+                                    {{-- <h4>{{ date('F d, Y') }}</h4> --}}
+                                    <p> {{ date( 'd, l' )}} </p><p id="currentTime">{{ date('h:i A') }}</p>
+                                    <script>
+                                        function updateTime() {
+                                            const timeElement = document.getElementById('currentTime');
+                                            const now = new Date();
+                                            timeElement.textContent = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                                        }
+                                        // Update time immediately and then every minute
+                                        updateTime();
+                                        setInterval(updateTime, 60000);
+                                    </script>
+                                </div>
+
+                                <div class="flex items-center space-x-4">
+                                    <!-- User Feedback to System Button -->
+                                    <!-- Feedback Button -->
+                                    <button @click="showUserFeedbackModal = true" 
+                                        class="hover:bg-gray-100 p-2 rounded-full transition-colors duration-200 relative group">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                                            class="w-6 h-6 text-gray-600 hover:text-indigo-600 transition-colors duration-200"
+                                            onmouseover="this.style.transform='scale(1.1)'" 
+                                            onmouseout="this.style.transform='scale(1)'">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                        </svg>
+                                        <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                            Add Feedback
+                                        </span>
+                                    </button>
+
+                                    <!-- Overview Link -->
+                                    <a href="{{ route('admin.overview') }}" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 hover:scale-110 relative group">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                                        </svg>
+                                        <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                            Overview of the System
+                                        </span>
+                                    </a>
+
+                                    <!-- Notification Bell -->
+                                    <div class="notification-div relative group" style="position: relative; top: 0px; right: 0px;">
+                                        <button id="notificationBell" class="relative hover:bg-gray-100 p-2 rounded-full transition-colors duration-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 hover:text-indigo-600 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5" />
+                                            </svg>
+                                            <span id="notificationCount" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center hidden animate-bounce">0</span>
+                                            <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                                Notifications (Click to Open)
+                                            </span>
+                                        </button>
+                                        <div id="notificationDropdown" class="absolute right-0 mt-2 w-[300px] bg-white border border-gray-200 rounded-lg shadow-lg hidden hover:shadow-xl transition-shadow duration-200">
+                                            <ul id="notificationList" class="p-2">
+                                                <!-- Notifications will be appended here -->
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- User Dropdown -->
+                                    <x-dropdown align="right" width="48">
+                                        <x-slot name="trigger">
+                                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                                @if(Auth::user()->profile_picture)
+                                                    @if (str_contains(Auth::user()->profile_picture, 'http'))
+                                                        <img src="{{ Auth::user()->profile_picture }}" alt="Profile Picture" class="h-6 w-6 rounded-full mr-2">
+                                                    @else
+                                                        <img src="{{ url('/profile_pictures/' . basename(Auth::user()->profile_picture)) }}" alt="Profile Picture" class="h-6 w-6 rounded-full mr-2">
+                                                    @endif
+                                                @else
+                                                    <div class="h-6 w-6 rounded-full mr-2 flex items-center justify-center text-white font-bold" style="background-color: {{ '#' . substr(md5(Auth::user()->name), 0, 6) }};">
+                                                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                                    </div>
+                                                @endif
+                                                <div>
+                                                    {{ Auth::user()->name }}
+                                                    (<span class="@if(Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id) text-red-600 font-semibold @elseif(Auth::user()->user_type === 'Admin') text-blue-600 font-semibold @elseif(Auth::user()->user_type === 'Program-Head') text-emerald-600 font-semibold @elseif(Auth::user()->user_type === 'Dean') text-amber-600 font-semibold @else text-gray-600 font-semibold @endif">
+                                                        {{ Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id ? 'Super Admin' : Auth::user()->user_type }}
+                                                    </span>)
+                                                </div>
+                                                <div class="ms-1">
+                                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            </button>
+                                        </x-slot>
+
+                                        <x-slot name="content">
+                                            <x-dropdown-link :href="route('admin.profile.edit')"
+                                                class="hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150">
+                                                {{ __('Profile') }}
+                                            </x-dropdown-link>
+
+                                            @foreach(Auth::user()->availableRoles() as $role)
+                                                @if($role !== Auth::user()->user_type)
+                                                    @if(!(Auth::user()->user_type === 'Admin' && !Auth::user()->campus_id) && !(Auth::user()->user_type === 'Program-Head' && !Auth::user()->campus_id) && !(Auth::user()->user_type === 'Dean' && !Auth::user()->campus_id))
+                                                        @if((Auth::user()->user_type !== 'Admin' || Auth::user()->campus_id) && (Auth::user()->user_type !== 'Program-Head' || Auth::user()->campus_id) && (Auth::user()->user_type !== 'Dean' || Auth::user()->campus_id))
+                                                            <form method="POST" action="{{ route('switchRole') }}">
+                                                                @csrf
+                                                                <input type="hidden" name="role" value="{{ $role }}">
+                                                                <x-dropdown-link :href="route('switchRole')"
+                                                                        class="hover:bg-green-50 hover:text-green-600 transition-colors duration-150"
+                                                                        onclick="event.preventDefault();
+                                                                                    this.closest('form').submit();">
+                                                                    {{ __('Switch to ' . $role) }}
+                                                                </x-dropdown-link>
+                                                            </form>
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            @endforeach
+
+                                            <form method="POST" action="{{ route('logout') }}">
+                                                @csrf
+                                                <x-dropdown-link :href="route('logout')"
+                                                    class="hover:bg-red-50 hover:text-red-600 transition-colors duration-150"
+                                                    onclick="event.preventDefault();
+                                                                this.closest('form').submit();">
+                                                    {{ __('Log Out') }}
+                                                </x-dropdown-link>
+                                            </form>
+                                        </x-slot>
+                                    </x-dropdown>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </main>
-                <footer class="bg-white py-6 mt-auto">
-                    <div class="container mx-auto text-center text-gray-800">
-                        <p class="text-sm">&copy; 2024 OMSCS IQA ClearVault.</p>
-                        <div class="flex justify-center space-x-4 mt-4">
-                            <a href="#" class="hover:text-indigo-400">Privacy Policy</a>
-                            <a href="#" class="hover:text-indigo-400">Terms of Service</a>
-                            <a href="#" class="hover:text-indigo-400">Contact Us</a>
+                    </header>
+                    @endisset
+                        <!-- Main Content -->
+                    <main class="min-h-screen overflow-x-hidden">
+                        <div class="py-12">
+                            <div class="{{--max-w-7xl--}}max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
+                                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                                    <div class="p-6 text-gray-900">
+                                        {{ $slot }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </footer>
+                    </main>
+                    <footer class="bg-white py-6 mt-auto">
+                        <div class="container mx-auto text-center text-gray-800">
+                            <p class="text-sm">&copy; 2024 OMSCS IQA ClearVault.</p>
+                            <div class="flex justify-center space-x-4 mt-4">
+                                <a href="#" class="hover:text-indigo-400">Privacy Policy</a>
+                                <a href="#" class="hover:text-indigo-400">Terms of Service</a>
+                                <a href="#" class="hover:text-indigo-400">Contact Us</a>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
             </div>
         </div>
 
