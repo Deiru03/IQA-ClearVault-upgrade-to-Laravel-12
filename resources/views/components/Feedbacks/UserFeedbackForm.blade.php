@@ -1,4 +1,5 @@
 
+    <div class="p-6 bg-white rounded-lg border-b border-blue-700">
         <form method="POST" action="{{ route('user-feedback.store') }}">
             @csrf
 
@@ -234,10 +235,10 @@
             </div>       
             
             <!-- Message/Comment Users Feedback About the System -->
-            <h3 class="text-lg font-semibold mb-4">Category 3: Technical Performance</h3>
+            <h3 class="text-lg font-semibold mb-4">Feedback Message: Additional Comments or Suggestions</h3>
 
             <div class="mb-4">
-                <x-input-label for="message" :value="__('Additional Comments or Suggestions')" />
+                <x-input-label for="message" :value="__('Leave a message here')" />
                 <textarea 
                     id="comment" 
                     name="comment" 
@@ -256,3 +257,4 @@
                 </x-primary-button>
             </div>
         </form>
+    </div>
