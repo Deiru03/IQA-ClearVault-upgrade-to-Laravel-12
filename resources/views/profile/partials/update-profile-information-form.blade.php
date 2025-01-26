@@ -180,28 +180,39 @@
 
                         <div class="col-span-1">
                             <x-input-label for="sub_programs" :value="__('All Programs Taught')" class="text-lg font-semibold"/>
-                            <div id="sub-programs-container" class="space-y-1">
+                            
+                            <!-- Single Search Box -->
+                            <input type="text" 
+                                id="global-program-search" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md mb-3" 
+                                placeholder="Search all programs...">
+
+                            <!-- Programs Container -->
+                            <div id="sub-programs-container" class="space-y-3">
                                 @foreach($user->subPrograms as $subProgram)
                                     <div class="flex items-center space-x-2">
-                                        <div class="relative flex-1">
-                                            <input type="text" class="program-search w-full px-3 py-2 border border-gray-300 rounded-md mb-1" placeholder="Search programs...">
-                                            <select name="sub_program_ids[]" class="program-select flex-1 mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" style="max-height: 200px; overflow-y: auto;">
-                                                <option value="" disabled>Select a Program</option>
-                                                @foreach($programs as $program)
-                                                    <option value="{{ $program->id }}" {{ $subProgram->program_id == $program->id ? 'selected' : '' }}>
-                                                        {{ $program->department->campus->name }} - {{ $program->department->name }} - {{ $program->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        <select name="sub_program_ids[]" class="program-select flex-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                            <option value="" disabled>Select a Program</option>
+                                            @foreach($programs as $program)
+                                                <option value="{{ $program->id }}" {{ $subProgram->program_id == $program->id ? 'selected' : '' }}>
+                                                    {{ $program->department->campus->name }} - {{ $program->department->name }} - {{ $program->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                         <button type="button" class="text-red-500 hover:text-red-700 remove-sub-program">
-                                            Remove
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
                                         </button>
                                     </div>
                                 @endforeach
                             </div>
-                            <button type="button" id="add-sub-program" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
-                                Add Sub Program
+
+                            <button type="button" id="add-sub-program" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Add Program
                             </button>
                         </div>
 
@@ -212,7 +223,6 @@
                             select[name="sub_program_ids[]"] option {
                                 padding: 8px;
                             }
-                            /* For webkit browsers like Chrome/Safari */
                             select[name="sub_program_ids[]"]::-webkit-scrollbar {
                                 width: 8px;
                             }
@@ -226,22 +236,21 @@
                             select[name="sub_program_ids[]"]::-webkit-scrollbar-thumb:hover {
                                 background: #555;
                             }
-                            .program-search {
-                                width: 100%;
-                                margin-bottom: 5px;
-                            }
                         </style>
 
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
                                 const subProgramsContainer = document.getElementById('sub-programs-container');
                                 const addSubProgramButton = document.getElementById('add-sub-program');
+                                const globalSearch = document.getElementById('global-program-search');
 
-                                function addSearchFunctionality(searchInput, select) {
-                                    searchInput.addEventListener('input', function() {
-                                        const searchTerm = this.value.toLowerCase();
+                                // Global search function that affects all dropdowns
+                                globalSearch.addEventListener('input', function() {
+                                    const searchTerm = this.value.toLowerCase();
+                                    const allSelects = document.querySelectorAll('select[name="sub_program_ids[]"]');
+                                    
+                                    allSelects.forEach(select => {
                                         const options = select.getElementsByTagName('option');
-                                        
                                         for (let option of options) {
                                             const text = option.text.toLowerCase();
                                             if (text.includes(searchTerm) || option.value === "") {
@@ -251,7 +260,7 @@
                                             }
                                         }
                                     });
-                                }
+                                });
 
                                 function addRemoveListener(button) {
                                     button.addEventListener('click', function() {
@@ -259,40 +268,29 @@
                                     });
                                 }
 
-                                // Add search functionality to existing dropdowns
-                                document.querySelectorAll('.program-search').forEach(searchInput => {
-                                    const select = searchInput.nextElementSibling;
-                                    addSearchFunctionality(searchInput, select);
-                                });
-
                                 addSubProgramButton.addEventListener('click', function() {
                                     const subProgramDiv = document.createElement('div');
                                     subProgramDiv.classList.add('flex', 'items-center', 'space-x-2');
 
                                     subProgramDiv.innerHTML = `
-                                        <div class="relative flex-1">
-                                            <input type="text" class="program-search w-full px-3 py-2 border border-gray-300 rounded-md mb-1" placeholder="Search programs...">
-                                            <select name="sub_program_ids[]" class="program-select flex-1 mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" style="max-height: 200px; overflow-y: auto;">
-                                                <option value="" disabled>Select a sub-program</option>
-                                                @foreach($programs as $program)
-                                                    <option value="{{ $program->id }}">{{ $program->department->campus->name }} - {{ $program->department->name }} - {{ $program->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        <select name="sub_program_ids[]" class="program-select flex-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                            <option value="" disabled selected>Select a Program</option>
+                                            @foreach($programs as $program)
+                                                <option value="{{ $program->id }}">{{ $program->department->campus->name }} - {{ $program->department->name }} - {{ $program->name }}</option>
+                                            @endforeach
+                                        </select>
                                         <button type="button" class="text-red-500 hover:text-red-700 remove-sub-program">
-                                            Remove
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
                                         </button>
                                     `;
 
                                     subProgramsContainer.appendChild(subProgramDiv);
                                     addRemoveListener(subProgramDiv.querySelector('.remove-sub-program'));
-                                    
-                                    // Add search functionality to new dropdown
-                                    const searchInput = subProgramDiv.querySelector('.program-search');
-                                    const select = subProgramDiv.querySelector('select');
-                                    addSearchFunctionality(searchInput, select);
                                 });
 
+                                // Add remove listeners to existing remove buttons
                                 document.querySelectorAll('.remove-sub-program').forEach(addRemoveListener);
                             });
                         </script>
