@@ -101,8 +101,78 @@
 
     </style>
 
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased"x-data="{ showUserFeedbackModal: false }">
+        <!-- Users Feedback to System Modal (COMPONENT) -->
+        <!-- Floating Notification -->
+        <div id="notification"
+            class="fixed top-10 right-0 transform transition-transform duration-300 ease-in-out z-50 max-w-sm w-full bg-gray-800 rounded-lg shadow-xl border-l-4 overflow-hidden {{ session('success') || session('error') ? '' : 'translate-x-full' }}" style="z-index: 150;">
+            <div class="p-4 flex items-center">
+                <div id="notificationIcon"
+                    class="flex-shrink-0 {{ session('success') ? 'text-emerald-400' : 'text-rose-400' }}">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="ml-3 w-0 flex-1">
+                    <p id="notificationMessage" class="text-sm font-medium text-gray-100">
+                        {{ session('success') ?? session('error') }}
+                    </p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button onclick="this.closest('#notification').classList.add('translate-x-full')"
+                        class="inline-flex text-gray-300 hover:text-gray-100">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="animate-progress h-1 {{ session('success') ? 'bg-emerald-400' : 'bg-rose-400' }}"
+                style="width: 100%"></div>
+        </div>
+
+        <style>
+            @keyframes progress {
+                from {
+                    width: 100%;
+                }
+
+                to {
+                    width: 0%;
+                }
+            }
+
+            .animate-progress {
+                animation: progress 3s linear;
+            }
+        </style>
+
+        @if (session('success') || session('error'))
+            <script>
+                setTimeout(() => {
+                    document.getElementById('notification').classList.add('translate-x-full');
+                }, 3000);
+            </script>
+        @endif
+
         <div class="min-h-screen bg-gray-100 flex">
+            <div x-show="showUserFeedbackModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4" style="z-index: 100;">
+                <div class="bg-white rounded-lg shadow-lg p-4 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div class="sticky top-0 bg-white z-10 flex justify-between items-center mb-4 pb-2 border-b">
+                        <h2 class="text-xl font-bold">User Feedback</h2>
+                        <button @click="showUserFeedbackModal = false" class="text-gray-600 hover:text-gray-900">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="overflow-y-auto">
+                        @include('Components.Feedbacks.UserFeedbackForm')
+                    </div>
+                </div>
+            </div>
             <!-- Sidebar -->
             {{-- <div class="w-60 bg-gray-800 text-white h-screen fixed z-10">
                 <div class="flex items-center p-4">
@@ -408,6 +478,21 @@
                             </div>
 
                             <div class="flex items-center space-x-4">
+                                <!-- User Feedback to System Button -->
+                                <!-- Feedback Button -->
+                                <button @click="showUserFeedbackModal = true" 
+                                    class="hover:bg-gray-100 p-2 rounded-full transition-colors duration-200 relative group">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                                        class="w-6 h-6 text-gray-600 hover:text-indigo-600 transition-colors duration-200"
+                                        onmouseover="this.style.transform='scale(1.1)'" 
+                                        onmouseout="this.style.transform='scale(1)'">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                    </svg>
+                                    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                        Add Feedback
+                                    </span>
+                                </button>
+
                                 <!-- Overview Link -->
                                 <a href="{{ route('admin.overview') }}" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 hover:scale-110 relative group">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
