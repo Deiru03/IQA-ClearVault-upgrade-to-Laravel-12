@@ -85,7 +85,7 @@
         @endif
 
           <!-- Analytics Section -->
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        {{-- <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             <!-- Office Distribution -->
             <div class="bg-white p-6 rounded-lg shadow-lg border-2 border-indigo-200">
                 <h3 class="text-lg font-bold mb-4">Office Distribution</h3>
@@ -109,7 +109,7 @@
                     <canvas id="activityChart"></canvas>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Include Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
