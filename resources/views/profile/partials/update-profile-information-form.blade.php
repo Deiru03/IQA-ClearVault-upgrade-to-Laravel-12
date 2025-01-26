@@ -160,6 +160,15 @@
                                 <option value="" disabled>Select a program</option>
                             </select>
                             <x-input-error class="mt-2" :messages="$errors->get('program_id')" />
+                                 <!-- Guide Note -->
+                            <div class="mt-2 mb-4 p-4 bg-blue-50 border-l-4 border-blue-500 text-blue-700">
+                                <p class="text-sm">
+                                    <strong>Guide about Sub-Programs:</strong> <br>
+                                    1. Type the program name in the search box below <br>
+                                    2. Select your program from the dropdown list<br>
+                                    3. Click "Add Program" to add more programs
+                                </p>
+                            </div>
                         </div>
 
                         <!-- Sub Programs Row CSS Alignment-->
@@ -180,7 +189,7 @@
 
                         <div class="col-span-1">
                             <x-input-label for="sub_programs" :value="__('All Programs Taught')" class="text-lg font-semibold"/>
-                            
+
                             <!-- Single Search Box -->
                             <input type="text" 
                                 id="global-program-search" 
