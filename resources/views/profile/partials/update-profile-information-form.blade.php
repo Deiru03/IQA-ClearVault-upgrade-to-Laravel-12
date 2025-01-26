@@ -183,14 +183,17 @@
                             <div id="sub-programs-container" class="space-y-1">
                                 @foreach($user->subPrograms as $subProgram)
                                     <div class="flex items-center space-x-2">
-                                        <select name="sub_program_ids[]" class="flex-1 mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" style="max-height: 200px; overflow-y: auto;">
-                                            <option value="" disabled>Select a Program</option>
-                                            @foreach($programs as $program)
-                                                <option value="{{ $program->id }}" {{ $subProgram->program_id == $program->id ? 'selected' : '' }}>
-                                                    {{ $program->department->campus->name }} - {{ $program->department->name }} - {{ $program->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <div class="relative flex-1">
+                                            <input type="text" class="program-search w-full px-3 py-2 border border-gray-300 rounded-md mb-1" placeholder="Search programs...">
+                                            <select name="sub_program_ids[]" class="program-select flex-1 mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" style="max-height: 200px; overflow-y: auto;">
+                                                <option value="" disabled>Select a Program</option>
+                                                @foreach($programs as $program)
+                                                    <option value="{{ $program->id }}" {{ $subProgram->program_id == $program->id ? 'selected' : '' }}>
+                                                        {{ $program->department->campus->name }} - {{ $program->department->name }} - {{ $program->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         <button type="button" class="text-red-500 hover:text-red-700 remove-sub-program">
                                             Remove
                                         </button>
@@ -223,6 +226,10 @@
                             select[name="sub_program_ids[]"]::-webkit-scrollbar-thumb:hover {
                                 background: #555;
                             }
+                            .program-search {
+                                width: 100%;
+                                margin-bottom: 5px;
+                            }
                         </style>
 
                         <script>
@@ -230,30 +237,60 @@
                                 const subProgramsContainer = document.getElementById('sub-programs-container');
                                 const addSubProgramButton = document.getElementById('add-sub-program');
 
-                                function addRemoveListener(button) {
-                                    button.addEventListener('click', function() {
-                                        button.parentElement.remove();
+                                function addSearchFunctionality(searchInput, select) {
+                                    searchInput.addEventListener('input', function() {
+                                        const searchTerm = this.value.toLowerCase();
+                                        const options = select.getElementsByTagName('option');
+                                        
+                                        for (let option of options) {
+                                            const text = option.text.toLowerCase();
+                                            if (text.includes(searchTerm) || option.value === "") {
+                                                option.style.display = "";
+                                            } else {
+                                                option.style.display = "none";
+                                            }
+                                        }
                                     });
                                 }
 
+                                function addRemoveListener(button) {
+                                    button.addEventListener('click', function() {
+                                        button.closest('.flex.items-center').remove();
+                                    });
+                                }
+
+                                // Add search functionality to existing dropdowns
+                                document.querySelectorAll('.program-search').forEach(searchInput => {
+                                    const select = searchInput.nextElementSibling;
+                                    addSearchFunctionality(searchInput, select);
+                                });
+
                                 addSubProgramButton.addEventListener('click', function() {
                                     const subProgramDiv = document.createElement('div');
-                                    subProgramDiv.classList.add('flex', 'items-center', 'mt-2');
+                                    subProgramDiv.classList.add('flex', 'items-center', 'space-x-2');
 
                                     subProgramDiv.innerHTML = `
-                                        <select name="sub_program_ids[]" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" style="max-height: 200px; overflow-y: auto;">
-                                            <option value="" disabled>Select a sub-program</option>
-                                            @foreach($programs as $program)
-                                                <option value="{{ $program->id }}">{{ $program->department->campus->name }} - {{ $program->department->name }} - {{ $program->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <button type="button" class="ml-2 text-red-500 remove-sub-program">
+                                        <div class="relative flex-1">
+                                            <input type="text" class="program-search w-full px-3 py-2 border border-gray-300 rounded-md mb-1" placeholder="Search programs...">
+                                            <select name="sub_program_ids[]" class="program-select flex-1 mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" style="max-height: 200px; overflow-y: auto;">
+                                                <option value="" disabled>Select a sub-program</option>
+                                                @foreach($programs as $program)
+                                                    <option value="{{ $program->id }}">{{ $program->department->campus->name }} - {{ $program->department->name }} - {{ $program->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="button" class="text-red-500 hover:text-red-700 remove-sub-program">
                                             Remove
                                         </button>
                                     `;
 
                                     subProgramsContainer.appendChild(subProgramDiv);
                                     addRemoveListener(subProgramDiv.querySelector('.remove-sub-program'));
+                                    
+                                    // Add search functionality to new dropdown
+                                    const searchInput = subProgramDiv.querySelector('.program-search');
+                                    const select = subProgramDiv.querySelector('select');
+                                    addSearchFunctionality(searchInput, select);
                                 });
 
                                 document.querySelectorAll('.remove-sub-program').forEach(addRemoveListener);
@@ -345,6 +382,21 @@
                                         <x-text-input id="dean_id" name="dean_id" type="text" class="mt-1 block w-full" :value="old('dean_id', $user->dean_id)" />
                                         <x-input-error class="mt-2" :messages="$errors->get('dean_id')" />
                                         <p class="text-sm text-gray-600 mt-2">{{ __('Save your Dean ID for future use when switching roles.') }}</p>
+                                    </div>
+                                </template>
+                                <template x-if="userType === 'Admin-Staff'">
+                                    <div>
+                                        <x-input-label for="office_id" :value="__('Office ID')" />
+                                        <select id="office_id" name="office_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                            <option value="">Select an office</option>
+                                            @foreach($offices as $office)
+                                                <option value="{{ $office->id }}" {{ old('office_id', $user->office_id) == $office->id ? 'selected' : '' }}>
+                                                    {{ $office->campus->name }} - {{ $office->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <x-input-error class="mt-2" :messages="$errors->get('office_id')" />
+                                        <p class="text-sm text-gray-600 mt-2">{{ __('Please select your admin office.') }}</p>
                                     </div>
                                 </template>
                             </div>

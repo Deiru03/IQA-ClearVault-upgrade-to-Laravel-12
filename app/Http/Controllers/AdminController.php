@@ -26,6 +26,7 @@ use App\Models\ProgramHeadDeanId;
 use App\Services\FileDeletionService;
 use App\Models\SharedClearance;
 use App\Models\SubProgram;
+use App\Models\Office;
 use Carbon\Carbon;
 /////////////////////////////////////////////// Admin ViewsController ////////////////////////////////////////////////
 class AdminController extends Controller
@@ -605,13 +606,14 @@ class AdminController extends Controller
         $departments = Department::with('programs')->get();
         $programs = Program::all();
         $campuses = Campus::all();
+        $offices = Office::all();
 
         // Fetch the user's sub-programs
         $subProgram = SubProgram::where('user_id', $user->id)->first();
 
         $noActiveClearance = true;
 
-        return view ('admin.profile.edit', compact('user', 'departments', 'noActiveClearance', 'campuses', 'programs', 'subProgram'));
+        return view ('admin.profile.edit', compact('user', 'departments', 'noActiveClearance', 'campuses', 'programs', 'subProgram', 'offices'));
     }
     /////////////////////////////////////////////// End of Views Controller ////////////////////////////////////////////////
 

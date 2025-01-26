@@ -14,6 +14,7 @@ use App\Models\Program;
 use App\Models\Campus;
 use App\Models\Department;
 use App\Models\SubProgram;
+use App\Models\Office;
 
 class OfficeController extends Controller
 {
@@ -150,13 +151,14 @@ class OfficeController extends Controller
         $departments = Department::with('programs')->get();
         $programs = Program::all();
         $campuses = Campus::all();
+        $offices = Office::all();
 
         // Fetch the user's sub-programs
         $subProgram = SubProgram::where('user_id', $user->id)->first();
 
         $noActiveClearance = true;
 
-        return view ('office.profile.edit', compact('user', 'departments', 'noActiveClearance', 'campuses', 'programs', 'subProgram'));
+        return view ('office.profile.edit', compact('user', 'departments', 'noActiveClearance', 'campuses', 'programs', 'subProgram', 'offices'));
     }
 
 }

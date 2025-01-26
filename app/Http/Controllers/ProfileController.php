@@ -16,6 +16,7 @@ use App\Models\ProgramHeadDeanId;
 use App\Models\User;
 use App\Models\SubProgram;
 use App\Models\Program;
+use App\Models\Office;
 class ProfileController extends Controller
 {
     /**
@@ -27,6 +28,7 @@ class ProfileController extends Controller
         $programs = Program::all();
         $user = $request->user()->load('subPrograms'); // Load subPrograms relationship
         $campuses = Campus::all();
+        $offices = Office::all();
 
         // Fetch the user's sub-programs
         $subProgram = SubProgram::where('user_id', $user->id)->first();
@@ -42,6 +44,7 @@ class ProfileController extends Controller
             'noActiveClearance' => $noActiveClearance,
             'programs' => $programs,
             'subProgram' => $subProgram,
+            'offices' => $offices,
         ]);
     }
 
@@ -144,6 +147,8 @@ class ProfileController extends Controller
         // $user->checked_by = 'System';
         $program = Program::find($request->input('program_id'));
 
+
+        $user->office_id = $request->input('office_id');
         $user->position = $request->input('position');
         $user->units = $request->input('units');
         $user->campus_id = $request->input('campus_id');
