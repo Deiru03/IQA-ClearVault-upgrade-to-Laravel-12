@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AdminOfficesController;
 use App\Http\Controllers\Admin\CampusController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserFeedbacksController as Feedback2System;
+use App\Http\Controllers\OthersController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\OptimizationController;
@@ -389,5 +390,7 @@ Route::middleware(['auth', 'verified', 'Admin'])->prefix('admin')->group(functio
 Route::get('/about-us', [AboutController::class, 'index'])->name('about-us');
 
 Route::resource('/user-feedback', Feedback2System::class)->only(['index', 'create', 'store']);
+
+Route::get('/others/user-feedbacks', [OthersController::class, 'feedbackIndex'])->name('others.feedbackIndex');
 
 require __DIR__.'/auth.php';

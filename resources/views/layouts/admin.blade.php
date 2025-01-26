@@ -433,6 +433,24 @@
                             </button>
                         </form>
 
+                        <!-- Secret Settings (Hidden - Ctrl+Shift+S to show) -->
+                        <div id="secretSettings" class="hidden">
+                            <a href="#" class="flex items-center px-10 py-4 hover:bg-gray-700 text-red-400 {{ request()->routeIs('about-us') ? 'bg-gray-700 border-l-4 border-red-500' : '' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                </svg>
+                                <span>Secret Settings</span>
+                            </a>
+                            <!-- System Feedback -->
+                            <a href="#" class="flex items-center px-10 py-4 hover:bg-gray-700 text-green-400 {{ request()->routeIs('about-us') ? 'bg-gray-700 border-l-4 border-green-500' : '' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                </svg>
+                                <span class="{{ request()->routeIs('about-us') ? 'text-indigo-300 font-semibold' : '' }}">System Feedback</span>
+                            </a>
+
+                        </div>
+
                         <!-- About Us -->
                         <a href="{{ route('about-us') }}" class="flex items-center px-10 py-4 hover:bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 {{-- request()->routeIs('about.us') ? 'bg-gradient-to-r from-indigo-500 to-purple-600 border-l-4 border-indigo-500' : '' --}} transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
@@ -440,6 +458,62 @@
                             </svg>
                             <span class="{{ request()->routeIs('about.us') ? 'text-white font-semibold' : '' }}">About Us</span>
                         </a>
+
+                        <script>
+                            // Secret Settings Keyboard Shortcut
+                            document.addEventListener('keydown', function(e) {
+                                if (e.ctrlKey && e.shiftKey && e.altKey &&e.key === 'Z') {
+                                    e.preventDefault();
+                                    const secretSettings = document.getElementById('secretSettings');
+                                    
+                                    // Remove hidden class with animation
+                                    secretSettings.classList.remove('hidden');
+                                    secretSettings.style.animation = 'slideIn 0.3s ease-out';
+                                    secretSettings.style.opacity = '1';
+                                    secretSettings.style.transform = 'translateX(0)';
+
+                                    // Add timer to hide with animation
+                                    setTimeout(() => {
+                                        secretSettings.style.animation = 'slideOut 0.3s ease-in';
+                                        secretSettings.style.opacity = '0';
+                                        secretSettings.style.transform = 'translateX(-20px)';
+                                        
+                                        // Add hidden class after animation completes
+                                        setTimeout(() => {
+                                            secretSettings.classList.add('hidden');
+                                        }, 300);
+                                    }, 5000);
+                                }
+                            });
+                        </script>
+
+                        <style>
+                            @keyframes slideIn {
+                                from {
+                                    opacity: 0;
+                                    transform: translateX(-20px);
+                                }
+                                to {
+                                    opacity: 1;
+                                    transform: translateX(0);
+                                }
+                            }
+
+                            @keyframes slideOut {
+                                from {
+                                    opacity: 1;
+                                    transform: translateX(0);
+                                }
+                                to {
+                                    opacity: 0;
+                                    transform: translateX(-20px);
+                                }
+                            }
+
+                            #secretSettings {
+                                transition: opacity 0.3s ease, transform 0.3s ease;
+                            }
+                        </style>
                     </nav>
                 </div>
 
