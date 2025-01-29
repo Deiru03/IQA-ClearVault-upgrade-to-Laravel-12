@@ -104,58 +104,6 @@
     <body class="font-sans antialiased"x-data="{ showUserFeedbackModal: false }">
         <!-- Users Feedback to System Modal (COMPONENT) -->
         <!-- Floating Notification -->
-        <div id="notification"
-            class="fixed top-10 right-0 transform transition-transform duration-300 ease-in-out z-50 max-w-sm w-full bg-gray-800 rounded-lg shadow-xl border-l-4 overflow-hidden {{ session('success') || session('error') ? '' : 'translate-x-full' }}" style="z-index: 150;">
-            <div class="p-4 flex items-center">
-                <div id="notificationIcon"
-                    class="flex-shrink-0 {{ session('success') ? 'text-emerald-400' : 'text-rose-400' }}">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div class="ml-3 w-0 flex-1">
-                    <p id="notificationMessage" class="text-sm font-medium text-gray-100">
-                        {{ session('success') ?? session('error') }}
-                    </p>
-                </div>
-                <div class="ml-4 flex-shrink-0 flex">
-                    <button onclick="this.closest('#notification').classList.add('translate-x-full')"
-                        class="inline-flex text-gray-300 hover:text-gray-100">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="animate-progress h-1 {{ session('success') ? 'bg-emerald-400' : 'bg-rose-400' }}"
-                style="width: 100%"></div>
-        </div>
-
-        <style>
-            @keyframes progress {
-                from {
-                    width: 100%;
-                }
-
-                to {
-                    width: 0%;
-                }
-            }
-
-            .animate-progress {
-                animation: progress 3s linear;
-            }
-        </style>
-
-        @if (session('success') || session('error'))
-            <script>
-                setTimeout(() => {
-                    document.getElementById('notification').classList.add('translate-x-full');
-                }, 3000);
-            </script>
-        @endif
 
         <div class="min-h-screen bg-gray-100 flex" x-data="{ showUserFeedbackModal: false }">
             <div x-show="showUserFeedbackModal" 

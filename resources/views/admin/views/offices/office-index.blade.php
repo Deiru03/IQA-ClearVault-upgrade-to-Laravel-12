@@ -17,7 +17,7 @@
         </div>
 
         <!-- Session Status -->
-        @if (session('success'))
+        {{-- @if (session('success'))
             <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
                 <p class="font-bold">Success</p>
                 <p>{{ session('success') }}</p>
@@ -29,7 +29,7 @@
                 <p class="font-bold">Error</p>
                 <p>{{ session('error') }}</p>
             </div>
-        @endif
+        @endif --}}
         <!-- Floating Notification -->
         <div id="notification"
             class="fixed top-10 right-0 transform transition-transform duration-300 ease-in-out z-50 max-w-sm w-full bg-gray-800 rounded-lg shadow-xl border-l-4 overflow-hidden {{ session('success') || session('error') ? '' : 'translate-x-full' }}">

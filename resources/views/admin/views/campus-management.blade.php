@@ -123,7 +123,7 @@
         </div>
 
         <!-- Add Campus Modal -->
-        <div id="campusModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-70 hidden z-10 transition-opacity duration-300">
+        <div id="campusModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden z-10 transition-opacity duration-300" style="z-index: 100">
             <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full relative overflow-hidden duration-300 scale-95 hover:scale-100">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
                 <h3 class="text-3xl font-bold mb-6 text-gray-800 flex items-center">
@@ -176,7 +176,7 @@
         </div>
 
         <!-- Edit Campus Modal -->
-        <div id="editCampusModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-70 hidden z-10 transition-opacity duration-300">
+        <div id="editCampusModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden z-10 transition-opacity duration-300" style="z-index: 100">
             <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full relative overflow-hidden duration-300 scale-95 hover:scale-100">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
                 <h3 class="text-3xl font-bold mb-6 text-gray-800 flex items-center">
@@ -238,7 +238,7 @@
         </div>
 
         <!-- Confirm Modal -->
-        <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-70 hidden z-10">
+        <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden z-10" style="z-index: 100">
             <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full">
                 <h3 class="text-2xl font-bold mb-4 text-gray-800">
                     Confirm Action

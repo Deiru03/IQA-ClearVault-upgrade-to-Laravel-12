@@ -179,6 +179,14 @@
             files.forEach(file => {
                 const fileElement = document.createElement('div');
                 fileElement.className = 'bg-white rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-all duration-200 mb-2';
+                const updatedAt = new Date(file.updated_at).toLocaleString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true
+                });
                 fileElement.innerHTML = `
                     <div class="p-3" onclick="viewFile('${file.path}', '${file.filename}')">
                         <div class="flex items-center">
@@ -190,8 +198,7 @@
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-700">${file.filename}</p>
                                 <p class="text-xs text-gray-500">
-                                    Last modified:
-                                    {{ \Carbon\Carbon::parse($file->updated_at)->format('F j, Y, g:i a') }}
+                                    Last modified: ${updatedAt}
                                 </p>
                             </div>
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
