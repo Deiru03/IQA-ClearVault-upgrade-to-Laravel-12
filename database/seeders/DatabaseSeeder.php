@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Office;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,29 +22,52 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::create([
-            'name' => 'F Super-Admin',
+            'name' => 'IQA S.A.',
             'email' => 'omsc.iqaclearvault@gmail.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('OMSCIQA#2024'),
+            'password' => Hash::make('OMSCIQA#2025'),
             'user_type' => 'Admin',
         ]);
 
         Campus::create([
-            'name' => 'Testing Campus',    
+            'name' => 'San Jose Campus',    
         ]);
 
         Department::create([
-            'name' => 'Testing Department',
+            'name' => 'CAST',
+            'description' => 'Computer Arts, Science and Technology',
             'campus_id' => 1,
         ]);
 
         Program::create([
-            'name' => 'Testing Program',
+            'name' => 'Bachelor of Science in Information Technology',
             'department_id' => 1,
         ]);
 
-        AdminId::create([
-            'admin_id' => '12345',
+        AdminId::insert([
+            ['admin_id' => 'ADMIN20250001'],
+            ['admin_id' => 'ADMIN20250002'],
+            ['admin_id' => 'ADMIN20250003'],
+            ['admin_id' => 'ADMIN20250004'],
+            ['admin_id' => 'ADMIN20250005']
+        ]);
+
+        Office::create([
+            'name' => 'MIS',
+            'description' => 'Management Information System',
+            'campus_id' => 1,
+        ]);
+
+        User::create([
+            'name' => 'IQA SJ Admin',
+            'email' => 'adminsj@iqaclearvault.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('OMSCIQA#2025'),
+            'user_type' => 'Admin',
+            'campus_id' => 1,
+            'department_id' => 1,
+            'program_id' => 1,
+            'admin_id_registered' => 'ADMIN20250006',
         ]);
     }
 }
