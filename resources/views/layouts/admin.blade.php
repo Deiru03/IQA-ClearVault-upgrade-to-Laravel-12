@@ -161,7 +161,7 @@
 
                     <!-- Content -->
                     <div class="mt-6 p-6 rounded-xl bg-gradient-to-b from-gray-50 to-white border border-indigo-100 shadow-inner">
-                        @include('Components.Feedbacks.UserFeedbackForm')
+                        @include('components.Feedbacks.UserFeedbackForm')
                     </div>
 
                     <!-- Footer -->
