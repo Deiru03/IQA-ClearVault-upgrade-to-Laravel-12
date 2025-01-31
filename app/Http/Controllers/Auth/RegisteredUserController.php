@@ -217,14 +217,13 @@ class RegisteredUserController extends Controller
                 // ->mixedCase()
                  ->symbols()
             ],
-            'user_type' => ['required', 'string', 'in:Super-Admin'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'user_type' => $request->user_type,
+            'user_type' => 'Admin',
         ]);
 
         event(new Registered($user));
