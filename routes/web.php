@@ -379,8 +379,11 @@ Route::middleware(['auth', 'verified', 'Admin-Staff'])->prefix('office')->group(
     Route::get('/clearance-checklist/{id}', [OfficeGenerateReports::class, 'generateChecklistOffice'])->name('office.clearanceChecklist');
 });
 
+/////////////////////////////////////////////// Admin Office Routes //////////////////////////////////////////////////
 Route::middleware(['auth', 'verified', 'Admin'])->prefix('admin')->group(function () {
     Route::get('/Admin-Offices', [AdminOfficesController::class, 'indexOffice'])->name('admin.views.offices-index');
+    Route::get('/Office-Create', [AdminOfficesController::class, 'createOffice'])->name('admin.office.create');
+    Route::get('/office/view/{id}', [AdminOfficesController::class, 'show'])->name('admin.office.view');
     Route::post('/Office-Create', [AdminOfficesController::class, 'storeOffice'])->name('admin.office.store');
     Route::delete('/Office-Delete/{officeId}', [AdminOfficesController::class, 'destroyOffice'])->name('admin.office.destroy');
     Route::get('/admin/Office-Edit/{id}', [AdminOfficesController::class, 'editOffice'])->name('admin.office.edit');

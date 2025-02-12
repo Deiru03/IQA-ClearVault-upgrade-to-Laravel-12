@@ -113,7 +113,7 @@
 
         <!-- Include Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
+        {{-- <script>
             document.addEventListener('DOMContentLoaded', function () {
                 // Office Distribution Chart
                 const officeCtx = document.getElementById('officeChart').getContext('2d');
@@ -168,7 +168,7 @@
                     }
                 });
             });
-        </script>
+        </script> --}}
 
         <!-- Offices List -->
         <div class="bg-white shadow-md border border-gray-200 rounded-lg overflow-hidden mt-8">
@@ -386,6 +386,61 @@
             </form>
         </div>
     </div>
+
+    <!-- View Office Modal -->
+    <div id="viewOfficeModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden z-20 transition-opacity duration-300" style="z-index: 100">
+        <div class="bg-white p-6 rounded-lg shadow-md max-w-xl w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-gray-800" id="viewOfficeName">Office Details</h3>
+                <button onclick="closeModal('viewOfficeModal')" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex flex-col md:flex-row md:space-x-6">
+                <div class="w-full md:w-1/3 mb-4 md:mb-0">
+                    <img id="viewOfficeImage" src="{{ asset('images/default-office.jpg') }}" alt="Office Image" class="w-full h-auto rounded-lg">
+                </div>
+                <div class="w-full md:w-2/3">
+                    <p class="text-gray-700 mb-2">
+                        <span class="font-semibold">Campus:</span> 
+                        <span id="viewOfficeCampus">Campus Name</span>
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        <span class="font-semibold">Staff Count:</span> 
+                        <span id="viewOfficeStaffCount">0</span>
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        <span class="font-semibold">Description:</span>
+                    </p>
+                    <p class="text-gray-600" id="viewOfficeDescription">Office description goes here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openOfficeModal(id) {
+            fetch(`/admin/office/view/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('viewOfficeName').textContent = data.name;
+                    document.getElementById('viewOfficeImage').src = data.profile_picture 
+                        ? `/office_pictures/${data.profile_picture.split('/').pop()}` 
+                        : '/images/default-office.png';
+                    document.getElementById('viewOfficeCampus').textContent = data.campus_name;
+                    document.getElementById('viewOfficeStaffCount').textContent = data.staff_count;
+                    document.getElementById('viewOfficeDescription').textContent = data.description;
+                    openModal('viewOfficeModal');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error loading office details', 'error');
+                });
+        }
+    </script>
 
     <script>
     function previewImage(event) {

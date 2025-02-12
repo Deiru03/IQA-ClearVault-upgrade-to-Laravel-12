@@ -65,7 +65,37 @@ class AdminOfficesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $office = Office::findOrFail($id);
+            $campus = DB::table('campuses')
+                ->select('name')
+                ->where('id', $office->campus_id)
+                ->first();
+            $office->campus_name = $campus ? $campus->name : 'Unknown Campus';
+
+            $office->staff_count = DB::table('users')
+                ->where('office_id', $office->id)
+                ->count();
+
+            return response()->json($office);
+        } catch (\Exception $e) {
+            Log::error('Error fetching office details: ' . $e->getMessage());
+            return response()->json(['error' => 'Error fetching office details'], 500);
+        }
+    }
+
+    public function officeCampusName($id)
+    {
+        try {
+            $campus = DB::table('campuses')->select('name')->where('id', $id)->first();
+            if (!$campus) {
+                return response()->json(['name' => 'Unknown Campus'], 404);
+            }
+            return response()->json(['name' => $campus->name]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching campus name: ' . $e->getMessage());
+            return response()->json(['name' => 'Unknown Campus'], 500);
+        }
     }
 
     /**
