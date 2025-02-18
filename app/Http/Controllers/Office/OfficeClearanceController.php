@@ -278,6 +278,10 @@ class OfficeClearanceController extends Controller
                 if (strlen($requirementName) > 100) {
                     $requirementName = substr($requirementName, 0, 100) . '...';
                 }
+                
+                $userClearanceID = UserClearance::where('user_id', $user->id)
+                    ->where('shared_clearance_id', $sharedClearanceId)
+                    ->firstOrFail();
 
                 // Create single report for all uploaded files
                 SubmittedReport::create([
@@ -290,6 +294,7 @@ class OfficeClearanceController extends Controller
                  UserNotification::create([
                     'user_id' => Auth::id(),
                     'admin_user_id' => null,
+                    'user_clearance_id' => $userClearanceID->id,
                     'notification_type' => 'File Uploaded',
                     'notification_message' => "Uploaded a {$fileCount} file(s) for requirement: {$requirementName}.",
                     'is_read' => false,

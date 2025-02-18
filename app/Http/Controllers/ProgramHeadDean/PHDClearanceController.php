@@ -273,6 +273,11 @@ class PHDClearanceController extends Controller
                     $requirementName = substr($requirementName, 0, 100) . '...';
                 }
 
+                // Find the UserClearance record
+                $userClearance = UserClearance::where('user_id', $user->id)
+                    ->where('shared_clearance_id', $sharedClearanceId)
+                    ->firstOrFail();
+
                 // Create single report for all uploaded files
                 SubmittedReport::create([
                     'user_id' => Auth::id(),
@@ -284,6 +289,7 @@ class PHDClearanceController extends Controller
                  UserNotification::create([
                     'user_id' => Auth::id(),
                     'admin_user_id' => null,
+                    'user_clearance_id' => $userClearance->id,
                     'notification_type' => 'File Uploaded',
                     'notification_message' => "Uploaded a {$fileCount} file(s) for requirement: {$requirementName}.",
                     'is_read' => false,
