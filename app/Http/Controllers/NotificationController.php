@@ -40,6 +40,7 @@ class NotificationController extends Controller
             ->map(function($notification) {
                 return [
                     'id' => $notification->id,
+                    'user_clearance_id'  => $notification->user_clearance_id, // Added this line (Date: 2025_02_18)
                     'notification_type' => $notification->notification_type,
                     'notification_message' => $notification->notification_message,
                     'is_read' => $notification->is_read,

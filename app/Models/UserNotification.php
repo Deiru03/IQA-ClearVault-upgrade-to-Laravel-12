@@ -12,6 +12,7 @@ class UserNotification extends Model
     protected $fillable = [
         'user_id',
         'admin_user_id', // Changed from admin_id to admin_user_id
+        'user_clearance_id', // Added this line (Date: 2025_02_18)
         'notification_type',
         'notification_message',
         'is_read',
