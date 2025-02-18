@@ -295,13 +295,11 @@ class PHDClearanceController extends Controller
                     'is_read' => false,
                 ]);
 
-                // Find the UserClearance record
-                $userClearance = UserClearance::where('user_id', $user->id)
-                    ->where('shared_clearance_id', $sharedClearanceId)
-                    ->firstOrFail();
-
                 // Update the 'updated_at' timestamp
-                $userClearance->touch();
+                $userClearance->update([
+                    'updated_at' => now(),
+                    'last_uploaded' => now(),
+                ]);
 
                 // Create feedback for the requirement
                 ClearanceFeedback::create([
