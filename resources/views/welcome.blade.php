@@ -307,8 +307,35 @@
                                 Login with Google
                             </a>
                         @endauth
+                        <!-- Add Tutorial Button -->
+                        <button id="tutorialBtn" class="button1" style="display: flex; align-items: center;">
+                            <span style="margin-right: 8px;">📹</span> Watch Tutorial
+                        </button>
                     </div>
                 @endif
+
+                <!-- Tutorial Video Modal -->
+                <div id="videoModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+                    <div class="bg-white/5 backdrop-blur-lg p-6 rounded-lg shadow-lg w-full max-w-5xl mx-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-light text-white">System Tutorial - Creating Account</h2>
+                            <button onclick="closeVideoModal()" class="text-white/60 hover:text-white text-4xl">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="relative" style="padding-bottom: 56.25%;">
+                            <!-- Using local MP4 video file instead of YouTube embed -->
+                            <video id="tutorialVideo" class="absolute inset-0 w-full h-full rounded-lg" 
+                                   controls
+                                   preload="metadata">
+                                <source src="{{ asset('images/guide-video/Creating_Account.mp4') }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <p class="text-white/80 mt-4 text-sm">Learn how to create an account and get started with IQA ClearVault system.</p>
+                    </div>
+                </div>
+
             <div id="registerModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
                 <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
                     <h2 class="text-2xl font-light mb-6 text-white text-center" id="modalTitle">Select Role</h2>
@@ -370,6 +397,20 @@
                     document.getElementById('registerModal').classList.remove('flex');
                     clickCount = 0;
                     document.getElementById('secretOption').classList.add('hidden');
+                }
+
+                // Video Tutorial Modal Functions
+                document.getElementById('tutorialBtn').addEventListener('click', function() {
+                    document.getElementById('videoModal').classList.remove('hidden');
+                    document.getElementById('videoModal').classList.add('flex');
+                });
+
+                function closeVideoModal() {
+                    const video = document.getElementById('tutorialVideo');
+                    // Pause the video when closing the modal
+                    video.pause();
+                    document.getElementById('videoModal').classList.add('hidden');
+                    document.getElementById('videoModal').classList.remove('flex');
                 }
             </script>
         </main>
