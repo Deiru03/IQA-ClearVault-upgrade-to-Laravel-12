@@ -595,10 +595,10 @@
                                     <!-- Tutorial Button -->  
                                     <button id="tutorialBtn" class="text-gray-600 hover:text-indigo-600 transition-colors duration-200 hover:scale-110 relative group ml-4">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
                                         </svg>
                                         <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                                            Video Tutorials
+                                            Guide Videos
                                         </div>
                                     </button>
 
@@ -749,13 +749,16 @@
                                     class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2">
                                 Upload Clearance - Faculty
                             </button>
-                            <button onclick="changeVideo('check-clearance', 'Check Clearance', 'Learn how to check and approve clearance submissions.')" 
+                            <button onclick="changeVideo('program-head-guide', 'Program Head Guide', 'Learn how to manage clearances as a Program Head, including approval workflows and document management.')" 
                                     class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2">
-                                Check Clearance
+                                Program Head Guide
                             </button>
                             <!-- Sample future tutorials (can be added later) -->
                             <button class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2 opacity-50">
                                 Managing Faculty (Coming Soon)
+                            </button>
+                            <button class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2 opacity-50">
+                                Check Clearanc (Coming Soon)
                             </button>
                             <button class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2 opacity-50">
                                 Advanced Reporting (Coming Soon)
@@ -933,7 +936,7 @@
                 const videos = {
                     'creating-account': 'Creating_Account.mp4',
                     'upload-clearance': 'Upload_Clearance_Faculty.mp4',
-                    'check-clearance': 'Check_Clearance.mp4'
+                    'program-head-guide': 'Program_Head_Guide.mp4'
                     // Add more videos as they become available
                 };
                 
