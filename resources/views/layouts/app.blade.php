@@ -431,6 +431,17 @@
                                         feedbackModal.classList.add('hidden');
                                     });
                                 </script>
+
+                                <!-- Tutorial Button -->
+                                <button id="tutorialBtn" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 hover:scale-110 relative group ml-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                                    </svg>
+                                    <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                        Watch Tutorial
+                                    </span>
+                                </button>
+
                                 <!-- Overview Link -->
                                 <a href="{{ route('faculty.overview') }}" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 hover:scale-110 relative group">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -440,6 +451,7 @@
                                         Overview of the System
                                     </span>
                                 </a>
+                                
                                 <!-- Notification Bell -->
                                 <div class="notification-div relative" style="position: relative; top: 0px; right: 0px;">
                                     <button id="notificationBell" class="relative text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors duration-200">
@@ -544,6 +556,28 @@
                         </div>
                     </div>
                 </footer>
+            </div>
+        </div>
+
+        <!-- Tutorial Video Modal -->
+        <div id="videoModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+            <div class="bg-white/5 backdrop-blur-lg p-6 rounded-lg shadow-lg w-full max-w-5xl mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-light text-white">System Tutorial - Creating Account</h2>
+                    <button onclick="closeVideoModal()" class="text-white/60 hover:text-white text-4xl">
+                        &times;
+                    </button>
+                </div>
+                <div class="relative" style="padding-bottom: 56.25%;">
+                    <!-- Using local MP4 video file instead of YouTube embed -->
+                    <video id="tutorialVideo" class="absolute inset-0 w-full h-full rounded-lg" 
+                            controls
+                            preload="metadata">
+                        <source src="{{ asset('images/guide-video/Upload_Clearance_Faculty.mp4') }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p class="text-white/80 mt-4 text-sm">Learn how to create an account and get started with IQA ClearVault system.</p>
             </div>
         </div>
 
@@ -657,6 +691,21 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+            }
+
+            
+            // Video Tutorial Modal Functions
+            document.getElementById('tutorialBtn').addEventListener('click', function() {
+                document.getElementById('videoModal').classList.remove('hidden');
+                document.getElementById('videoModal').classList.add('flex');
+            });
+
+            function closeVideoModal() {
+                const video = document.getElementById('tutorialVideo');
+                // Pause the video when closing the modal
+                video.pause();
+                document.getElementById('videoModal').classList.add('hidden');
+                document.getElementById('videoModal').classList.remove('flex');
             }
         </script>
 

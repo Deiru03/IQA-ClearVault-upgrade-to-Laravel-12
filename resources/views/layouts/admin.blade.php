@@ -592,6 +592,16 @@
                                         });
                                     </script>
 
+                                    <!-- Tutorial Button -->  
+                                    <button id="tutorialBtn" class="text-gray-600 hover:text-indigo-600 transition-colors duration-200 hover:scale-110 relative group ml-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                                        </svg>
+                                        <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                                            Video Tutorials
+                                        </div>
+                                    </button>
+
                                     <!-- Overview Link -->
                                     <a href="{{ route('admin.overview') }}" class="text-gray-600 hover:text-gray-900 transition-colors duration-200 hover:scale-110 relative group">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -716,6 +726,83 @@
             </div>
         </div>
 
+        <!-- Tutorial Video Modal -->
+        <div id="videoModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+            <div class="bg-white/5 backdrop-blur-lg p-6 rounded-lg shadow-lg w-full max-w-5xl mx-4 border border-indigo-400/50 shadow-indigo-500/30">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-light text-white" id="videoTitle">System Tutorial</h2>
+                    <button onclick="closeVideoModal()" class="text-white/60 hover:text-white text-4xl">
+                    &times;
+                    </button>
+                </div>
+            
+                <div class="flex flex-col md:flex-row gap-4">
+                    <!-- Sidebar Tutorials List -->
+                    <div class="md:w-1/3 bg-white/10 rounded-lg p-3">
+                        <h3 class="text-white text-sm mb-2 border-b border-white/20 pb-1">Available Tutorials:</h3>
+                        <div class="overflow-y-auto max-h-80 pr-2 tutorial-list">
+                            <button onclick="changeVideo('creating-account', 'Creating Account', 'Learn how to create an account and get started with IQA ClearVault system.')" 
+                                    class="tutorial-btn bg-indigo-600/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2">
+                                Creating Account
+                            </button>
+                            <button onclick="changeVideo('upload-clearance', 'Upload Clearance', 'Learn how to upload clearance documents as a faculty member.')" 
+                                    class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2">
+                                Upload Clearance - Faculty
+                            </button>
+                            <button onclick="changeVideo('check-clearance', 'Check Clearance', 'Learn how to check and approve clearance submissions.')" 
+                                    class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2">
+                                Check Clearance
+                            </button>
+                            <!-- Sample future tutorials (can be added later) -->
+                            <button class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2 opacity-50">
+                                Managing Faculty (Coming Soon)
+                            </button>
+                            <button class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2 opacity-50">
+                                Advanced Reporting (Coming Soon)
+                            </button>
+                            <button class="tutorial-btn bg-indigo-500/40 hover:bg-indigo-600/60 text-white py-2 px-3 rounded transition-all duration-300 text-left w-full mb-2 opacity-50">
+                                System Administration (Coming Soon)
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Player -->
+                    <div class="md:w-2/3">
+                        <div class="relative" style="padding-bottom: 56.25%;">
+                            <video id="tutorialVideo" class="absolute inset-0 w-full h-full rounded-lg" 
+                                   controls
+                                   preload="metadata">
+                                <source src="{{ asset('images/guide-video/Creating_Account.mp4') }}" type="video/mp4" id="videoSource">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <p class="text-white/80 mt-4 text-sm" id="videoDescription">Learn how to create an account and get started with IQA ClearVault system.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Custom scrollbar for the tutorial list */
+            .tutorial-list::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            .tutorial-list::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+            }
+            
+            .tutorial-list::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 10px;
+            }
+            
+            .tutorial-list::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.5);
+            }
+        </style>
+
         <!-- Notification Scripts -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -828,6 +915,61 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+            }
+                        
+            // Video Tutorial Modal Functions
+            document.getElementById('tutorialBtn').addEventListener('click', function() {
+                document.getElementById('videoModal').classList.remove('hidden');
+                document.getElementById('videoModal').classList.add('flex');
+            });
+
+            function changeVideo(videoKey, title, description) {
+                const videoSource = document.getElementById('videoSource');
+                const video = document.getElementById('tutorialVideo');
+                const videoTitle = document.getElementById('videoTitle');
+                const videoDescription = document.getElementById('videoDescription');
+                
+                // Define video mapping
+                const videos = {
+                    'creating-account': 'Creating_Account.mp4',
+                    'upload-clearance': 'Upload_Clearance_Faculty.mp4',
+                    'check-clearance': 'Check_Clearance.mp4'
+                    // Add more videos as they become available
+                };
+                
+                // Update video source
+                videoSource.src = "{{ asset('images/guide-video') }}/" + videos[videoKey];
+                
+                // Update title and description
+                videoTitle.textContent = "System Tutorial - " + title;
+                videoDescription.textContent = description;
+                
+                // Highlight selected button
+                document.querySelectorAll('.tutorial-btn').forEach(btn => {
+                    btn.classList.replace('bg-indigo-600/40', 'bg-indigo-500/40');
+                });
+                // Get the clicked button and add stronger highlighting
+                const selectedBtn = event.currentTarget;
+                document.querySelectorAll('.tutorial-btn').forEach(btn => {
+                    btn.classList.replace('bg-indigo-600/40', 'bg-indigo-500/40');
+                    btn.classList.remove('border-l-4', 'border-white', 'pl-2');
+                });
+                
+                // Apply more visible styling to the selected button
+                selectedBtn.classList.replace('bg-indigo-500/40', 'bg-indigo-600/70');
+                selectedBtn.classList.add('border-l-4', 'border-white', 'pl-2');
+                
+                // Load the new video
+                video.load();
+                video.play();
+            }
+            
+            function closeVideoModal() {
+                const video = document.getElementById('tutorialVideo');
+                // Pause the video when closing the modal
+                video.pause();
+                document.getElementById('videoModal').classList.add('hidden');
+                document.getElementById('videoModal').classList.remove('flex');
             }
         </script>
 
