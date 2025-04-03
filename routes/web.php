@@ -21,6 +21,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\OptimizationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\GenerateReports;
+use App\Http\Controllers\BackupController;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\View;
 use App\Models\User;
@@ -87,8 +88,7 @@ Route::get('/office_pictures/{path}', function($path) {
 })->where('path', '.*')->middleware('auth');
 /////////////////////////////////////////////// End of File View Route ////////////////////////////////////////////////
 
-
-// Google Auth Routes
+/////////////////////////////////////////////// Google Auth Routes ////////////////////////////////////////////////
 Route::get('auth/google', [GoogleAuthController::class, 'redirectGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleAuthController::class, 'callbackGoogle'])->name('google.callback');
 
@@ -125,6 +125,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+////////////////////////////////////////////// Backup Route ////////////////////////////////////////////////
+Route::get('/admin/backup', [BackupController::class, 'index'])->name('backup.index');
+Route::post('/admin/backup/run', [BackupController::class, 'runBackup'])->name('backup.run');
+Route::post('/admin/backup/database', [BackupController::class, 'backupDatabase'])->name('backup.database');
+Route::post('/backup/user-documents', [BackupController::class, 'backupUserDocuments'])->name('backup.user_documents');
+Route::get('/backup/download/{fileName}', [BackupController::class, 'downloadBackup'])->name('backup.download');
+Route::delete('/backup/delete/{fileName}', [BackupController::class, 'deleteBackup'])->name('backup.delete');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////// Redirects If Not Admin or Faculty Middleware ////////////////////////////////////////////////
