@@ -1310,10 +1310,23 @@
         let currentShareClearanceId = null;
 
         function openShareModal(id, name) {
-            currentShareClearanceId = id;
-            document.getElementById('shareClearanceName').innerText = name;
-            document.getElementById('shareForm').action = `{{ route('admin.clearance.share', '') }}/${id}`;
-            document.getElementById('shareModal').classList.remove('hidden');
+            try {
+                if (!id) {
+                    showNotification('Missing clearance ID. Please refresh the page.', 'error');
+                    return;
+                }
+                
+                currentShareClearanceId = id;
+                document.getElementById('shareClearanceName').innerText = name || 'Selected Clearance';
+                
+                // Use direct URL instead of route helper
+                document.getElementById('shareForm').action = `/admin/clearance/share/${id}`;
+                
+                document.getElementById('shareModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error in openShareModal:', error);
+                showNotification('An error occurred. Please refresh the page and try again.', 'error');
+            }
         }
 
         function closeShareModal() {
@@ -1426,26 +1439,37 @@
         }
     
         function removeSharedClearance(id) {
-            fetch(`{{ route('admin.clearance.removeShared', '') }}/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    fetchSharedClearances();
-                    showNotification(data.message, 'successRemovedShared');
-                } else {
-                    showNotification(data.message || 'Failed to remove shared clearance.', 'error');
+            try {
+                if (!id) {
+                    showNotification('Missing clearance ID. Please refresh the page.', 'error');
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error('Error removing shared clearance:', error);
-                showNotification('An error occurred while removing the shared clearance.', 'error');
-            });
+                
+                // Use direct URL construction instead of Laravel's route helper
+                fetch(`/admin/clearance/shared/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchSharedClearances();
+                        showNotification(data.message || 'Shared clearance removed successfully.', 'successRemovedShared');
+                    } else {
+                        showNotification(data.message || 'Failed to remove shared clearance.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error removing shared clearance:', error);
+                    showNotification('An error occurred while removing the shared clearance.', 'error');
+                });
+            } catch (error) {
+                console.error('Exception when removing shared clearance:', error);
+                showNotification('An error occurred. Please refresh the page and try again.', 'error');
+            }
         }
     </script>
 
