@@ -69,5 +69,11 @@ class DatabaseSeeder extends Seeder
             'program_id' => 1,
             'admin_id_registered' => 'ADMIN20250006',
         ]);
+
+        // Call the Clearance seeder
+        $this->call([
+            ClearanceSeeder::class,
+            ClearanceRequirementSeeder::class,
+        ]);
     }
 }
