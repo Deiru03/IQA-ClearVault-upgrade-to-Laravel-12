@@ -117,7 +117,7 @@ class BackupController extends Controller
     
         // Check if the source directory exists
         if (!file_exists($sourcePath)) {
-            return response()->json(['error' => 'The user_uploaded_documents directory does not exist.'], 404);
+            return redirect()->back()->with('error', 'The user_uploaded_documents directory does not exist.');
         }
     
         // Ensure the backup directory exists
@@ -129,13 +129,10 @@ class BackupController extends Controller
         $zip = new \ZipArchive();
         if ($zip->open($backupPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
             $files = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($sourcePath),
+                new \RecursiveDirectoryIterator($sourcePath, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::LEAVES_ONLY
             );
-    
-            $totalFiles = iterator_count($files); // Count total files
-            $processedFiles = 0;
-    
+
             foreach ($files as $file) {
                 if (!$file->isDir()) {
                     $filePath = $file->getRealPath();
@@ -143,22 +140,14 @@ class BackupController extends Controller
     
                     // Add file to the zip archive
                     $zip->addFile($filePath, $relativePath);
-    
-                    // Update progress
-                    $processedFiles++;
-                    $progress = ($processedFiles / $totalFiles) * 100;
-                    session(['zip_progress' => $progress]);
                 }
             }
-    
+
             $zip->close();
     
-            // Clear progress after completion
-            session()->forget('zip_progress');
-    
-            return response()->json(['success' => 'User documents backup saved successfully in the backup folder.']);
+            return redirect()->back()->with('success', 'User documents backup saved successfully.');
         } else {
-            return response()->json(['error' => 'Failed to create the zip archive.'], 500);
+            return redirect()->back()->with('error', 'Failed to create the zip archive.');
         }
     }
 
