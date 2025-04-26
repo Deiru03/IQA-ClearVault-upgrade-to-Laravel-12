@@ -11,6 +11,9 @@ use App\Models\Campus;
 use App\Models\Department;
 use App\Models\Program;
 use App\Models\AdminId;
+use App\Models\Clearance;
+use App\Models\ClearanceRequirement;
+use App\Models\SharedClearance;
 
 class DatabaseSeeder extends Seeder
 {
@@ -70,10 +73,36 @@ class DatabaseSeeder extends Seeder
             'admin_id_registered' => 'ADMIN20250006',
         ]);
 
-        // Call the Clearance seeder
-        $this->call([
-            ClearanceSeeder::class,
-            ClearanceRequirementSeeder::class,
+         // Create a single clearance
+         $clearance = Clearance::create([
+            'document_name' => 'FACULTY PORTFOLIO CHECKLIST-A',
+            'description' => '(For Regular and Temporary Teachers)',
+            'units' => 21,
+            'type' => 'Permanent-Temporary',
+            'number_of_requirements' => 1, // Just one requirement for simplicity
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
+        
+        // Create a single requirement for the clearance
+        ClearanceRequirement::create([
+            'clearance_id' => $clearance->id,
+            'requirement' => 'Updated TORs and PDS',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        // Create a shared clearance record
+        SharedClearance::create([
+            'clearance_id' => $clearance->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Call the Clearance seeder
+        // $this->call([
+        //     ClearanceSeeder::class,
+        //     ClearanceRequirementSeeder::class,
+        // ]);
     }
 }
